@@ -1,0 +1,15 @@
+Package: fundamentos
+Type: Book
+Title: Notas del curso fundamentos de estadistica.
+Version: 0.0.2
+Imports: 
+    bookdown,
+    tidyverse,
+    patchwork,
+    ggthemes,
+    ggrepel, 
+    lubridate, 
+    gridExtra
+Remotes: rstudio/bookdown
+URL: https://github.com/tereom/fundamentos-2021
+BugReports: https://github.com/tereom/fundamentos-2021/issues
