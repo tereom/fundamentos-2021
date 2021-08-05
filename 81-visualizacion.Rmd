@@ -10,9 +10,7 @@ que tienen las mismas propiedades estadísticas.
 Sin embargo, cuando analizamos los datos de manera gráfica en un histograma
 encontramos rápidamente que los conjuntos de datos son muy distintos.
 
-:::::: {.cols data-latex=""}
-
-::: {.col data-latex="{0.50\textwidth}"}
+<div style= "float:left;top:-10px;width:500px;">
 
 ```{r, message=FALSE, echo=FALSE, warning=FALSE}
 library(tidyverse)
@@ -31,18 +29,10 @@ ggplot(anscombe_long, aes(x, y)) +
 
 ```
 
-:::
-  
-::: {.col data-latex="{0.10\textwidth}"}
-\ 
-<!-- an empty Div (with a white space), serving as
-a column separator -->
-:::
-  
-::: {.col data-latex="{0.4\textwidth}"}
+</div>
 
-<br>
-<br>
+</br>
+</br>
 
 
 Media de $x$: 9  
@@ -52,9 +42,7 @@ Varianza muestral de $y$: 4.12
 Correlación entre $x$ y $y$: 0.816  
 Línea de regresión lineal: $y = 3.00 + 0.500x$
 
-:::
-  
-::::::
+<div style="clear:both"></div>
 
 En la gráfica del primer conjunto de datos, se ve clara una 
 relación lineal simple con un modelo que cumple los supuestos de
@@ -66,89 +54,51 @@ basta tener una observación atípica para que se produzca un coeficiente de
 correlación alto aún cuando en realidad no existe una asociación lineal entre
 las dos variables.  
 
-<!-- :::::: {.cols data-latex=""} -->
-<!-- ::: {.col data-latex="{0.40\textwidth}"} -->
+<div style="clear:both"></div>
 
-El cuarteto de Ascombe inspiró una técnica reciente para crear datos que comparten las
-mismas propiedades estadísticas al igual que en el cuarteto, pero que producen gráficas
-muy distintas ([Matejka,
-Fitzmaurice](https://www.autodeskresearch.com/publications/samestats)).
 
-<!-- ::: -->
-<!-- ::: {.col data-latex="{0.10\textwidth}"} -->
-<!-- \  -->
-<!-- <!-- an empty Div (with a white space), serving as -->
-<!-- a column separator --> 
-<!-- ::: -->
-<!-- ::: {.col data-latex="{0.4\textwidth}"} -->
+<div style= "float:right;padding=10px; top:-10px; width:350px">
 
-<!-- ```{r datasaurus_gif, eval=FALSE, echo=FALSE, cache=TRUE} -->
-<!-- library(datasauRus) -->
-<!-- library(gganimate) -->
-<!-- library(animation) -->
-
-<!-- ggplot(datasaurus_dozen, aes(x = x, y = y, frame = dataset)) + -->
-<!--   geom_point() + -->
-<!--   theme(legend.position = "none") + -->
-<!--    transition_states( -->
-<!--     dataset, -->
-<!--     transition_length = 2, -->
-<!--     state_length = 1 -->
-<!--   ) + -->
-<!--   enter_fade() + -->
-<!--   exit_shrink() + -->
-<!--   ease_aes('sine-in-out') -->
-<!-- anim_save("imges/datasaurus.gif") -->
-<!-- ``` -->
-
-```{r, echo=FALSE, cache=TRUE, fig.align="center", out.width="95%", fig,height=10, fig.with=10}
+```{r, echo=FALSE, eval=FALSE, fig.align="center", out.width="95%", fig,height=10, fig.with=10}
 library(datasauRus)
 library(gganimate)
 library(animation)
 
 datasets_plot <- unique(datasaurus_dozen$dataset)[1:9]
 
-ggplot(datasaurus_dozen %>% filter(dataset %in% datasets_plot), aes(x = x, y = y)) +
+ggplot(datasaurus_dozen %>% filter(dataset %in% datasets_plot), 
+       aes(x = x, y = y)) +
   geom_point() +
   theme(legend.position = "none") +
-  facet_wrap( ~ dataset) + ylab("") + xlab("")
+  transition_states(
+    dataset,
+    transition_length = 2,
+    state_length = 1
+  ) +
+  enter_fade() +
+  exit_shrink() +
+  ease_aes('sine-in-out')
+anim_save("imges/datasaurus.gif")
 ```
 
-<!-- ::: -->
-<!-- :::::: -->
+```{r, echo = FALSE}
+if(knitr::opts_knit$get("rmarkdown.pandoc.to") == 'html') {
+  knitr::include_graphics("images/datasaurus.gif")
+} else {
+  knitr::include_graphics("images/datasaurus.png")
+}
+```
 
-<!-- <div style="clear:both"></div> -->
 
-<!-- <div style= "float:right;padding=10px; top:-10px; width:350px"> -->
 
-<!-- ```{r datasaurus_gif, eval=FALSE, echo=FALSE} -->
-<!-- library(datasauRus) -->
-<!-- library(gganimate) -->
-<!-- library(animation) -->
+</div>
 
-<!-- ggplot(datasaurus_dozen, aes(x = x, y = y, frame = dataset)) + -->
-<!--   geom_point() + -->
-<!--   theme(legend.position = "none") + -->
-<!--    transition_states( -->
-<!--     dataset, -->
-<!--     transition_length = 2, -->
-<!--     state_length = 1 -->
-<!--   ) + -->
-<!--   enter_fade() + -->
-<!--   exit_shrink() + -->
-<!--   ease_aes('sine-in-out') -->
-<!-- anim_save("imges/datasaurus.gif") -->
-<!-- ``` -->
+El cuarteto de Ascombe inspiró una técnica reciente para crear datos que comparten las
+mismas propiedades estadísticas al igual que en el cuarteto, pero que producen gráficas
+muy distintas ([Matejka,
+Fitzmaurice](https://www.autodeskresearch.com/publications/samestats)).
 
-<!-- ![](images/datasaurus.gif) -->
-<!-- </div> -->
-
-<!-- El cuarteto de Ascombe inspiró una técnica para crear datos que comparten las -->
-<!-- propiedades estadísticas al igual que en el cuarteto, pero que producen gráficas -->
-<!-- muy distintas ([Matejka, -->
-<!-- Fitzmaurice](https://www.autodeskresearch.com/publications/samestats)). -->
-
-<!-- <div style="clear:both"></div> -->
+<div style="clear:both"></div>
 
 
 ## Introducción {-}
@@ -257,10 +207,9 @@ fáciles para el ojo humano que otras [@cleveland94].
 
 ### Factor de engaño y Chartjunk {-}
 
-
-:::::: {.cols data-latex=""}
-
-::: {.col data-latex="{0.55\textwidth}"}
+<div style= "float:right;position: relative; top: -10px;width:140px">
+![](images/pies.jpg)
+</div>
 
 El **factor de engaño** es el cociente entre el efecto mostrado en una gráfica y
 el efecto correspondiente en los datos. Idealmente, el factor de engaño debe ser
@@ -294,42 +243,12 @@ todo el trabajo (una vez que ordenamos las categrías de la más grande a la má
 chica). Es posible hacer una gráfica de barras como la de abajo a la izquierda.
 
 
-:::
+<div style="clear:both"></div>
 
-::: {.col data-latex="{0.05\textwidth}"}
-\ 
-<!-- an empty Div (with a white space), serving as
-a column separator -->
-:::
+<div style= "float:left;top: -0px;width:300px">
+![](images/barras_pie.jpg)
+</div>
 
-
-::: {.col data-latex="{0.45\textwidth}"}
-
-```{r, echo=FALSE, out.width="70%", fig.align="center"}
-knitr::include_graphics('images/pies.jpg')
-```
-
-:::
-
-::::::
-
-:::::: {.cols data-latex=""}
-
-::: {.col data-latex="{0.40\textwidth}"}
-
-```{r, out.width='100%', echo=FALSE }
-knitr::include_graphics('images/barras_pie.jpg')
-```
-:::
-
-::: {.col data-latex="{0.05\textwidth}"}
-\ 
-<!-- an empty Div (with a white space), serving as
-a column separator -->
-:::
-
-
-::: {.col data-latex="{0.50\textwidth}"}
 
 Hay otros tipos de **chartjunk** comunes: uno es la textura de barras, por ejemplo.
 El efecto es la producción de un efecto moiré que es desagradable y quita la
@@ -337,11 +256,6 @@ atención de los datos, como en la gráfica de barras de abajo. Otro común son 
 rejillas, como mostramos en las gráficas de la izquierda. Nótese como en estos
 casos hay efectos ópticos no planeados que degradan la percepción de los
 patrones en los datos.
-
-
-:::
-
-::::::
 
 
 ```{r, out.width='100%', echo=FALSE }
@@ -360,29 +274,33 @@ caballos). La gráfica de la izquierda es pobre en densidad pues sólo represent
 gráfica:
 
 
-```{r, out.width='100%', echo=FALSE }
+```{r, out.width='98%', echo=FALSE }
 knitr::include_graphics('images/france_plot.jpg')
 ```
 
 La razón de este encogimiento es una que tiene qué ver con las oportunidades perdidas de una gráfica grande. Si repetimos este mismo patrón (misma escala, mismos tipos de ganado) para distintos países obtenemos la siguiente gráfica:
 
-```{r, out.width='100%', echo=FALSE, fig.align="center" }
-knitr::include_graphics('images/europe_plot.jpg')
-```
+<div style= "float:left;top: -10px;width:500px">
+![](images/europe_plot.jpg)
 
-Esta es una gráfica de puntos. Es útil como sustituto de una gráfica de barras,
-y es superior en el sentido de que una mayor proporción de la tinta que se usa
-es tinta de datos. Otra vez, mayor proporción de tinta de datos representa más
-oportunidades que se pueden capitalizar, como muestra la gráfica de punto y
+</div>
+
+Esta es una gráfica de puntos. Es útil como sustituto de una gráfica de barras, 
+y es superior en el sentido de que una mayor proporción de la tinta que se usa 
+es tinta de datos. Otra vez, mayor proporción de tinta de datos representa más 
+oportunidades que se pueden capitalizar, como muestra la gráfica de punto y 
 líneas que mostramos al principio (rendimiento en campos de cebada).
 
-### Más pequeños múltiplos {-}
+<div style="clear:both"></div>
+
+
+#### Más pequeños múltiplos {-}
 
 Los pequeños múltiplos presentan oportunidades para mostrar más acerca
 de nuestro problema de interés. Consideramos por ejemplo la relación
 de radiación solar y niveles de ozono:
 
-```{r, message=FALSE, warning = FALSE, fig.width = 5, fig.asp=0.7, out.width="55%", fig.align="center"}
+```{r, message=FALSE, warning = FALSE, fig.width = 5, fig.asp=0.7, out.width="45%", fig.align="center"}
 ggplot(airquality, aes(x=Solar.R, y=Ozone)) + geom_point() +
     geom_smooth(method = "loess", span = 1)
 ```
@@ -431,7 +349,7 @@ de este principio.
 El espacio en blanco es suficientemente bueno para indicar las fronteras en una
 tabla, y facilita la lectura:
 
-```{r, out.width='63%', echo=FALSE, fig.align="center" }
+```{r, out.width='65%', echo=FALSE, fig.align="center" }
 knitr::include_graphics('images/tabla_2_tinta_datos.jpg')
 ```
 
@@ -439,14 +357,14 @@ Para un ejemplo del proceso de rediseño de una tabla, ver [aquí](https://www.d
 Finalmente, podemos ver un ejemplo que intenta incorporar
 los elementos del diseño analítico, incluyendo pequeños múltiplos:
 
-```{r, out.width='95%', echo=FALSE, fig.align="center" }
+```{r, out.width='100%', echo=FALSE, fig.align="center" }
 knitr::include_graphics('images/ejemplo_enigh.png')
 ```
 
 
 ### Decoración {-}
 
-```{r, out.width='95%', echo=FALSE, fig.align="center" }
+```{r, out.width='100%', echo=FALSE, fig.align="center" }
 knitr::include_graphics('images/ejemplo_csi.png')
 ```
 
@@ -469,7 +387,7 @@ knitr::include_graphics('images/cleveland_tasks.png')
 Los resultados de Cleveland y McGill fueron replicados por Heer y Bostock en
 2010 y los resultados se muestran en las gráficas de la derecha:
 
-```{r, out.width='75%', echo=FALSE, fig.align="center" }
+```{r, out.width='50%', echo=FALSE, fig.align="center" }
 knitr::include_graphics('images/heer-bostock_results.png')
 ```
 
@@ -497,7 +415,7 @@ la dirección del movimiento del ejército y la temperatura en varias fechas
 durante la retirada de Moscú".
 
 
-```{r, out.width='95%', echo=FALSE, fig.align="center" }
+```{r minard-png, out.width='100%', echo=FALSE, fig.align="center" }
 knitr::include_graphics('images/minard.png')
 ```
 
