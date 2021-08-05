@@ -48,3 +48,5 @@ jobs:
           BUILD_DIR: _book/                     # "_site/" by default
        with:
           build_dir: _book
+          github_token: ${{ secrets.GH_PAT }}
+          email: ${{ secrets.EMAIL }}
