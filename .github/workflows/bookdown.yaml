@@ -48,4 +48,3 @@ jobs:
           BUILD_DIR: _book/                     # "_site/" by default
        with:
           build_dir: _book
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
