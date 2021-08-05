@@ -5,7 +5,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning=FALSE, cache =TRUE)
 ```
 
 * Las tareas se envían por correo a <teresa.ortiz.mancera@gmail.com> con título: 
-fundamentos-tareaXX (donde XX corresponde al número de tarea, 01..). 
+fundamentos-tareaXX (donde XX corresponde al número de tarea, 01..), usen siempre el mismo correo para enviar. 
 
 * Las tareas deben incluir código y resultados (si conocen [Rmarkdown](https://rmarkdown.rstudio.com) es muy conveniente para este propósito).
 

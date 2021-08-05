@@ -7,7 +7,7 @@ documentclass: book
 bibliography: [bibs/book.bib, bibs/packages.bib]
 biblio-style: apalike
 link-citations: yes
-github-repo: tereom/fundamentos
+github-repo: tereom/fundamentos-2021
 description: "Curso de Fundamentos de Estadística con Remuestreo, maestría en Ciencia de Datos, ITAM, Otoño 2021."
 ---
 
