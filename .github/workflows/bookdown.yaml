@@ -1,7 +1,6 @@
 on:
   push:
-     branches:
-       - dev
+     branches: dev
 
 name: renderbook
 
