@@ -40,6 +40,7 @@ jobs:
          name: _book # optional
          # Destination path
          path: _book # optional
+         build_dir: _book
      - name: Deploy to GitHub Pages
        uses: Cecilapp/GitHub-Pages-deploy@master
        env:
