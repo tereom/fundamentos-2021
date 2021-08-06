@@ -82,11 +82,7 @@ anim_save("imges/datasaurus.gif")
 ```
 
 ```{r, echo = FALSE}
-if(knitr::opts_knit$get("rmarkdown.pandoc.to") == 'html') {
-  knitr::include_graphics("images/datasaurus.gif")
-} else {
-  knitr::include_graphics("images/datasaurus.png")
-}
+knitr::include_graphics("images/datasaurus.gif")
 ```
 
 
