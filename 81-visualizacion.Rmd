@@ -1,4 +1,4 @@
-# Apéndice: Principios de visualizacion
+# Apendice: Principios de visualizacion
 
 ## El cuarteto de Ascombe {-}
 
