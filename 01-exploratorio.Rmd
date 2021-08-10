@@ -147,7 +147,7 @@ cambio) haciendo comparaciones en diferentes partes de la gráfica:
 tiene considerablemente más dispersión que el 10\% de las cuentas más bajas.
 
 - Entre los cuantiles 0.2 y 0.7 es donde existe *mayor* densidad de datos: la
-pendiente (tasa de cambio) es alta, lo que significa que al avanzar en los
+pendiente (tasa de cambio) es baja, lo que significa que al avanzar en los
 valores observados, los cuantiles (el porcentaje de casos) aumenta rápidamente.
 
 - Cuando la pendiente alta, quiere decir que los datos tienen más
