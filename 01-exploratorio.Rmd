@@ -167,8 +167,7 @@ $q(f)$ como sigue: si $f$ está entre $f_i$ y $f_{i+1}$ interpolamos linealmente
 los valores correspondientes $x_{(i)}$ y $x_{(i-1)}$. 
 
 En la práctica, es más conveniente usar $f_i= \frac{i - 0.5}{N}$. La gráfica
-de cuantiles no cambia mucho comparado con la difinición anterior, y esto nos permitirá
-más comparar con 
+de cuantiles no cambia mucho comparado con la difinición anterior, y esto nos permitirá comparar de mejor manera con 
 distribuciones teóricas que no tienen definido su cuantil 0 y el 1, pues tienen
 soporte en los números reales (como la distribución normal, por ejemplo).
 
@@ -178,7 +177,7 @@ Asociada a la función de cuantiles también tenemos la **distribución acumulad
 empírica de los datos**, que es aproximadamente inversa de la función de $q$ de cuantiles, y 
 se define como:
 
-$$\hat{F}(x) = x_{(i)}$$
+$$\hat{F}(x) = i/N$$
 si $x_{(i)} \leq x < x_{(i+1)}$. Nótese que $\hat{F}(q(f_i)) = i/N = f_i$ (demuéstralo).
 
 
