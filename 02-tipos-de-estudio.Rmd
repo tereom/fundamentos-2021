@@ -37,6 +37,11 @@ ggplot(bind_rows(pre, post), aes(x = y, color = group)) +
 ```
 
 
+> Far better an approximate answer to the right question, which is often vague, than an exact answer to the wrong question, which can always be made precise.
+>
+> --- John Tukey
+
+
 La siguiente imagen [Roger Peng](https://simplystatistics.org/2019/04/17/tukey-design-thinking-and-better-questions/) 
 representa una situación común a la que se enfrenta el analista de datos, y se
 desarrolló en el contexto de preguntas vagas. En el esquema hay tres caminos: 
@@ -89,7 +94,7 @@ de la tienda en términos de ventas?, etc.
 
 Entre las preguntas que se debe hacer el analista de datos una fundamental es
 entender el **proceso generador de datos**, pues esto determinará que 
-otras preguntas son relevantes, tanto en términos prácticos como estadísticos.
+otras preguntas son relevantes, y que análisis son adecuados, tanto en términos prácticos como estadísticos.
 
 * La **inferencia estadística** busca hacer afirmaciones, cuantificadas de 
 manera probabilista, acerca de datos que no tenemos, usando regularidades y 
@@ -142,15 +147,13 @@ paciente <- paciente %>%
 Supongamos que nos interesa conocer el porcentaje de menores en edad escolar, 
 (entre 6 y 15 años), con 
 anemia en México. La fuente de datos disponible corresponde a registros de 
-del IMSS de hospitalizaciones de menores, ya sea por anemia o 
-que por otra causa (infecciones gastrointestinales, apendicitis, tratamiento de 
+del IMSS de hospitalizaciones de menores, ya sea por anemia o por otra causa (infecciones gastrointestinales, apendicitis, tratamiento de 
 leucemia, ...), se registró 
 si el menor tenía anemia. En nuestra muestra el 47% de los niños tiene anemia.
 
 ```{r}
 head(paciente)
 ```
-
 
 - ¿Qué nos dice esta cantidad acerca de la anemia en la población?  
 - ¿Podemos hacer inferencia estadística?  
@@ -287,7 +290,8 @@ categorías históricas de qué tan complicado es cada crucero. Junta a sus dato
 muestra
 ```
 
-El analista argumenta entonces qu los policías se enviaron principalmente a cruceros que 
+El analista argumenta entonces que los policías se enviaron principalmente a 
+cruceros que 
 se consideran _Complicados_ según datos históricos. Esto resta credibilidad a la 
 comparación que hicimos inicialmente:
 
@@ -315,7 +319,7 @@ dentro de cada bloque.
 Por ejemplo, si queremos saber si el tiempo de caída libre es diferente para un objeto
 más pesado que otro, prepararíamos dos pesos con el mismo tamaño pero de peso distinto. Soltaríamos los dos al mismo tiempo y compararíamos el tiempo de caída de cada uno.
 
-En nuestro caso, como es usual en problemas de negocio o sociales, hacer esto es considerablemente más difícil. No podemos "preparar" cruceros con condiciones idénticas. Sin embargo, podríamos intentar bloquear los cruceros
+En nuestro caso, como es usual en problemas de negocio o sociales, hacer esto es considerablemente más difícil. No podemos "preparar" cruceros con condiciones idénticas. Sin embargo, podríamos intentar $bloquear$ los cruceros
 según información que tenemos acerca de ellos, para hacer más comparaciones e peras con peras.
 
 ## Bloqueo {-}
@@ -342,7 +346,6 @@ muestra_bloqueada <- trafico_tbl %>% group_by(categoria, policia) %>%
   select(policia, tiempo_espera_min, categoria)
 knitr::kable(muestra_bloqueada %>% group_by(categoria, policia) %>% tally())
 ```
-
 
 Y ahora hacemos comparaciones dentro de cada bloque creado por categoría:
 
@@ -379,7 +382,7 @@ usan para enviar a los policías.
 
 En este caso, por ejemplo, los expertos hipotéticos 
 nos señalan que hay algunos
-cruceros que aunque problemáticos a veces, su tráfico se resuelve 
+cruceros que aunque problemáticos, a veces su tráfico se resuelve 
 rápidamente, mientras que otros tienen tráfico más persistente, y 
 prefieren enviar policías a los de tráfico persistente. La lista
 de cruceros persistentes están en una hoja de excel que se comparte
@@ -433,7 +436,6 @@ muestra_natural <- trafico_tbl %>% filter(categoria != "Fluido") %>%
   # observar resultado
   mutate(tiempo_espera_obs = ifelse(policia ==1, y_1, y_0))
 ```
-
 
 Resumimos nuestros resultados del experimento son:
 
@@ -503,6 +505,4 @@ están intentando optimizarse, y la gente está haciendo su trabajo.
 - La cara mala de este hecho es que no podemos evaluar de manera simple la 
 efectividad de los tratamientos. Y esto hace difícil **optimizar** de forma 
 cuantificable los procesos, o **entender** qué funciona y qué no.
-
-
 

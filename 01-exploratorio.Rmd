@@ -742,10 +742,12 @@ Nos interesa ver qué personas compran té suelto, y de qué tipo. Empezamos por
 ver las proporciones que compran té según su empaque (en bolsita o suelto):
 
 ```{r}
-precio <- te %>% group_by(precio) %>%
-  tally() %>% mutate(prop = round(100 * n / sum(n))) %>%
+precio <- te %>% 
+  count(precio) %>%
+  mutate(prop = round(100 * n / sum(n))) %>%
   select(-n)
-tipo <- te %>% group_by(presentacion) %>% tally() %>%
+tipo <- te %>% 
+  count(presentacion) %>%
   mutate(pct = round(100 * n / sum(n)))
 tipo %>% formatear_tabla
 ```
@@ -758,8 +760,7 @@ presentación:
 ```{r}
 tipo <- tipo %>% select(presentacion, prop_presentacion = pct)
 tabla_cruzada <- te %>%
-  group_by(presentacion, precio) %>%
-  tally() %>%
+  count(presentacion, precio) %>%
   # porcentajes por presentación
   group_by(presentacion) %>%
   mutate(prop = round(100 * n / sum(n))) %>%
@@ -787,8 +788,7 @@ de las columnas con la columna marginal (en la tabla de tipo de estilo de té):
 ```{r, message = FALSE}
 num_grupos <- n_distinct(te %>% select(presentacion))
 tabla <- te %>%
-  group_by(presentacion, precio) %>%
-  tally() %>%
+  count(presentacion, precio) %>%
   group_by(presentacion) %>%
   mutate(prop_precio = (100 * n / sum(n))) %>%
   group_by(precio) %>%
