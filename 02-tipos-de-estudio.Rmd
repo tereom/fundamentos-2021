@@ -479,9 +479,9 @@ reduce a la mitad el tiempo de espera en un crucero complicado
 ## Selección de unidades y tratamiento {-}
 
 Vimos dos tipos de inferencia que requieren distintos diseños de estudio: 
-a poblaciones (caso anemia) y causal (policías). En el caso ideal de cada uno de
-estos ejemplos requerimos un mecanismo de aleatorización distinto y esto es 
-fundamental para entender las inferencias que podemos hacer.
+a poblaciones (ejemplo anemia) y causal (ejemplo policías). En el escenario ideal de cada uno de
+estos ejemplos requerimos un mecanismo de aleatorización, sin embargo, la aleatorización requerida en cada caso es distinta y distinguir esto es 
+fundamental para entender las inferencias que podemos hacer en distintos escenarios.
 
 
 ![Inferencia estadística de acuerdo al tipo del diseño (@ramsey).](images/03_inferencia-estudio.png)
