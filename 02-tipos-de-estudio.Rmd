@@ -36,6 +36,7 @@ ggplot(bind_rows(pre, post), aes(x = y, color = group)) +
   xlab("CPR error") + labs(color = "")
 ```
 
+</br>
 
 > Far better an approximate answer to the right question, which is often vague, than an exact answer to the wrong question, which can always be made precise.
 >
@@ -271,8 +272,19 @@ sabiduría popular.
 
 Para juzgar este argumento desde el punto de vista causal, nos preguntamos primero:
 
-- ¿Cuáles son los contrafactuales (los contrafactuales explican que pasaría si hubiéramos 
-hecho otra cosa que la que efectivamente hicimos) de las observaciones? 
+- ¿Cuáles son los contrafactuales (los contrafactuales explican que pasaría si hubiéramos hecho otra cosa que la que efectivamente hicimos) de las observaciones? 
+
+```{block, type='mathblock'}
+**Efectos causales y el esquema de resultados potenciales**       
+
+Consideramos un *tratamiento binario*: Se manda policía o no se manda policía. Un resultado potencial es aquél que se observaría bajo un tratamiento particular. En cada semáforo, a una hora dada, hay dos resultados potenciales, uno por cada valor del tratamiento:
+
+* $y_1:$ tiempo de espera si se envía policía.
+
+* $y_0:$ tiempo de espera si **no** se envía policía.
+
+Para cada semáforo, en el momento de registro, uno observa únicamente uno de los dos resultados potenciales. El resultado no observado se conoce como resultado contrafactual.
+```
 
 ## El estimador estándar {-}
 
@@ -299,7 +311,7 @@ comparación que hicimos inicialmente:
 policías en cruceros difíciles con cruceros no difíciles donde no hay policía.
 - La razón de esto es que el proceso generador de los datos incluye el hecho de que no
 se envían policías a lugares donde no hay tráfico.
-- ¿Cómo producir contrafactuales hacer la comparación correcta?
+- ¿Cómo producir contrafactuales para hacer la comparación correcta?
 
 ## Experimentos tradicionales {-}
 
@@ -344,7 +356,7 @@ de crucero, 3 con policía y 3 sin policía):
 muestra_bloqueada <- trafico_tbl %>% group_by(categoria, policia) %>% 
   sample_n(3) %>% 
   select(policia, tiempo_espera_min, categoria)
-knitr::kable(muestra_bloqueada %>% group_by(categoria, policia) %>% tally())
+knitr::kable(muestra_bloqueada %>% count(categoria, policia))
 ```
 
 Y ahora hacemos comparaciones dentro de cada bloque creado por categoría:
@@ -422,7 +434,7 @@ muestra_exp <- trafico_tbl %>% filter(categoria != "Fluido") %>%
   # asignar tratamiento al azar, esta es nuestra intervención:
   mutate(tratamiento_policia = rbernoulli(length(y_0), 0.5)) %>%
   # observar resultado
-  mutate(tiempo_espera_exp = ifelse(tratamiento_policia ==1, y_1, y_0))
+  mutate(tiempo_espera_exp = ifelse(tratamiento_policia == 1, y_1, y_0))
 ```
 
 Nótese la diferencia si tomamos la asignación natural del tratamiento (policía o no):
@@ -434,7 +446,7 @@ muestra_natural <- trafico_tbl %>% filter(categoria != "Fluido") %>%
   # usamos el tratamiento que se asignó
   # policia indica si hubo o no policía en ese crucero
   # observar resultado
-  mutate(tiempo_espera_obs = ifelse(policia ==1, y_1, y_0))
+  mutate(tiempo_espera_obs = ifelse(policia == 1, y_1, y_0))
 ```
 
 Resumimos nuestros resultados del experimento son:
@@ -464,18 +476,15 @@ ayudan o no los policías a reducir el tráfico en los cruceros
 problemáticos?** El experimento establece que un policía en promedio
 reduce a la mitad el tiempo de espera en un crucero complicado
 
-## Resumen: selección de unidades y tratamiento {-}
+## Selección de unidades y tratamiento {-}
 
-Vimos dos tipos de inferencia que requieren distintos diseños de estudio, 
-en particual debemos considerar el mecanismo de aleatorización para 
-entender las inferencias que podemos hacer: casual o a poblaciones.
+Vimos dos tipos de inferencia que requieren distintos diseños de estudio: 
+a poblaciones (caso anemia) y causal (policías). En el caso ideal de cada uno de
+estos ejemplos requerimos un mecanismo de aleatorización distinto y esto es 
+fundamental para entender las inferencias que podemos hacer.
 
-El punto crucial para entender las medidas de incertidumbre estadística es
-visualizar de manera hipotética, replicaciones del estudio y las condiciones
-que llevaron a la selección de la muestra. Esto es, entender el proceso 
-generador de datos e imaginar replicarlo.
 
-![Inferencia estadística de acuerdo al tipo del diseño [@ramsey].](images/03_inferencia-muestra.png)
+![Inferencia estadística de acuerdo al tipo del diseño (@ramsey).](images/03_inferencia-estudio.png)
 
 * El cuadro arriba a la izquierda es donde el análisis es más simple y los 
 resultados son más fáciles de interpretar.
@@ -484,6 +493,12 @@ resultados son más fáciles de interpretar.
 complicado, requieren más supuestos, conocimiento del dominio y habilidades 
 de análisis. En general resultan conclusiones menos sólidas. Muchas veces no 
 nos queda otra más que trabajar fuera del cuadro ideal.
+
+* El punto crucial para entender las medidas de incertidumbre estadística es
+visualizar de manera hipotética, replicaciones del estudio y las condiciones
+que llevaron a la selección de la muestra. Esto es, entender el proceso 
+generador de datos e imaginar replicarlo.
+
 
 ```{block, type='ejercicio'}
 Ubica los siguientes tipos de análisis:
@@ -495,9 +510,9 @@ Ubica los siguientes tipos de análisis:
 
 ## Asignación natural del tratamiento {-}
 
-- Cuando consideramos un sistema donde se "asignan" tratamientos,
-generalmente los tratamientos se asignan bajo un criterio de 
-optimización o conveniencia. 
+- Cuando consideramos un sistema donde se "asignan" tratamientos de manera 
+natural, generalmente los tratamientos se asignan bajo un criterio de 
+optimización o conveniencia (por ejemplo los policías a cruceros problemáticos). 
 
 - La cara buena de este hecho es que de alguna forma los resultados
 están intentando optimizarse, y la gente está haciendo su trabajo.
