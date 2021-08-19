@@ -280,7 +280,7 @@ no encontramos evidencia en contra de que los tres grupos producen datos con
 
 ## Comparaciones usando *lineup* (continuación) {-}
 
-Repitimos el ejemplo para otra muestra (en este ejemplo el proceso generador
+Repetimos el ejemplo para otra muestra (en este ejemplo el proceso generador
 de datos es diferente para el grupo `b`):
 
 ```{r, echo = FALSE, fig.width =5, fig.height=3}
@@ -319,7 +319,7 @@ Veremos otro ejemplo donde podemos hacer más concreta la idea de
 que con nuestra muestra
 de tomadores de té, queremos probar la siguiente hipótesis nula:
 
-- Los tomadores de té en bolsas exclusivamente usan azúcar más a tasas simillares que
+- Los tomadores de té en bolsas exclusivamente, usan azúcar a tasas simillares que
 los tomadores de té suelto (que pueden o no también tomar té en bolsita).
 
 Los datos que obtuvimos en nuestra encuesta, en conteos, son:
@@ -415,9 +415,9 @@ g_1 + g_2
 Este es el rango de fluctuación usual para nuestra estadística *bajo la
 hipótesis* de que los dos grupos de tomadores de té consumen té a la misma tasa.
 El valor que obtuvimos en nuestros datos es: `r round(dif_obs, 2)`.
-Misimo que no es un valor extremo en la distribución de referencia que vimos arriba. Ésta
+Mismo que no es un valor extremo en la distribución de referencia que vimos arriba. Ésta
 muestra no aporta mucha evidencia en contra de que los grupos tienen distribuciones similares.
-Podemos graficar otra vez marcando el valor de referencia:
+Podemos graficar otra vez marcando el valor observado:
 
 ```{r}
 # Función de distribución acumulada (inverso de función de cuantiles)
@@ -496,7 +496,7 @@ denominar como:
 
 En el ejemplo anterior planteamos hipótesis nula (proporciones iguales) e
 hipótesis alternativa que la proporción de tomadores de te suelto que usan
-azúcar en menor, esto corresponde a una hipótesis alternativa a dos colas:
+azúcar en menor proporción, esto corresponde a una hipótesis alternativa a dos colas:
 $H_0: p_1 = p_2$, y $H_1:p_1 > p_2$.
 
 
@@ -523,6 +523,10 @@ p se calcula como $P(T \geq t).$
 En el ejemplo de tomadores de té: el valor *p* lo calculamos usando el percentil donde
 nuestra observación cae en la distribución generada por las permutación (valor
 *p* de una cola).
+
+```{r}
+1 - dist_perm(dif_obs)
+```
 
 Por otro lado, podemos calcular:
 
