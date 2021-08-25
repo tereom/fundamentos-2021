@@ -228,19 +228,20 @@ library(tidyverse)
 source("R/funciones_auxiliares.R")
 n <- 5000
 set.seed(881)
-trafico_tbl <- tibble(x_inicial = rexp(n, 1 / 5), persistencia = runif(n)) %>%
+trafico_tbl <- tibble(x_inicial = rexp(n, 1 / 5), 
+                      persistencia = runif(n)) %>%
     mutate(dia_sem = sample(1:3, n, replace = T)) %>% 
-    mutate(z = x_inicial + 10*persistencia - 15) %>% 
+    mutate(z = x_inicial + 10 * persistencia - 15) %>% 
     mutate(policia = rbinom(n, 1, prob = exp(z) / (1 + exp(z)))) %>% 
-    mutate(e = 0.2*rnorm(n)) %>% 
-    mutate(y_0 = 1* x_inicial*exp(1.2 * persistencia - 1 + e)) %>% 
-    mutate(y_1 =  1*x_inicial*exp(1.2 * persistencia - 1 - 0.6 * policia + e)) %>% 
+    mutate(e = 0.2 * rnorm(n)) %>% 
+    mutate(y_0 = 1 * x_inicial * exp(1.2 * persistencia - 1 + e)) %>% 
+    mutate(y_1 = 1 * x_inicial * exp(1.2 * persistencia - 1 - 0.6 * policia + e)) %>% 
     #mutate(y_0 = round(y_0, 3), y_1 = round(y_1)) %>% 
     mutate(tiempo_espera_min = round(ifelse(policia == 1, y_1, y_0), 2)) %>%
-    mutate(factor = x_inicial*exp(1.2 * persistencia - 1)) %>% 
+    mutate(factor = x_inicial * exp(1.2 * persistencia - 1)) %>% 
     mutate(categoria = cut(factor, breaks = c(0, 4, 10, Inf),
-                           labels = c("Fluido", "Típico", "Complicado"),
-                            include.lowest = TRUE)) %>% 
+                           labels = c("Fluido", "Típico", "Complicado"), 
+                           include.lowest = TRUE)) %>% 
     mutate(efecto = y_1 - y_0) 
 muestra_policias <- sample_n(trafico_tbl, 200) %>% 
   select(policia, tiempo_espera_min, categoria)

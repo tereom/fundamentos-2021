@@ -87,9 +87,10 @@ muestrear_ventanas <- function(control, obs, n_ventana = 20, long = 20){
     dat_lista <- append(control_lista, list(obs))
     orden <- sample(1:n_ventana, n_ventana)
     datos_lineup <- tibble(rep = orden, datos = dat_lista) %>%
-        unnest(cols = c(datos)) %>% group_by(rep) %>% mutate(t_0 = t - min(t)) %>% ungroup  
+        unnest(cols = c(datos)) %>% group_by(rep) %>% 
+        mutate(t_0 = t - min(t)) %>% ungroup  
     list(lineup = datos_lineup,
-        pos = last(orden))
+         pos = last(orden))
 }
 set.seed(12)
 obs <- historicos[500:519, ]
@@ -152,6 +153,12 @@ la probabilidad de que hayamos señalado la nueva serie "sobreinterpretando"
 fluctuaciones en un proceso que sigue comportándose normalente es 0.05 - relativamente baja.
 **Detectar los datos diferentes es evidencia en contra de que el sistema sigue funcionando de la misma
 manera que antes.**
+
+En el ejemplo anterior se encontraban en la posición:
+
+```{r}
+prueba_tbl$pos
+```
 
 
 **Observaciones y terminología**:
@@ -309,7 +316,7 @@ más altos y tiene mayor dispersión. En este caso, como en general podemos iden
 datos, obtenemos evidencia en contra de que los tres grupos tienen distribuciones iguales.
 
 Estos ejemplos siguen la idea de inferencia visual propuestas en
-[@lineup], [@graphical-tests] e implementadas en R en el paquete `lineup`. Son
+[@lineup], [@graphical-tests] son
 pruebas muy flexibles y estadísticamente rigurosas.
 
 ## Prueba de permutaciones para proporciones {-}
@@ -393,6 +400,9 @@ Ahora construimos nuestra distribución nula o de referencia:
 
 ```{r permutaciones-lineup}
 reps <- lineup(null_permute("how"), te_azucar, n = 10000)
+
+glimpse(reps)
+
 valores_ref <- reps %>%
   mutate(usa_azucar = as.numeric(sugar == "sugar")) %>%
   group_by(.sample, how) %>%
