@@ -359,7 +359,7 @@ o iguales a $x$, así que
 $$F_{\max} (x) = P(X_1\leq x, X_2\leq x, \cdots, X_n\leq x)$$
 como las $X_i$'s son independientes entonces
 $$F_{\max}(x) = P(X_1\leq x)P(X_2\leq x)\cdots P(X_n\leq x) = x^n$$
-para $x\in [0,1]$, pues para cada $X_i$ tenemos $P(X_i\leq x) = x$ (demuéstralo).
+para $x\in [0,1]$, pues para cada $X_i$ tenemos $P(X_i\leq x) = x$.
 Así que no es necesario usar simulación para conocer esta distribución de muestreo.
 Derivando esta distribución acumulada obtenemos su densidad, que es
 
@@ -601,7 +601,7 @@ la segunda gráfica en términos de la forma de la distribución normal?
 Para interpretar las gráficas de cuantiles normales se requiere práctica, 
 pues claramente los datos, aún cuando provengan de una distribución normal, no
 van a caer justo sobre una línea recta y observaremos variabilidad. Esto no descarta
-neceariamente que los datos sean aproximadamente normales. Con la práctica, generalmente
+necesariamente que los datos sean aproximadamente normales. Con la práctica, generalmente
 esta gráfica nos da una buena indicación si el supuesto de normalidad es apropiado.
 
 Sin embargo, podemos hacer una prueba de hipótesis formal de normalidad si 
@@ -680,7 +680,7 @@ Si $S=X_1 + X_2 + X_{30}$, entonces la media de $S$ es 15 (¿cómo se calcula?)
 y su desviación estándar es $\sqrt{\frac{30}{12}}$. La suma es entonces
 aproximadamente $\mathsf{N}\left(15, \sqrt{\frac{30}{12}}\right)$. Entonces
 
-$$P(S > 50) = P \left (\frac{S - 15}{\sqrt{\frac{30}{12}}}  > \frac{18 - 15}{\sqrt{\frac{30}{12}}}\right) \approx P(Z > 1.897)$$
+$$P(S > 18) = P \left (\frac{S - 15}{\sqrt{\frac{30}{12}}}  > \frac{18 - 15}{\sqrt{\frac{30}{12}}}\right) \approx P(Z > 1.897)$$
 
 donde $Z$ es normal estándar. Esta última cantidad la calculamos
 usando la función de distribución de la normal estándar, y nuestra aproximación es

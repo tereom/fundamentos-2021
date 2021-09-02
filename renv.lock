@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.1.0",
+    "Version": "4.1.1",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -78,13 +78,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "7e2c62de2799dc212e5b52526c288e72"
-    },
-    "animation": {
-      "Package": "animation",
-      "Version": "2.6",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b726b7119ba99cc79dfdd24cb4ee6894"
     },
     "anytime": {
       "Package": "anytime",
@@ -245,13 +238,6 @@
       "Repository": "CRAN",
       "Hash": "d1b8b1a821ee564a3515fa6c6d5c52dc"
     },
-    "datasauRus": {
-      "Package": "datasauRus",
-      "Version": "0.1.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "e43590e853297a0eb7703995c544208c"
-    },
     "dbplyr": {
       "Package": "dbplyr",
       "Version": "2.1.1",
@@ -300,13 +286,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "ec8ca05cffcc70569eaaad8469d2a3a7"
-    },
-    "expm": {
-      "Package": "expm",
-      "Version": "0.999-6",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "1bb0f92b6125ea03dd7142f8eaf36bf5"
     },
     "fansi": {
       "Package": "fansi",
@@ -560,13 +539,6 @@
       "Repository": "CRAN",
       "Hash": "3d5108641f47470611a32d0bdf357a72"
     },
-    "latex2exp": {
-      "Package": "latex2exp",
-      "Version": "0.5.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "f96b4c78546d415fa21c99e83629543a"
-    },
     "lattice": {
       "Package": "lattice",
       "Version": "0.20-44",
@@ -601,13 +573,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "1ebfdc8a3cfe8fe19184f5481972b092"
-    },
-    "magick": {
-      "Package": "magick",
-      "Version": "2.7.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "db36bbb91bf293f0550c51ecbf6f1928"
     },
     "magrittr": {
       "Package": "magrittr",
@@ -870,10 +835,10 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.9",
+      "Version": "2.10",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "912c09266d5470516df4df7a303cde92"
+      "Hash": "1fb097f233ee98968f8e5d0bcd42df6d"
     },
     "robustbase": {
       "Package": "robustbase",
