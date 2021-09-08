@@ -212,7 +212,7 @@ Para el primer caso hacemos:
 
 ```{r}
 # simular
-replicar_muestreo_unif <- function(est = estimador_1, m, n = 15){
+replicar_muestreo_unif <- function(est = mean, m, n = 15){
   valores_est <- map_dbl(1:m, ~ est(runif(n)))
   tibble(id_muestra = 1:m, estimacion = valores_est)
 }
@@ -421,7 +421,7 @@ Podemos checar este resultado con simulación, por ejemplo para una
 muestra de tamaño $n=15$ con $\lambda = 1$:
 
 ```{r}
-replicar_muestreo_exp <- function(est = estimador_1, m, n = 15, lambda = 1){
+replicar_muestreo_exp <- function(est = mean, m, n = 15, lambda = 1){
   valores_est <- map_dbl(1:m, ~ est(rexp(n, lambda)))
   tibble(id_muestra = 1:m, estimacion = valores_est)
 }
@@ -614,7 +614,7 @@ generando muestras normales $\mathsf{N}(\bar{x}, s)$.
 - Usamos el *lineup*, produciendo datos bajo la hipótesis nula y viendo si
 podemos distinguir los datos. Por ejemplo:
 
-```{r}
+```{r, fig.height=7.2, fig.width=7}
 library(nullabor)
 lineup_normal <- lineup(null_dist("x_2", dist = "normal"), muestra)
 ggplot(lineup_normal, aes(sample = x_2)) +
@@ -626,7 +626,7 @@ ggplot(lineup_normal, aes(sample = x_2)) +
 En esta gráfica claramente rechazaríamos la hipótesis de normalidad. Sin embargo, para
 la primera muestra, obtenemos:
 
-```{r}
+```{r, fig.height=7.2, fig.width=7}
 lineup_normal <- lineup(null_dist("x_1", dist = "normal"), muestra)
 ggplot(lineup_normal, aes(sample = x_1)) +
   geom_qq(distribution = stats::qnorm) +
