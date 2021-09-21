@@ -78,6 +78,6 @@ La tarea 5 es el proyecto de RStudio.Cloud con este nombre, el ejercicio está
 en un archvio de R Markdown. Envíen el reporte por correo electrónico (con 
 título fundamentos-tarea05).
 
-## 5. TCL y bootstrap {-}
+## 6. TCL y bootstrap {-}
 
 La tarea 6 es el proyecto de RStudio.Cloud con este nombre.

@@ -9,7 +9,8 @@ Imports:
     ggthemes,
     ggrepel, 
     lubridate, 
-    gridExtra
+    gridExtra,
+    pryr
 Remotes: rstudio/bookdown
 URL: https://github.com/tereom/fundamentos-2021
 BugReports: https://github.com/tereom/fundamentos-2021/issues
