@@ -1715,12 +1715,10 @@ concentrado_hogar <- read_csv(here::here("data",
 hogar <- concentrado_hogar %>% 
     mutate(
         upm = as.integer(upm),
-        jefe_hombre = sexo_jefe == 1, 
-        edo = str_sub(ubica_geo, 1, 2), 
-        jefa_50 = (sexo_jefe == 2) & (edad_jefe > 50)
+        edo = str_sub(ubica_geo, 1, 2)
         ) %>% 
-    select(folioviv, foliohog, est_dis, upm, factor, ing_cor, sexo_jefe, 
-       edad_jefe, edo, jefa_50) %>% 
+    select(folioviv, foliohog, est_dis, upm, factor, ing_cor, 
+       edad_jefe, edo) %>% 
     group_by(est_dis) %>% 
     mutate(n = n_distinct(upm)) %>% # número de upms por estrato
     ungroup()
@@ -1759,7 +1757,7 @@ una replicación del ponderador correspondiente a la $k$-ésima unidad (USM) com
 $$d_k^*=d_k \bigg[\bigg(1-\sqrt{\frac{m_h}{n_h - 1}}\bigg) + 
 \bigg(\sqrt{\frac{m_h}{n_h - 1}}\frac{n_h}{m_h}m_{h}^*\bigg)\bigg]$$
 
-donde $d_k$ es el inverso de la probabilidad de selección. Si $m_h<(n_h -1)$ 
+donde $d_k$ es el inverso de la probabilidad de selección. Si $m_h <(n_h -1)$ 
 todos los pesos definidos de esta manera serán no negativos. Calculamos el 
 peso final $w_k^*$ aplicando a $d_k^*$ los mismos ajustes que se hicieron a los 
 ponderadores originales.
@@ -1773,7 +1771,7 @@ $w_k^*$ en lugar de los originales $w_k$.
 
 $$\hat{\textsf{se}}_B = \bigg\{\frac{\sum_{b=1}^B[\hat{\theta}^*(b)-\hat{\theta}^*(\cdot)]^2 }{B}\bigg\}^{1/2}$$
 
-Podemos elegir cualquier valor de $m_h \geq 1$, el más sencillo es elegir
+En principio podemos elegir cualquier valor de $m_h \geq 1$, el más común es elegir
 $m_h=n_h-1$, en este caso:
 $$d_k^*=d_k \frac{n_h}{n_h-1}m_{hi}^*$$
 en este escenario las unidades que no se incluyen en la muestra tienen 
@@ -1786,12 +1784,13 @@ Implementemos el bootstrap de Rao y Wu a la ENIGH, usaremos $m_h=n_h-1$
 ```{r funcion_boot, cache = TRUE, message=FALSE}
 # creamos una tabla con los estratos y upms
 est_upm <- hogar %>% 
-    distinct(est_dis, upm, n)
+  distinct(est_dis, upm, n) %>% 
+  arrange(upm)
 
 hogar_factor <- est_upm %>% 
     group_by(est_dis) %>% # dentro de cada estrato tomamos muestra (n_h-1)
     sample_n(size = first(n) - 1, replace = TRUE) %>% 
-    add_count(est_dis, upm, name = "m_hi", wt = 1) %>% # calculamos m_hi*
+    add_count(est_dis, upm, name = "m_hi") %>% # calculamos m_hi*
     left_join(hogar, by = c("est_dis", "upm", "n")) %>% 
     mutate(factor_b = factor * m_hi * n / (n - 1))
 
@@ -1833,7 +1832,7 @@ rm(boot_rep)
 
 
 El método bootstrap está implementado en el paquete `survey` y más recientemente 
-en `srvyr` que es una versión *tidy* que utiliza las funciones en `survey`. 
+en `srvyr` que es una versión *tidy* que utiliza las funciones en `survey`.
 
 Podemos comparar nuestros resultados con la implementación en `survey`.
 
