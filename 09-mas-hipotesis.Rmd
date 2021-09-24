@@ -111,7 +111,7 @@ Repite esta prueba con una muestra de Chiapas. ¿Qué resultado obtienes?
 
 Tenemos entonces:
 
-```{block, type='mathblock'}
+```{block2, type='mathblock'}
 
 **Prueba de Wald.** Consideramos probar la hipótesis nula $H_0: \theta =
 \theta_0$ contra la alternativa $H_1: \theta \neq \theta_0$. Suponemos que
@@ -741,7 +741,7 @@ teorema, cuya demostración no es trivial, explica las observaciones que
 hicimos arriba. Este teorema enuncia la estrategia del enfoque clásico,
 que utiliza una aproximación asintótica.
 
-```{block, type='mathblock'}
+```{block2, type='mathblock'}
 **Valores-p para pruebas de cocientes de verosimilitud**. Supongamos
 que $\theta = (\theta_1,\theta_2, \ldots, \theta_p)$.  Sea
 $$\Theta_0 = \{\theta : \theta_1 = a_1, \theta_2 = a_2, \dots, \theta_q = a_q \}\,,$$
