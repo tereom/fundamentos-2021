@@ -1045,4 +1045,150 @@ muestreo. Una posibilidad son modelos jerárquicos bayesianos. Ver por ejemplo
 
 ## Meta-análisis {-}
 
+El meta-análisis es un estudio estadístico de los resultados de múltiples
+estudios científicos. Usualmente se utilizan cuando diversos estudios
+intentan responder a la misma pregunta, y cada estudio incluye un medida de los 
+errores de estimación. Por ejemplo, el siguiente caso viene de @anxiety. 
+
+Los autores han recopilado distintos estudios sobre la prevalencia ---la
+proporción de personas en un estudio que sufren de una enfermedad--- de ansiedad
+en los jóvenes durante la pandemia del COVID-19.
+
+En total se tienen 26 estudios distintos. Donde cada uno reporta el número de 
+jóvenes con diagnóstico positivo de ansiedad dentro de sus grupos de estudio. 
+Por ejemplo, podemos ver una muestra de los datos. 
+
+```{r, echo = FALSE}
+
+datos <- tibble(
+       publicacion = factor(seq(26, 1)), 
+       casos   = c(278, 213, 252, 864, 3334, 67, 1899, 5136, 4240, 265, 40, 309, 
+                   1941, 175, 403, 805, 857, 98, 362, 179, 1402, 248, 155, 122, 
+                   103, 30), 
+       total   = c(436, 384, 455, 1794, 7772, 168, 4805, 13002, 11180, 859, 156, 
+                   1241, 7890, 721, 1784, 3613, 4342, 515, 2050, 1018, 8079, 
+                   1550, 1025, 1036, 2078, 1352))
+
+datos <- datos %>% mutate(
+        estimate = casos/total, 
+        se       = sqrt(estimate * (1 - estimate)/total), 
+        lo.bound = estimate - 2 * se, 
+        hi.bound = estimate + 2 * se
+)
+
+datos |> head()
+
+```
+
+```{block, type="ejercicio"}
+
+¿Qué modelo paramétrico crees que fue utilizado para generar estos resúmenes?
+
+```
+
+Esta información la podríamos graficar como sigue (cada estudio se muestra como
+una observación)
+
+```{r}
+
+datos %>% 
+    ggplot(aes(x = estimate, y = publicacion)) +
+    geom_linerange(aes(xmin = lo.bound, xmax = hi.bound)) + 
+    geom_point() + 
+  xlab("Estimador")+ ylab("Publicación (estudio)") + 
+  ggtitle("Meta-análisis de prevalencia de ansiedad en jóvenes")
+
+```
+De lo cual puede resultar un poco confuso que todos los estudios tienen como
+objetivo estimar la misma cantidad. Pero parece ser que hay resultados muy
+diferentes entre todos estos estudios. Más aún, la precisión con la que 
+se estima la proporción de jóvenes con ansiedad parece ser muy distinta entre 
+estudios. 
+
+Podríamos ajustar de manera ingenua un estimador utilizando como se muestra 
+a continuación: 
+
+```{r mean estimates, echo = FALSE}
+
+datos %>% 
+    summarise( casos = sum(casos), 
+               total = sum(total)) %>% 
+    mutate(
+        estimate = casos/total, 
+        se       = sqrt(estimate * (1 - estimate)/total), 
+        lo.bound = estimate - 2 * se, 
+        hi.bound = estimate + 2 * se, 
+        width    = hi.bound - lo.bound
+        )
+
+```
+
+```{block, type = "ejercicio"}
+
+¿Consideras que es un buen estimador de acuerdo a lo observado en los estudios 
+individuales?
+
+```
+
+Podríamos suponer que aunque las medias sean diferentes los errores estándar en
+las estimaciones deberían de ser similares. Para esto podemos utilizar una
+estimación de los errores estándar por grupo ([*pooled variance*](https://en.wikipedia.org/wiki/Pooled_variance)):
+
+$$\hat \sigma^2 = \frac{(n_1 - 1) \hat s_1^2 + \cdots + (n_k - 1) \hat s_k^2}{n_1 + \cdots + n_k - k}\,,$$
+donde $k$ denota el número de estudios, $\hat s_i$ la estimación del error 
+estándar y $n_k$ el tamaño de muestra de cada estudio. 
+
+Es claro, por la gráfica de arriba, que este supuesto en la varianza no es el
+correcto. Pero, nos lleva a un estimador con un error estándar mas amplio, pues
+nos ayuda a incoporar heterogeneidad en las medias de los grupos. Esto a su vez,
+nos puede "proteger" al tener una mejor cuantificación del error en la
+estimación.
+
+```{r pooled estimates}
+
+datos %>% 
+    summarise(average  = mean(estimate), 
+              se       = sqrt(sum((total - 1) * (se**2))/(sum(total) - n())), 
+              lo.bound = average - 2 * se, 
+              hi.bound = average + 2 * se, 
+              width    = hi.bound - lo.bound)
+    
+```
+
+```{block, type = "ejercicio"}
+
+Utiliza *bootstrap* no paramétrico para estimar la distribución de muestreo de la
+prevalencia de ansiedad en jóvenes durante la pandemia. ¿Cómo se compara 
+tu estimador con los propuestos arriba? Al hacer el *bootstrap* ¿qué supuestos 
+del método generador de datos estás incorporando?
+
+```
+
+
+Este último ejemplo es particular en algunos aspectos. El más importante es que
+nos muestra que un estimador con menor incertidumbre no necesariamente es mejor
+que uno con mayor. El proceso de estimación puede incorporar supuestos que hacen
+transparente el proceso generador de datos, lo cual puede llevar a estimaciones
+mas prudentes o conservadoras. Esto último, lo leemos como el *slogan* de
+nuestro curso: "no es malo tener incertidumbre, el problema es **no**
+cuantificarla".
+
+```{block, type = "ejercicio"}
+
+¿Qué características de nuestros estimadores no están siendo capturados en 
+los ejercicios de arriba con respecto a la prevalencia de ansiedad en jóvenes 
+durante la pandemia? ¿Encuentras una manera de subsanar esas deficiencias?
+
+```
+
+
+En la sección siguiente veremos una paradigma distinto para hacer inferencia
+estadística. Posiblemente se te ocurrirá cómo atacar el problema del
+meta-análisis con las técnicas a continuación.
+
+
+
+
+
+
 
