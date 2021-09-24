@@ -19,7 +19,7 @@ estimador, en general, no es un estimador de *plug-in* necesariamente.
 
 Sin embargo, suponiendo que el modelo paramétrico que estamos usando es
 apropiado, podemos remuestrear de tal modelo para estimar la varianza de
-nuestros estimadores. Este proceso se llama el ***bootstrap* paramétrico**.
+nuestros estimadores. Este proceso se llama el *bootstrap* **paramétrico**.
 Antes de hacer una definición precisa, veamos cómo calcularíamos error estándar
 para los estimadores de máxima verosimilitud de la normal que vimos arriba.
 
