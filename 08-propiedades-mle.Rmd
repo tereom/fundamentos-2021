@@ -120,11 +120,11 @@ la representamos por medio del concepto de *consistencia*. Para hablar de
 esta propiedad necesitamos definir un tipo de convergencia para una 
 secuencia de variables aleatorias, **convergencia en probabilidad.**
 
-```{block, type = 'mathblock'}
+```{block2, type = 'mathblock'}
 **Definición.** Una sucesión de variables aleatorias $X_n$ converge en
 probabilidad a la variable aleatoria $X,$ lo cual denotamos por 
-$X_n \overset{P}{\rightarrow} X,$ si para toda $\epsilon > 0,$
-$$\lim_{n \rightarrow \infty}  \mathbb{P}(|X_n - X| > \epsilon) = 0.$$
+$X_n \overset{P}{\rightarrow} X,$ si para toda $\epsilon>0,$
+$$\lim_{n \rightarrow \infty}  \mathbb{P}(|X_n - X| >\epsilon) = 0.$$
 ```
 
 Ahora, definimos un estimador consistente como:
@@ -308,7 +308,7 @@ donde $\mathsf{ee}$ denota el error estándar del $\textsf{MLE},$ $\mathsf{ee} =
 Esta distribución se puede caracterizar de manera aproximada por métodos analíticos. 
 Para esto necesitamos las siguientes definiciones. 
 
-```{block, type = 'mathblock'}
+```{block2, type = 'mathblock'}
 
 **Definición. ** La función de *score* está definida como
 \begin{align}
@@ -498,7 +498,7 @@ la distribución de $\tau = g(\theta)?$
 La respuesta es afirmativa y la enunciamos por medio de un teorema. El resultado se conoce como 
 el **método delta**. 
 
-```{block, type = 'mathblock'}
+```{block2, type = 'mathblock'}
 
 **Teorema.** Si $\tau = g(\theta)$ es una función diferenciable y $g'(\theta)\neq 0,$ entonces
 $$\hat \tau_n \overset{d}{\rightarrow} \mathsf{N}( \tau^*, \hat{\mathsf{ee}}^2_\tau)\,,$$
