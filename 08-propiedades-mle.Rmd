@@ -4,15 +4,15 @@
 library(tidyverse)
 library(patchwork)
 source("R/funciones_auxiliares.R")
-knitr::opts_chunk$set(cache = TRUE, echo = TRUE, message = FALSE, warning=FALSE, fig.align = 'center', fig.width = 5, fig.height=4)
+knitr::opts_chunk$set(cache = TRUE, echo = TRUE, message = FALSE, warning=FALSE, fig.align = 'center', fig.height=4)
 comma <- function(x) format(x, digits = 2, big.mark = ",")
 theme_set(theme_minimal())
 ```
 
 El método de máxima verosimiltud es uno de los métodos más utilizados en la
 inferencia estadística paramétrica. En esta sección estudiaremos las propiedades
-teóricas que cumplen los estimadores de máxima verosimilitud ($\textsf{MLE}$) y que 
-han ayudado en su *casi* adopción universal.
+teóricas que cumplen los estimadores de máxima verosimilitud ($\textsf{MLE}$) y
+que han ayudado en su *casi* adopción universal.
 
 Estas propiedades de los $\textsf{MLE}$ son válidas siempre y cuando el modelo
 $f(x; \theta)$ satisfaga ciertas condiciones de regularidad. En particular
@@ -22,18 +22,19 @@ asintóticamente eficientes, y equivariantes.
 
 ```{block, type = 'comentario'}
 
-Los estimadores $\textsf{MLE}$ en ocasiones son malinterpretados como una estimación 
+Los estimadores $\textsf{MLE}$ usualmente son malinterpretados como una estimación 
 puntual en la inferencia, y por ende, incapaces de cuantificar incertidumbre. A lo
 largo de estas notas hemos visto cómo extraer intervalos de confianza por medio de 
 simulación y por lo tanto incorporar incertidumbre en la estimación. 
-Sin embargo, hay otros maneras de reportar incertidumbre para $\textsf{MLE}$.
-Y hablaremos de ello en esta sección.
+Sin embargo, mediante $\textsf{MLE}$ también es posible reportar incertidumbre. 
+Justo lo veremos en esta sección.  
+
 ```
 
 
 A lo largo de esta sección asumiremos muestras de la forma 
 \begin{align}
-  X_1, \ldots, X_n \overset{\text{iid}}{\sim} f(x; \theta^*),
+  X_1, \ldots, X_n \overset{\text{iid}}{\sim} f(x; \theta^*)\,,
 \end{align}
 donde $\theta^*$ es el valor verdadero ---que suponemos desconocido pero fijo---
 del parámetro $\theta \in \Theta$, y sea $\hat \theta_n$ el estimador de máxima
@@ -49,7 +50,7 @@ registran el éxito o fracaso de un experimento. Es decir, $X_1, \ldots, X_n \si
 éxitos. Éste último denotado por $p.$ Este ejemplo lo hemos estudiado en
 secciones pasadas (ver Sección \@ref(S:max-verosimilitud)), y sabemos que el $\textsf{MLE}$ es
 \begin{align}
-  \hat p_n = \frac{S_n}{n} = \bar X_n,
+  \hat p_n = \frac{S_n}{n} = \bar X_n\,,
 \end{align}
 donde $S_n= \sum_i X_i$ es el número total de éxitos en la muestra. 
 
@@ -58,7 +59,9 @@ observaciones en nuestra muestra. Podemos apreciar cómo el promedio parece
 estabilizarse alrededor del verdadero valor de $p^* = 0.25$ cuando tenemos una
 cantidad suficientemente grande de observaciones.
 
-```{r, echo = FALSE, fig.height = 2}
+```{r, echo = FALSE, fig.height = 2, out.width = "95%"}
+library(latex2exp)
+
 set.seed(1087)
 p_true <- .25
 
@@ -73,18 +76,20 @@ extrae_muestras(1, n = 2500) %>%
     geom_hline(yintercept = p_true, color = 'red', lty = 2) + 
     scale_x_log10() +
     xlab('n: número de muestras') + 
-    ylab(expression(bar(x)[n]))   + 
+    ylab(TeX('$\\bar{x}_n$'))   + 
     ylim(0, .50)
 
 ```
 
 Como es de esperarse, diferentes muestras tendrán diferentes valores de $n$ dónde las
 trayectorias parezca que se haya estabilizado (Ver figura siguiente). Sin embargo, 
-se puede notar que este comportamiento parece estar controlado y son *raras* las 
-trayectorias que se encuentran más lejos.
+se puede notar que este comportamiento parece estar controlado y son **"raras" las 
+trayectorias** que se encuentran más lejos.
 
-```{r, echo = FALSE, fig.height = 2}
+```{r, echo = FALSE, fig.height = 2, out.width = "95%"}
+
 n_muestra <- 2500
+
 g_0 <- 1:10 %>% 
   map_dfr(extrae_muestras, n = n_muestra) %>% 
   group_by(muestra) %>% 
@@ -94,9 +99,8 @@ g_0 <- 1:10 %>%
     geom_hline(yintercept = p_true, color = 'red', lty = 2) + 
     scale_x_log10() +
     xlab('n: número de muestras') + 
-    ylab(expression(bar(x)[n])) + 
-    theme(legend.position = "none") + 
-    ylim(0, 1)
+    ylab(TeX('$\\bar{x}_n$')) + theme(legend.position = "none") + 
+    ylim(0, .50)
 
 g_0 
 
@@ -119,10 +123,9 @@ secuencia de variables aleatorias, **convergencia en probabilidad.**
 ```{block2, type = 'mathblock'}
 **Definición.** Una sucesión de variables aleatorias $X_n$ converge en
 probabilidad a la variable aleatoria $X,$ lo cual denotamos por 
-$X_n \overset{P}{\rightarrow} X$, si para toda $\epsilon \gt 0$,
+$X_n \overset{P}{\rightarrow} X,$ si para toda $\epsilon>0,$
+$$\lim_{n \rightarrow \infty}  \mathbb{P}(|X_n - X| >\epsilon) = 0.$$
 ```
-
-$$\lim_{n \rightarrow \infty}  \mathbb{P}(|X_n - X| > \epsilon) = 0.$$
 
 Ahora, definimos un estimador consistente como:
 ```{block, type = 'mathblock'}
@@ -139,39 +142,37 @@ En particular, los estimadores $\textsf{MLE}$ son consistentes.
 probabilidad a $\theta^*.$ Es decir, $\hat \theta_n$ es
 consistente.
 ```
-La demostración de este teorema la pueden encontrar en @Wasserman y escapa 
-a los objetivos del curso. Sin embargo, el boceto es importante pues
-nos permite hablar de un concepto muy útil en probabilidad, aprendizaje de máquina
-y teoría de la información: *divergencia de Kullback-Leibler,* la cual mide la diferencia 
-entre dos distribuciones, y está definida como 
-$$ D(f\, \|\, g) = \int f(x) \log \frac{f(x)}{g(x)} \, \text{d}x.$$
+La demostración de este teorema la pueden encontrar en @Wasserman y escapa a los
+objetivos del curso. Sin embargo, el boceto es importante pues nos permite
+hablar de un concepto muy útil en probabilidad, aprendizaje de máquina y teoría
+de la información: *divergencia de Kullback-Leibler,* la cual mide la diferencia
+entre dos distribuciones, y está definida como
+$$ D(f\, \|\, g) = \int f(x) \log \frac{f(x)}{g(x)} \, \text{d}x\,.$$
 Nota que $D(f\, \|\, g) \geq 0,$ no es simétrica, y $D(f\, \|\, g) =0$ si y sólo si 
 $f = g.$
 
 *Idea de la demostración.* Este boceto nos permite ilustrar la importancia 
 teórica de la log-verosimilitud. Pues para buscar el $\textsf{MLE}$ necesitamos maximizar 
-$$\ell_n(\theta) = \sum_{i = 1}^n \log f(X_i; \theta).$$
+$$\ell_n(\theta) = \sum_{i = 1}^n \log f(X_i; \theta)\,.$$
 
 Esta expresión como suma nos permite ligar la *Ley de los Grandes Números* mediante:
-$$\frac{\ell_n(\theta)}{n}= \frac1n\sum_{i = 1}^n \log f(X_i; \theta) \approx \mathbb{E}[\log f(X; \theta)],$$
+$$\frac{\ell_n(\theta)}{n}= \frac1n\sum_{i = 1}^n \log f(X_i; \theta) \approx \mathbb{E}[\log f(X; \theta)]\,,$$
 donde el valor esperado se toma con respecto a la distribución de la muestra. 
 Es decir, 
-$$\mathbb{E}[\log f(X; \theta)] = \int f(x; \theta^*)  \log f(x; \theta)\,  \text{d}x,$$
+$$\mathbb{E}[\log f(X; \theta)] = \int f(x; \theta^*)  \log f(x; \theta)\,  \text{d}x\,,$$
 misma que podemos rescribir como 
-$$\mathbb{E}[\log f(X; \theta)] = -D( \theta^* \| \theta) + \Psi (\theta^*).$$
+$$\mathbb{E}[\log f(X; \theta)] = -D( \theta^* \| \theta) + \Psi (\theta^*)\,.$$
 Ahora, dado que sabemos que $D( \theta^* \| \theta) \geq 0$ y $D( \theta^* \| \theta) =
 0,$ si y sólo si $\theta^* = \theta,$ la log-verosimilitud es máxima
 en $\hat \theta_n \approx \theta^*,$ y la approximación se vuelve una identidad
 en el límite $n\rightarrow \infty.$ 
 
 ```{block, type = 'ejercicio'}
-
 En los pasos anteriores: 
-
-- deriva el término faltante $\Psi (\theta^*);$
-- describe en tus propias palabras lo que significa $D( \theta^* \| \theta).$ Recuerda, que arriba la definimos para 
-distribuciones $f$ y $g$. Es decir, $D( f \| g).$
-
+1) deriva el término faltante $\Psi (\theta^*);$  
+2) describe en tus propias palabras lo que significa $D( \theta^* \| \theta).$  
+Recuerda, que arriba la definimos para distribuciones $f$ y $g$. Es decir, $D( f
+\| g).$
 ```
 
 
@@ -191,7 +192,7 @@ n_muestra <- 4**5
 
 ```
 
-```{r consistency, cache = TRUE, echo = FALSE, fig.height = 2, fig.width = 7}
+```{r consistency, cache = TRUE, echo = FALSE, fig.height = 2.8, out.width = "99%"}
 TOL <- p_true/4
 
 # extraigo 500 muestras diferentes de tamaño n_muestra
@@ -213,7 +214,8 @@ g1 <- dt %>%
   geom_ribbon(aes(ymin = p_true-TOL, ymax = p_true + TOL ), alpha = .3) + 
   geom_line(aes(group = muestra), alpha = .05) + 
   geom_hline(yintercept = p_true, lty = 2, color = 'red') +
-  ylab(expression(bar(x)[n])) + 
+  ylab(TeX('$\\bar{x}_n$')) + 
+  # geom_line(data = esperado, aes(x = 1:n_muestra, y = media), lty = 1, color = 'lightblue') +
   scale_x_log10()
 
 
@@ -233,25 +235,27 @@ g1 + g2
 
 ```
 
-Nota que la banda definida por $\epsilon$ se puede hacer tan pequeña como se requiera, 
-lo único que sucederá es que necesitaremos un mayor número de observaciones para garantizar 
-que las trayectorias de los estimadores $\hat p_n$ se mantengan dentro de las bandas con 
-alta probabilidad conforme $n$ aumenta. 
+Nota que la banda definida por $\epsilon$ se puede hacer tan pequeña como se
+requiera, lo único que sucederá es que necesitaremos un mayor número de
+observaciones para garantizar que las trayectorias de los estimadores $\hat p_n$
+se mantengan dentro de las bandas con alta probabilidad conforme $n$ aumenta.
 
 ## Equivarianza del $\textsf{MLE}$  {-}
 
-Muchas veces nos interesa reparametrizar la función de verosimilitud con el motivo 
-de simplificar el problema de optimización asociado, o simplemente por conveniencia 
-interpretativa. Por ejemplo, si el parámetro de interés es tal que $\theta \in [a, b],$ entonces
-encontrar el $\textsf{MLE}$ se traduce en optimizar la log-verosimilitud en el espacio restringido al 
-intervalo $[a,b].$ En este caso, los métodos tradicionales de búsqueda local por descenso en gradiente 
-podrían tener problemas de estabilidad cuando la búsqueda se realice cerca de las cotas. 
+Muchas veces nos interesa reparametrizar la función de verosimilitud con el
+motivo de simplificar el problema de optimización asociado, o simplemente por
+conveniencia interpretativa. Por ejemplo, si el parámetro de interés es tal que
+$\theta \in [a, b],$ entonces encontrar el $\textsf{MLE}$ se traduce en
+optimizar la log-verosimilitud en el espacio restringido al intervalo $[a,b].$
+En este caso, los métodos tradicionales de búsqueda local por descenso en
+gradiente podrían tener problemas de estabilidad cuando la búsqueda se realice
+cerca de las cotas.
 
 El concepto de equivarianza nos dice que si el cambio de coordenadas
 parametrales está definida, y si este cambio de variable se realiza por medio de
-una función bien comportada (derivable y cuya derivada no es cero$), entonces la solución de encontrar el $\textsf{MLE}$ en las
-coordenadas originales y transformar, es igual a realizar la inferencia en las
-coordenadas *fáciles.*
+una función bien comportada, entonces la solución de encontrar el $\textsf{MLE}$
+en las coordenadas originales y transformar, es igual a realizar la inferencia
+en las coordenadas *fáciles.*
 
 ```{block, type = 'mathblock'}
 
@@ -269,19 +273,19 @@ factor de riesgo.
 
 Como hemos visto estimador $\hat p_n$ es **equivariante.** Es importante
 mencionar que esta propiedad es general para cualquier tamaño de muestra. Es
-decir, no descansa en supuestos de muestras grandes. Supongamos que nos interesa estimar
-el momio de éxitos (bastante común en casas de apuestas). El momio está definido
-como
-$$ \theta = \frac{p}{1-p},$$
+decir, no descansa en supuestos de muestras grandes. Supongamos que nos interesa
+estimar el momio de éxitos (bastante común en casas de apuestas). El momio está
+definido como
+$$ \theta = \frac{p}{1-p}\,,$$
 y podemos rescribir la función de verosimilitud en términos de este parámetro.
 Sustituyendo $p = \frac{\theta}{1+\theta}$ en $\mathcal{L}_n(p)$
 obtenemos 
 \begin{align}
-  \mathcal{L}_n(\theta) = \left( \frac{\theta}{1 + \theta} \right)^{S_n} \left(\frac{1}{1 + \theta} \right)^{n - S_n}, 
+  \mathcal{L}_n(\theta) = \left( \frac{\theta}{1 + \theta} \right)^{S_n} \left(\frac{1}{1 + \theta} \right)^{n - S_n}\,, 
 \end{align}
 cuya función encuentra su máximo en 
 \begin{align}
- \hat \theta_n = \frac{\bar X_n}{ 1 - \bar X_n}.
+ \hat \theta_n = \frac{\bar X_n}{ 1 - \bar X_n}\,.
 \end{align}
 
 ```{block, type = 'ejercicio'}
@@ -292,11 +296,11 @@ Comprueba que el estimador de arriba para $\theta$ es el MLE.
 
 ## Normalidad asintótica {-}
 
-Está propiedad nos permite caracterizar la distribución asintótica del MLE. Es 
-decir, nos permite caracterizar la incertidumbre asociada una  muestra 
+Está propiedad nos permite caracterizar la distribución asintótica del MLE . Es
+decir, nos permite caracterizar la incertidumbre asociada una  nuestra
 suficientemente grande por medio de una distribución Gaussiana. Esto es, bajo
 ciertas condiciones de regularidad, 
-$$\hat \theta_n \overset{.}{\sim} \mathsf{N}( \theta^*, \mathsf{ee}^2),$$
+$$\hat \theta_n \overset{.}{\sim} \mathsf{N}( \theta^*, \mathsf{ee}^2)\,,$$
 
 donde $\mathsf{ee}$ denota el error estándar del $\textsf{MLE},$ $\mathsf{ee} =
 \mathsf{ee}(\hat \theta_n) = \sqrt{\mathbb{V}(\hat \theta_n)}$.
@@ -308,13 +312,13 @@ Para esto necesitamos las siguientes definiciones.
 
 **Definición. ** La función de *score* está definida como
 \begin{align}
-  s(X; \theta) = \frac{\partial \log f(X; \theta)}{\partial \theta}.
+  s(X; \theta) = \frac{\partial \log f(X; \theta)}{\partial \theta}\,.
 \end{align}
 
 La **información de Fisher** está definida como 
 \begin{align}
   I_n(\theta) &= \mathbb{V}\left( \sum_{i = 1}^ns(X_i; \theta) \right) \\ 
-              &= \sum_{i = 1}^n  \mathbb{V} \left(s(X_i; \theta) \right)
+              &= \sum_{i = 1}^n  \mathbb{V} \left(s(X_i; \theta) \right)\,,
 \end{align}
 
 ```
@@ -343,7 +347,7 @@ permite a su vez un cómputo más sencillo de la información de Fisher.
 **Teorema.** El cálculo de la información de Fisher para una muestra 
 de tamaño $n$ se puede calcular de manera simplificada como 
 $I_n(\theta) = n \, I(\theta).$ Por otro lado, tenemos la siguiente igualdad
-$$ I(\theta) = - \mathbb{E}\left( \frac{\partial^2 \log f(X; \theta)}{\partial \theta^2}  \right).$$
+$$ I(\theta) = - \mathbb{E}\left( \frac{\partial^2 \log f(X; \theta)}{\partial \theta^2}  \right)\,.$$
 
 ```
 
@@ -353,7 +357,7 @@ Con estas herramientas podemos formular el teorema siguiente.
 
 **Teorema.** Bajo ciertas condiciones de regularidad se satisface que 
 $\mathsf{ee} \approx \sqrt{1/I_n(\theta^*)}$ y 
-$$ \hat \theta_n \overset{d}{\rightarrow} \mathsf{N}( \theta^*, \mathsf{ee}^2).$$
+$$ \hat \theta_n \overset{d}{\rightarrow} \mathsf{N}( \theta^*, \mathsf{ee}^2)\,.$$
 
 ```
 
@@ -363,18 +367,18 @@ embargo, no es práctico pues no conocemos $\theta^*$ en la práctica y por
 consiguiente no conoceríamos la varianza. Sin embargo, también podemos aplicar
 el principio de *plug-in* y caracterizar la varianza de la distribución
 asintótica por medio de
-$$\hat{\mathsf{ee}} = \sqrt{1/I_n(\hat \theta_n)}.$$
+$$\hat{\mathsf{ee}} = \sqrt{1/I_n(\hat \theta_n)}\,.$$
 
 Esto último nos permite constuir intervalos de confianza, por ejemplo al 95\%, a través de 
 $$ \hat \theta_n \pm 2 \, \hat{\mathsf{ee}}.$$
 Asimismo, el teorema de Normalidad asintótica nos permite establecer que el $\textsf{MLE}$ es **asíntoticamente insesgado**. Es decir, 
-$$\lim_{n \rightarrow n}\mathbb{E}[\hat \theta_n] =  \theta^*.$$
+$$\lim_{n \rightarrow n}\mathbb{E}[\hat \theta_n] =  \theta^*\,.$$
 
 ```{block, type = 'mathblock'}
 
 **Definición.** Sea una muestra $X_1, \ldots, X_n \overset{iid}{\sim} f(X;
 \theta^*)$. Un estimador $\tilde \theta_n$ es insesgado si satisface que
-$$\mathbb{E}[\tilde \theta_n] =\theta^*.$$ 
+$$\mathbb{E}[\tilde \theta_n] =\theta^*\,.$$ 
 
 ```
 El sesgo del estimador es precisamente la diferencia: $\textsf{Sesgo} = \mathbb{E}[\tilde \theta_n] - \theta^*.$
@@ -390,11 +394,11 @@ verosímil. Por ejemplo, podemos utilizar el $\mathsf{MLE}$ de los momios. La
 figura que sigue muestra la distribución de $\hat \theta_n$ para distintas
 remuestras $(B = 500)$ con distintos valores de $n.$
 
-```{r, echo = FALSE, fig.height = 5, out.width = '95%', fig.asp = .6}
+```{r, echo = FALSE, fig.height = 5, out.width = "99%", fig.asp = .6}
 
-theta_true      <- p_true/(1 - p_true)
+theta_true <- p_true/(1 - p_true)
 fisher_true_inv <- ((1+theta_true)**2) * theta_true
-ee_true         <- sqrt(fisher_true_inv)
+ee_true <- sqrt(fisher_true_inv)
 
 dt %>% 
   group_by(muestra) %>% 
@@ -415,19 +419,19 @@ este resultado para obtener intervalos de confianza.
 
 Para el caso de $\hat p_n$ hemos visto que el error estándar se calcula 
 analíticamente como
-$$\textsf{ee}_p^2 = \mathbb{V}(\hat p_n) = \mathbb{V}\left(\frac1n \sum_{i = 1}^n x_i\right)  = \frac{p^* (1 - p^*)}{n}.$$
+$$\textsf{ee}_p^2 = \mathbb{V}(\hat p_n) = \mathbb{V}\left(\frac1n \sum_{i = 1}^n x_i\right)  = \frac{p^* (1 - p^*)}{n}\,.$$
 
 Éste empata con el valor del error estándar asintótico
-$$\textsf{ee}_p^2 \approx \sqrt{\frac{1}{I_n(p^*)}},$$
+$$\textsf{ee}_p^2 \approx \sqrt{\frac{1}{I_n(p^*)}}\,,$$
 pues la información de Fisher es igual a 
-$$I_n(p) = n \, I(p)  = \frac{n}{p (  1- p)}.$$
+$$I_n(p) = n \, I(p)  = \frac{n}{p (  1- p)}\,.$$
 En este caso podemos utilizar el estimador *plug-in,* 
 $\hat{\textsf{ee}}_p = \textsf{ee}_p(\hat p_n).$
 Para estimar el momio, $\theta,$ el cálculo no es tan fácil pues tendríamos que calcular 
 de manera analítica la varianza de un cociente 
-$$\textsf{ee}_\theta^2 = \mathbb{V}\left( \frac{\hat p_n}{1-\hat p_n}\right).$$
+$$\textsf{ee}_\theta^2 = \mathbb{V}\left( \frac{\hat p_n}{1-\hat p_n}\right)\,.$$
 Utilizando la distirbución asintótica, el error estándar se puede calcular mediante
-$$\textsf{ee}_\theta^2 \approx \sqrt{\frac{1}{I_n(\theta^*)}} = \sqrt{\frac{\theta (1 + \theta)^2 }{n}}.$$
+$$\textsf{ee}_\theta^2 \approx \sqrt{\frac{1}{I_n(\theta^*)}} = \sqrt{\frac{\theta (1 + \theta)^2 }{n}}\,.$$
 A continuación mostramos los errores estándar para nuestro ejemplo utilizando 
 la distribución asintótica y por medio de la distribución de *bootstrap.*
 Como es de esperarse, ambos coinciden para muestras relativamente grandes. 
@@ -494,25 +498,23 @@ la distribución de $\tau = g(\theta)?$
 La respuesta es afirmativa y la enunciamos por medio de un teorema. El resultado se conoce como 
 el **método delta**. 
 
-```{block, type = 'mathblock'}
-**Teorema.** Si $\tau = g(\theta)$ es una función diferenciable y $g\'(\theta) \neq 0$, entonces
-```
+```{block2, type = 'mathblock'}
 
-$$\hat \tau_n \overset{d}{\rightarrow} \mathsf{N}( \tau^*, \hat{\mathsf{ee}}^2_\tau),$$
-```{block, type = 'mathblock'}
-
+**Teorema.** Si $\tau = g(\theta)$ es una función diferenciable y $g'(\theta)\neq 0,$ entonces
+$$\hat \tau_n \overset{d}{\rightarrow} \mathsf{N}( \tau^*, \hat{\mathsf{ee}}^2_\tau)\,,$$
 donde $\hat \tau_n = g(\hat \theta_n)$ y 
+$$\hat{\mathsf{ee}}_\tau = \bigg| g'(\hat \theta_n) \bigg| \times \hat{\mathsf{ee}}_\theta(\hat \theta_n)\,.$$
 ```
-
-$$\hat{\mathsf{ee}}_\tau = \bigg| g'(\hat \theta_n) \bigg| \times \hat{\mathsf{ee}}_\theta(\hat \theta_n).$$
 
 Por ejemplo, este resultado lo podemos utilizar para nuestro experimento de Bernoullis. 
 Pues $g(p) = \frac{p}{1-p}$ es una función diferenciable y por lo tanto 
-$$\hat{\mathsf{ee}}_\theta = \sqrt{\frac1n} \times \left[ \hat p_n^{1/2} (1-\hat p_n)^{3/2}\right].$$
+$$\hat{\mathsf{ee}}_\theta = \sqrt{\frac1n} \times \left[ \hat p_n^{1/2} (1-\hat p_n)^{3/2}\right]\,.$$
 
 ```{block, type = 'ejercicio'}
 
-Comprueba la fórmula del método delta para el momio en función de la fracción de éxitos, y también comprueba que de el mismo resultado analítico que habías calculado en el ejercicio anterior.
+Comprueba la fórmula del método delta para el momio en función de la fracción de
+éxitos, y también comprueba que de el mismo resultado analítico que habías
+calculado en el ejercicio anterior.
 
 ```
 
@@ -527,13 +529,13 @@ tanto, en promedio emiten estimaciones correctas. Pero ¿cómo escogemos cual
 utilizar?
 
 Un criterio para comparar estimadores es el **error cuadrático medio**
-($\textsf{ECM}$, por sus siglas en inglés).
+($\textsf{ECM}$.
 
 ```{block, type = 'mathblock'}
 
 **Definición.** El error cuadrático medio de un estimador $\tilde \theta_n$ se
 calcula como
-$$\textsf{ECM}[\tilde \theta_n] = \mathbb{E}[(\tilde \theta_n - \theta^*)^2].$$
+$$\textsf{ECM}[\tilde \theta_n] = \mathbb{E}[(\tilde \theta_n - \theta^*)^2]\,.$$
 
 ```
 
@@ -543,7 +545,7 @@ para comparar dos estimadores.
 
 ```{block, type = 'mathblock'}
 
-$$\textsf{ECM}[\tilde \theta_n] = \mathbb{V}\left(\tilde \theta_n\right) + \textsf{Sesgo}\left[\tilde \theta_n\right]^2.$$
+$$\textsf{ECM}[\tilde \theta_n] = \mathbb{V}\left(\tilde \theta_n\right) + \textsf{Sesgo}\left[\tilde \theta_n\right]^2\,.$$
 
 ```
 
@@ -551,10 +553,10 @@ Por lo tanto si dos estimadores son insesgados, uno es más eficiente que el otr
 su varianza es menor.
 
 La media sabemos que es el $\textsf{MLE}$ y por el TCL tenemos que 
-$$\sqrt{n} \left( \bar X_n - \theta \right) \overset{d}{\rightarrow} \mathsf{N}( 0, \sigma^2).$$
+$$\sqrt{n} \left( \bar X_n - \theta \right) \overset{d}{\rightarrow} \mathsf{N}( 0, \sigma^2)\,.$$
 
 La mediana, en contraste, tiene una distribución asintótica 
-$$\sqrt{n} \left( \tilde X_n - \theta \right) \overset{d}{\rightarrow} \mathsf{N}\left( 0, \sigma^2 \frac{\pi}{2}\right),$$
+$$\sqrt{n} \left( \tilde X_n - \theta \right) \overset{d}{\rightarrow} \mathsf{N}\left( 0, \sigma^2 \frac{\pi}{2}\right)\,,$$
 
 es decir tiene una varianza ligeramente mayor. Por lo tanto, decimos que la
 mediana tiene una *eficiencia relativa* con respecto a la media del $.63 \%
@@ -569,7 +571,7 @@ esta resultado de manera mas general para cualquier estimador insesgado.
 **Teorema.**  Sea $\tilde \theta_n$ *cualquier*
 estimador insesgado de $\theta$ cuyo valor verdadero es $\theta^*,$ entonces
 \begin{align}
-  \mathbb{V}(\tilde \theta_n) \geq \frac{1}{n I(\theta^*)}.
+  \mathbb{V}(\tilde \theta_n) \geq \frac{1}{n I(\theta^*)}\,.
 \end{align}
  
 ```
@@ -598,3 +600,97 @@ propiedades que hemos visto en esta sección.
 knitr::include_graphics('images/mle-mapa-mental.jpg')
 ```
 
+## Conexión con teoría de la información$^\dagger$ {-}
+
+Esta sección contiene una discusión similar que en la publicación de 
+[Rachel Draelos](https://glassboxmedicine.com/2019/12/07/connections-log-likelihood-cross-entropy-kl-divergence-logistic-regression-and-neural-networks/). En secciones anteriores (Sección \@ref{S:max-verosimilitud}) 
+hemos visto que la función de log-verosimilitud tiene una conexión con una 
+función de pérdida. Por ejemplo, si consideramos una muestra 
+$X_1, \ldots, X_n \sim \mathsf{N}(\mu, \sigma^2),$ donde conocemos
+la varianza pero no el promedio. En este caso, la función de log-verosimilitud
+corresponde a la función de pérdida cuadrática
+$$\ell_n(\mu) = - \frac{1}{2 \sigma^2}\sum_{i = 1}^n \left( x_i - \mu \right)^2\,.$$
+En este caso, maximizar la log-verosimilitud corresponde a minimizar una función de 
+pérdida, o costo. La conexión con teoría de la información la podemos establecer
+a través de esta última interpretación.
+
+En teoría de la información un concepto clave es el de **entropía**. Esta
+cantidad mide el nivel de *informacion* o *sorpresa* inherente a una variable
+aleatoria. Por ejemplo, cuando lanzamos una moneda al azar y consideramos cara o
+cruz como el resultado, el máximo nivel de sorpresa es cuando la moneda es justa
+$(p = 1/2),$ pues no favorecemos un resultado sobre el otro.
+
+```{block, type = 'mathblock'}
+
+**Definición.** Sea $X$ una variable aleatoria discreta con posibles valores
+$x_1, \ldots, x_k,$ con probabilidades $P(X = X_i) = f(X_i)$ para cada $i = 1,
+\ldots, k.$ La entropía la definimos como 
+$$ H(X) = - \sum_{i = 1}^k f(X_i) \log f(X_i)\,. $$ 
+
+```
+Con esta definición, la entropía la interpretamos como el número esperado de
+$bits$ necesarios para *comunicar* o *transferir* el mensaje que toma la
+variable $X.$ La idea es que utilicemos la función de probabilidad $f(\cdot)$ como 
+nuestro mejor código de compresión de información. El libro de @mackay2003
+contiene una discusión sobre entropía y transmisión de información muy clara en sus 
+primeros capítulos. 
+
+Ahora, supongamos que no tenemos conocimiento de la distribución de $X,$ la cual
+denotaremos por $g(\cdot)$, pero seguiremos utilizando el mejor codificador de
+información que tenemos disponible $f(\cdot).$
+
+Nuestra interpretación es la siguiente. Aunque los datos se distribuyan con la función 
+de probabilidad $g(\cdot),$ nosotros asignamos $f(\cdot)$ como nuestra mejor explicación
+disponible. Con esta consideración en mente, definimos el concepto de **entropía cruzada**.
+
+```{block cross-ent, type = 'mathblock'}
+
+**Definición.** Sea $X$ una variable aleatoria discreta. La entropía cruzada la 
+definimos como 
+$$ H (g, f) = - \sum_{i = 1}^n g(X_i) \log f(X_i)\,.$$
+
+```
+
+En el caso que nos interesa, consideramos que los datos que observamos en
+nuestra muestra son independientes e idénticamente distribuidos. La ley de los
+grandes números nos permite asignar los pesos $1/n$ cuando $X_1, \ldots, X_n
+\overset{\text{iid}}{\sim} g$. Esto es,
+$$H (g, f) \approx - \sum_{i = 1}^n \frac1n \, \log f(x_i)\,,$$
+
+donde $n_1, \ldots, x_n$ denota la realización de la muestra.
+
+La manera de comprimir la información de una variable aleatoria es a
+través del modelo probabilístico que estamos considerando. La función $f(x;
+\theta)$ de nuestro modelo es precisamente nuestro codificador de información
+disponible. La notación $f(x; \theta)$ hace alusión sobre que escogemos dentro
+de esta familia de distribuciones a un candidato por medio de la etiqueta
+$\theta.$ Por ejemplo, todas las distribuciones Gaussianas $\mathsf{N}(\mu, 1)$
+forman una familia de distribuciones. Y nosotros escogemos, por medio del
+parámetro $\mu$, la *mejor.*
+
+```{r, echo = FALSE, out.width = "90%", fig.height = 3}
+
+tibble(x = rnorm(1000)) %>% 
+  ggplot(aes(x= x)) + 
+    geom_histogram(aes(y = ..density..), binwidth = .5) + 
+    stat_function(fun = dnorm, args = list(mean = 0, sd = 1), color = 'red', lty = 2, lwd = 1) + 
+    stat_function(fun = dnorm, args = list(mean = 1.5, sd = 1), color = 'lightgreen', lty = 2, lwd = 1) + 
+    stat_function(fun = dnorm, args = list(mean = -2, sd = 1), color = 'lightblue', lty = 2, lwd = 1) + 
+    annotate("text", x=0, y=.42, label="N[mu](0, 1)", parse=TRUE, size = 5, col = 'red') + 
+    annotate("text", x=2, y=.42, label="N[mu](2, 1)", parse=TRUE, size = 5, col = 'lightgreen') + 
+    annotate("text", x=-2, y=.42, label="N[mu](-2, 1)", parse=TRUE, size = 5, col = 'lightblue')
+    
+```
+
+
+Estos dos
+puntos nos permiten establecer la función de entropía cruzada como
+$$ H (g, f; \theta) = - \frac1n \sum_{i = 1}^n  \log f(x_i;\theta)\,.$$
+
+De donde establecemos que nuestra mejor compresión de información se cumple cuando
+$$\tilde \theta_n = \underset{\theta \, \in \, \Theta}{\arg\min} \, H (g, f; \theta)\,,$$
+pues queremos minimizar la entropía (el grado de sorpresa) con respecto al
+modelo que generó los datos. Notemos que la siguiente serie de igualdades se
+satsiface
+$$ \tilde \theta_n = \underset{\theta \, \in \, \Theta}{\arg\min} \, H (g, f; \theta) = \underset{\theta \, \in \, \Theta}{\arg\max} \, \mathcal{L}_n(\theta) = \hat \theta_n\,,$$
+lo cual implica que el estimador minimizador de entropía coincide con el estimador máximo verosímil.
