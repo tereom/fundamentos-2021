@@ -1,5 +1,4 @@
-\mainmatter
-
+# Appendix {-}
 # Principios de visualizacion
 
 ## El cuarteto de Ascombe {-}
