@@ -1124,8 +1124,6 @@ qt(c(0.025, 0.5, 0.975), 2 * alpha_post) * s + mu_post
 
 ```
 
-
-
 ### Ejemplo: posterior predictiva de Pareto-Uniforme. {-}
 
  La posterior predictiva del modelo Pareto-Uniforme no tiene un nombre estándar, pero
