@@ -140,9 +140,120 @@ De esta manera la función de probabilidad satisface:
 - $P(\mathcal{E}) = 1.$
 - Si $E \cap F = \emptyset$ entonces $P(E \cup F) = P(E) + P(F)$.
 
+```
+
+## Un primer ejemplo completo de inferencia bayesiana {-}
+
+Consideremos el siguiente problema: Nos dan una moneda, y sólo sabemos
+que la moneda puede ser una de dos posibilidades. Una opción es que la
+moneda tiene probabilidad $3/5$ de tirar sol (está cargada a sol). O
+alternativamente, puede ser una moneda cargada a águila, con
+probabilidad $2/5$ de tirar sol. Es decir, tenemos información previa
+al lanzamiento de la moneda que nos dice qué posibilidades tenemos
+para la moneda que usaremos para nuestro experimento.
+
+Vamos a lanzar la moneda dos veces y observamos su resultado (águila o
+sol).  Queremos decir algo acerca de qué tan probable es que hayamos
+tirado la moneda cargada a sol o la moneda cargada a águila. El proceso 
+generador de nuestras observaciones (verosimilitud) lo podemos escribir como 
+
+$$ P(X = x \,|\, \theta) = {2 \choose x} \theta^x (1- \theta)^{2-x}\,.$$ 
+
+En este caso, tenemos dos variables: $X$, que cuenta el número de
+soles obtenidos en el experimento aleatorio, y $\theta$, que da la
+probabilidad de que un volado resulte en sol (por ejemplo, si la
+moneda es justa entonces $\theta = 0.5$). 
+
+¿Qué cantidades podríamos usar para evaluar qué moneda es la que
+estamos usando? Si hacemos el experimento, y tiramos la moneda 2
+veces, podríamos considerar la probabilidad
+$$P(\theta = 0.4 \,|\, X = x)\,,$$
+donde $x$ es el número de soles que obtuvimos en el experimento. Esta
+es la probabilidad condicional de que estemos tirando la moneda con
+probabilidad de sol 2/5 dado que observamos $x$ soles. Por ejemplo, si
+tiramos 2 soles, deberíamos calcular
+$$P(\theta=0.4 \,|\, X=2)\,.$$
+
+¿Cómo calculamos esta probabilidad? ¿Qué sentido tiene?
+
+Usando reglas de probabilidad condicional, podríamos calcular
+$$P(\theta=0.4|X=2) = \frac{P(X=2 | \theta = 0.4) P(\theta =0.4)}{P(X=2)}\,.$$
+
+Nota que en el numerador uno de los factores, $P(X=2 | \theta = 0.4),$ es la
+verosimilitud. Así que primero necesitamos evaluarla:
+$$P(X=2|\theta = 0.4) = (0.4)^2 = 0.16\,.$$
+
+La novedad es que ahora tenemos que considerar la probabilidad
+$P(\theta = 0.4)$. Esta cantidad no la habíamos encontrado
+antes. Tenemos que pensar que bajo nuestro conocimiento previo, el
+tipo de moneda que recibimos para nuestro juego es aleatoria y en este
+caso sólo puede tomar dos valores.  
+
+```{block, type = "comentario"}
+
+En diversos textos esto se *simplifica* y se escribe que la moneda
+con la que hacemos los lanzamiento es una variable aleatoria. ¡Pero esto es un
+abuso de lenguaje! Una vez que recibimos la moneda, ésta la utilizamos para
+generar nuestros datos. No hay ningún mecanismo aleatorio que nos cambie la
+moneda entre lanzamientos. Entonces con $P(\theta)$ lo que estamos codificando
+son nuestros grados de creencia de haber recibido una moneda cargada a sol o
+cargada a águila.
 
 ```
 
+Supongamos que en este caso, nos dicen que la moneda se escoge al
+azar de una bolsa donde hay una proporción similar de los dos tipos de moneda
+(0.4 ó 0.6). Es decir el espacio parametral es $\Theta = \{0.4, 0.6\},$  y las
+probabilidades asociadas a cada posibilidad son las mismas. Es decir, tenemos
+\begin{align}
+P(\text{tener la moneda cargada a águila}) &= P(\theta = 0.4) \\
+&= P(\theta = 0.6)\\
+&= P(\text{tener la moneda cargada a sol}) \\
+&= 0.5\,,
+\end{align}
+que representa la probabilidad de escoger de manera aleatoria la moneda con
+una carga en particular.
+
+Ahora, lo que nos falta es calcular $P(X=2)$, pero con el trabajo que
+hicimos esto es fácil.  Pues requiere usar reglas de probabilidad
+usuales para hacerlo. Podemos utilizar **probabilidad total** y después **probabilidad condicional**
+\begin{align}
+P(X) &= \sum_{\theta \in \Theta} P(X, \theta)\\
+&= \sum_{\theta \in \Theta} P(X\, |\, \theta) P(\theta),
+\end{align}
+lo cual en nuestro ejemplo se traduce en escribir
+
+$$ P(X=2) = P(X=2|\theta = 0.4)P(\theta = 0.4) + P(X=2|\theta=0.6)P(\theta =0.6)\,,$$
+por lo que obtenemos
+$$P(X=2) = 0.16(0.5) + 0.36(0.5) = 0.26\,.$$
+
+```{block, type = "comentario"}
+
+La función de probabilidad $P(X)$ tiene un lugar muy especial en inferencia 
+bayesiana y dependiendo el uso recibe dos nombres. 
+
+- Si la evaluamos en nuestros datos $P(X = 2)$ se conoce como la **evidencia**
+de nuestros datos. 
+- Si la evaluamos en un caso hipótetico $P(X = x^*)$ se conoce como la **predictiva previa**.
+
+```
+
+Finalmente la probabilidad de haber escogido la moneda con carga $2/5$ dado que
+observamos dos soles en el lanzamiento es
+
+$$P(\theta=0.4|X=2) = \frac{0.16(0.5)}{0.26} \approx  0.31\,.$$
+
+Esto se conoce como la **probabilidad posterior** de que estemos
+tirando la moneda con carga a águila.  Nota que nuestro conocimiento
+inicial baja de 0.5 (nuestra información inicial) a 0.31. Es decir, 
+los lanzamientos que realizamos aumentan nuestra creencia de haber recibido
+una moneda cargada a soles.
+
+Este es un ejemplo completo, aunque muy simple, de inferencia
+bayesiana. La estrategia de **inferencia bayesiana implica tomar
+decisiones basadas en probabilidades posteriores.** Y esto es por que
+bajo el marco de teoría de decisión en situaciones con incertidumbre
+tenemos el siguiente teorema.
 
 ```{block, type = "mathblock"}
 
@@ -159,92 +270,37 @@ $$ d^* = \arg \max_i \mathbb{E}[u(d_i)]\,.$$
 
 ```
 
-## Un primer ejemplo completo de inferencia bayesiana {-}
+Nota que la derivación de la probabilidad posterior arriba (que
+argumentamos fue obtenida con reglas de probabilidad condicional) se
+extiende a la regla de Bayes o teorema de Bayes en situaciones mas
+generales.
 
-Consideremos el siguiente problema: Nos dan una moneda, y solo sabemos
-que la moneda puede tener probabilidad $3/5$ de tirar sol (está cargada a sol)
-o puede ser una moneda cargada a águila, con probabilidad $2/5$ de tirar sol.
 
-Vamos a lanzar la moneda dos veces y observamos su resultado (águila o sol).
-Queremos decir algo acerca de qué tan probable es que hayamos tirado la moneda
-cargada a sol o la moneda cargada a águila.
+```{block, type = "mathblock"}
 
-En este caso, tenemos dos variables: $X$, que cuenta el número
-de soles obtenidos en el experimento aleatorio, y $\theta$, que da la probabilidad
-de que un volado resulte en sol (por ejemplo, si la moneda es justa
-entonces $\theta = 0.5$).
-
-¿Qué cantidades podríamos usar para evaluar
-qué moneda es la que estamos usando? Si hacemos el experimento,
-y tiramos la moneda 2 veces, podríamos considerar la probabilidad
-$$P(\theta = 0.4 | X = x)\,,$$
-donde $x$ es el número de soles que obtuvimos en el experimento. Esta es la probabilidad
-condicional de que estemos tirando la moneda con probabilidad de sol 2/5 dado
-que observamos $x$ soles. Por ejemplo, si tiramos 2 soles, deberíamos calcular
-$$P(\theta=0.4|X=2)\,.$$
-
-¿Cómo calculamos esta probabilidad? ¿Qué sentido tiene?
-
-Usando reglas de probabildad (regla de Bayes en particular), podríamos calcular
-$$P(\theta=0.4|X=2) = \frac{P(X=2 | \theta = 0.4) P(\theta =0.4)}{P(X=2)}\,.$$
-
-Nota que en el numerador uno de los factores, $P(X=2 | \theta = 0.4),$ es la
-verosimilitud. Así que primero necesitamos la verosimilitud:
-$$P(X=2|\theta = 0.4) = (0.4)^2 = 0.16\,.$$
-
-La novedad es que ahora tenemos que considerar la probabilidad $P(\theta =
-0.4)$. Esta cantidad no la habíamos encontrado antes. Tenemos que pensar
-entonces que este parámetro es una *cantidad aleatoria*, y puede tomar dos
-valores $\theta=0.4$ ó $\theta = 0.6$.
-
-Considerar esta cantidad como aleatoria requiere pensar, en este caso, en cómo
-se escogió la moneda, o qué sabemos acerca de las monedas que se usan para este
-experimento. Supongamos que en este caso, nos dicen que la moneda se escoge al
-azar de una bolsa donde hay una proporción similar de los dos tipos de moneda
-(0.4 ó 0.6). Es decir el espacio parametral es $\Theta = \{0.4, 0.6\},$  y las
-probabilidades asociadas a cada posibilidad son las mismas. Es decir, tenemos
-$$P(\theta = 0.4) = P(\theta = 0.6) =0.5\,,$$
-que representa la probabilidad de escoger de manera aleatoria la moneda con
-una carga en particular.
-
-Ahora queremos calcular $P(X=2)$, pero con el trabajo que hicimos esto es fácil.
-Pues requiere usar reglas de probabilidad usuales para hacerlo. Podemos utilizar
-probabilidad total
+**Teorema.** (Teorema de Bayes) Sea $\{E_j: j \in J\}$ una partición finita de 
+$\mathcal{E}$. Es decir, que $E_i\cap E_j = \emptyset$ y $\cup_{j \in J} E_j = \mathcal{E}$. Sea $Z \neq \emptyset$, entonces
 \begin{align}
-P(X) &= \sum_{\theta \in \Theta} P(X, \theta)\\
-&= \sum_{\theta \in \Theta} P(X\, |\, \theta) P(\theta),
+P(E_i |Z) = \frac{P(Z|E_i)P(E_i)}{\sum_{j \in J}P(Z|E_j)P(E_j)}\,.
 \end{align}
-lo cual en nuestro ejemplo se traduce en escribir
 
-$$ P(X=2) = P(X=2|\theta = 0.4)P(\theta = 0.4) + P(X=2|\theta=0.6)P(\theta =0.6)\,,$$
-por lo que obtenemos
-$$P(X=2) = 0.16(0.5) + 0.36(0.5) = 0.26\,.$$
 
-Finalmente la probabilidad de haber escogido la moneda con carga $2/5$ dado que
-observamos dos soles en el lanzamiento es
+```
 
-$$P(\theta=0.4|X=2) = \frac{0.16(0.5)}{0.26} \approx  0.31\,.$$
-
-Es decir, la **probabilidad posterior** de que estemos tirando la moneda $2/5$
-baja de 0.5 (nuestra información inicial) a 0.31.
-
-Este es un ejemplo completo, aunque muy simple, de inferencia bayesiana. La
-estrategia de **inferencia bayesiana implica tomar decisiones basadas en las
-probabilidades posteriores.**
 
 ```{block, type='ejercicio'}
 ¿Cuál sería la estimación de máxima verosimilitud para este problema? ¿Cómo
 cuantificaríamos la incertidumbre en la estimación de máxima verosimilitud?
 ```
 
-Finalmente, podríamos hacer predicciones usando la **posterior predictiva**.
-Si ${X}_{nv}$ es una nueva tirada adicional de la moneda que estamos usando, nos
+Finalmente, podríamos hacer predicciones para lanzamientos nuevos
+condicionando en nuestra información actualizada. Si ${X}_{nv}$ es una
+nueva tirada de la moneda que estamos usando, nos
 interesaría saber:
 $$P({X}_{nv}=\mathsf{sol}\, | \, X=2)\,.$$
-Notemos que un volado adicional es un resultado binario. Por lo que podemos
-calcular observando que $P({X}_{nv}|X=2, \theta)$ es una variable Bernoulli con
-probabilidad $\theta$, que puede valer 0.4 ó 0.6. Como tenemos las
-probabilidades posteriores $P(\theta|X=2)$ podemos usar probabilidad total,
+
+Notemos que un volado adicional es un resultado binario. Como tenemos las
+probabilidades posteriores $P(\theta|X=2)$, podemos usar probabilidad total
 condicionado en $X=2$:
 \begin{align*}
 P({X}_{nv}=\mathsf{sol}\, | \, X=2) & = \sum_{\theta \in \Theta} P({X}_{nv}=\mathsf{sol}, \theta \, | \, X=2) & \text{(probabilidad total)}\\
@@ -258,55 +314,46 @@ Es decir, promediamos ponderando con las probabilidades posteriores.
 Por lo tanto obtenemos
 $$P(X_{nv} = \mathsf{sol}|X=2) =  0.4 ( 0.31) + 0.6 (0.69) = 0.538\,.$$
 
-#### Observación 0 {-}
+```{block, type = "comentario"}
 
-Nótese que en contraste con máxima verosimilitud, en este ejemplo *cuantificamos
-con probabilidad condicional la incertidumbre de los parámetros que no
-conocemos*. En máxima verosimilitud esta probabilidad no tiene mucho sentido,
-pues nunca consideramos el parámetro desconocido como una cantidad aleatoria.
+La función de probabilidad $P(X_{nv} | X)$ recibe un nombre especial en 
+inferencia bayesiana. Se conoce como la función de probabilidad *predictiva posterior*. 
 
-#### Observación 1 {-}
 
-Nótese el factor $P(X=2)$ en la probabilidad posterior puede entenderse como un
-factor de normalización. Notemos que los denominadores en la distribución
-posterior son
-$$P(X=2 | \theta = 0.4) P(\theta =0.4) = 0.16(0.5) = 0.08\,,$$
-y
-$$P(X=2 | \theta = 0.6) P(\theta =0.6) = 0.36(0.5) = 0.18\,.$$
-Las probabilidades posteriores son proporcionales a estas dos cantidades,
-y como deben sumar uno, entonces normalizando estos dos números (dividiendo
-entre su suma) obtenemos las probabilidades.
+```
 
-#### Observación 2 {-}
+```{block, type = "mathblock"}
 
-La nomenclatura que usamos es la siguiente:
+**Definición.** La **función de probabilidad predictiva** es la función de probabilidad 
+marginal que determina qué valores de X son los mas probables. 
 
-- Como $X$ son los datos observados, llamamos a $P(X|\theta)$ la *verosimilitud*,
-o modelo de los datos.
-- A $P(\theta)$ le llamamos la distribución *inicial* o *previa*.
-- La distribución que usamos para hacer inferencia $P(\theta|X)$ es la
-distribución *final* o *posterior.*
+Lo que se conoce sobre nuestras mediciones $X$ es que condicionado en $\theta$ resulta en el proceso
+generador de datos (verosimilitud). Cuando no hemos visto realizaciones de este 
+proceso. Es decir, que no tenemos información $X \sim P(X|\theta)$ entonces 
+nuestro estado de conocimiento marginal, $P(X)$, se conoce como la 
+**distribución predictiva previa** y se obtiene 
+$$ P(X) = \sum_{\theta \in \Theta}^{} P(X | \theta) P(\theta)\,.$$
 
-Para utilizar inferencia bayesiana, hay que hacer supuestos para definir las
-primeras dos partes del modelo. La parte de iniciales o previas está ausente de
-enfoques como máxima verosimlitud usual.
+Cuando hemos recabado información, utilizamos probabilidad condicional para
+determinar qué valores nuevos $X^*$ son los mas probables una vez que hemos observado mediciones. Esto es $P(X^*|X)$ y se obtiene al marginalizar utilizando 
+nuestro estado actual de conocimiento. Es decir, 
+$$ P(X^*|X) = \sum_{\theta \in \Theta}^{} P(X^* | \theta) P(\theta|X)\,.$$
+Esta última es la **distribución predictiva posterior**.
 
-#### Observación 3 {-}
+```
 
-¿Cómo decidimos las probabilidades iniciales, por ejemplo $P(\theta=0.4)$ ?
+```{block, type = "comentario"}
 
-Quizá es un supuesto y no tenemos razón para pensar que se hace de otra manera.
-O quizá conocemos el mecanismo concreto con el que se selecciona la moneda.
-Discutiremos esto más adelante.
+Nota que para definir las función de probabilidad predictiva previa (posterior)
+marginalizamos con respecto a nuestro estado de conocimiento previo (posterior)
+que denotamos por $P(\theta)$ (o respectivamente $P(\theta | \textsf{datos})$).
+En este sentido decimos, que nuestra incertidumbre sobre el valor del parámetro
+$\theta$ ha sido incorporada para expresar nuestras predicciones
+(probabilisticas) de una realización hipotética.
 
-#### Observación 4 {-}
+```
 
-¿Cómo decidimos el modelo de los datos? Aquí típicamente también tenemos que
-hacer algunos supuestos, aunque algunos de estos pueden estar basados en el
-diseño del estudio, por ejemplo. Igual que cuando usamos máxima verosimilitud,
-es necesario checar que nuestro modelo ajusta razonablemente a los datos.
-
-#### Ejercicio {-}
+#### Ejercicios {-}
 
 Cambia distintos parámetros del número de soles observados, las probabilidades
 de sol de las monedas, y las probabilidades iniciales de selección de las
@@ -384,13 +431,13 @@ distribución *final* o *posterior*
 
 Hacemos inferencia usando la ecuación
 
-$$P(\theta | X) = \frac{P(X | \theta) P(\theta)}{P(X)}\,,$$
+$$P(\theta | X) = \frac{P(X | \theta) P(\theta)}{P(X)} = \frac{P(X | \theta) P(\theta)}{\sum_{\theta \in \Theta} P(X | \theta) P(\theta)}\,,$$
 
 que también escribimos:
 
 $$P(\theta | X) \propto P(X | \theta) P(\theta)\,,$$
 donde $\propto$ significa "proporcional a". No ponemos $P(X)$ pues como vimos
-arriba, es una constante de normalización.
+arriba, es una constante de normalización (y en la mayoría de los casos es muy dificil poder derivar analiticamente).
 
 ```
 
@@ -415,7 +462,7 @@ población dada usando una muestra iid $X_1,X_2,\ldots, X_n$ de variables
 Bernoulli.  Ya sabemos calcular la
 verosimilitud (el modelo de los datos):
 
-$$P(X_1=x_1,X_2 =x_2,\ldots, X_n=x_n|\theta) = \theta^k(1-\theta)^{n-k}\,,$$
+$$P(X_1=x_1,X_2 =x_2,\ldots, X_n=x_n|\theta) = {n \choose k} \theta^k(1-\theta)^{n-k}\,,$$
 
 donde $k = x_1 + x_2 +\cdots + x_k$ es el número de éxitos que observamos.
 
