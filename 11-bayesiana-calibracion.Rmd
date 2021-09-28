@@ -54,29 +54,29 @@ basa en los siguientes puntos (@Wasserman):
 1. La probabilidad se interpreta como un límite de frecuencias relativas, donde
 las probabilidades son propiedades objetivas en el mundo real.
 
-2. En un modelo, los parámetros son constantes fijas (desconocidas). Como 
-consecuencia, no se pueden realizar afirmaciones probabilísticas útiles en 
+2. En un modelo, los parámetros son constantes fijas (desconocidas). Como
+consecuencia, no se pueden realizar afirmaciones probabilísticas útiles en
 relación a éstos.
 
-3. Los procedimientos estadísticos deben diseñarse con el objetivo de tener 
-propiedades frecuentistas bien definidas. Por ejemplo, un intervalo de confianza 
+3. Los procedimientos estadísticos deben diseñarse con el objetivo de tener
+propiedades frecuentistas bien definidas. Por ejemplo, un intervalo de confianza
 del $95\%$ debe contener el verdadero valor del parámetro con frecuencia límite
 de al menos el $95\%$.
 
 En contraste, el acercamiento **Bayesiano** muchas veces se describe por los
 siguientes postulados:
 
-1. La probabilidad describe grados de creencia, no frecuencias limite. Como 
-tal uno puede hacer afirmaciones probabilísticas acerca de muchas cosas y no 
-solo datos sujetos a variabilidad aleatoria. Por ejemplo, puedo decir: "La 
-probabilidad de que Einstein tomara una taza de té el primero de agosto de $1948$" 
+1. La probabilidad describe grados de creencia, no frecuencias limite. Como
+tal uno puede hacer afirmaciones probabilísticas acerca de muchas cosas y no
+solo datos sujetos a variabilidad aleatoria. Por ejemplo, puedo decir: "La
+probabilidad de que Einstein tomara una taza de té el primero de agosto de $1948$"
 es $0.35$, esto no hace referencia a ninguna frecuencia relativa sino que refleja
 la certeza que yo tengo de que la proposición sea verdadera.
 
 2. Podemos hacer afirmaciones probabilísticas de parámetros.
 
-3. Podemos hacer inferencia de un parámetro $\theta$ por medio de 
-distribuciones de probabilidad. Las inferencias como estimaciones puntuales y 
+3. Podemos hacer inferencia de un parámetro $\theta$ por medio de
+distribuciones de probabilidad. Las inferencias como estimaciones puntuales y
 estimaciones de intervalos se pueden extraer de dicha distribución.
 
 Finalmente, en el enfoque **bayesiano calibrado** (@little2011):
@@ -92,12 +92,8 @@ la distribución inicial $p(\theta)\sim \mathsf{Beta}(2,2)$, y la verosimilitud 
 binomial, vimos que la posterior cuando observamos $k$
 éxitos es  $$p(\theta|k) \sim \mathsf{Beta}(k + 2, n - k + 2)\,.$$
 
-La media posterior es 
-<<<<<<< HEAD:11-bayesiana-calibracion.Rmd
-$$\frac{k + 2}{n + 4},$$
-=======
+La media posterior es
 $$\frac{k + 2}{n + 4}\,,$$
->>>>>>> main:15-bayesiana-calibracion.Rmd
 que podemos interpretar como: agrega 2 éxitos y 2 fracasos a los datos observados
 y calcula la proporción de éxitos. Un intervalo posterior de credibilidad del 95% se calcula
 encontrando los cuantiles 0.025 y 0.975 de una $\mathsf{Beta}(k + 2, n - k + 2),$
@@ -131,12 +127,12 @@ ejemplo <- simular_muestras(5, 20, 0.4)
 ```
 
 ```{r}
-ejemplo %>% mutate(intervalo = intervalo_wald(n, k)) %>% pull(intervalo) %>% 
+ejemplo %>% mutate(intervalo = intervalo_wald(n, k)) %>% pull(intervalo) %>%
   bind_cols(ejemplo) %>% select(-rep)
 ```
 
 ```{r}
-ejemplo %>% mutate(intervalo = intervalo_bayes(n, k)) %>% pull(intervalo) %>% 
+ejemplo %>% mutate(intervalo = intervalo_bayes(n, k)) %>% pull(intervalo) %>%
   bind_cols(ejemplo) %>% select(-rep)
 ```
 
@@ -148,24 +144,24 @@ el parámetro.
 Sin embargo, podemos checar la cobertura frecuentista haciendo una cantidad grande de simulaciones:
 
 ```{r}
-parametros <- crossing(n = c(5, 10, 30, 60, 100, 400), 
-                       p = c(0.01, 0.015, 0.02, 0.025, 0.03, 
+parametros <- crossing(n = c(5, 10, 30, 60, 100, 400),
+                       p = c(0.01, 0.015, 0.02, 0.025, 0.03,
                              0.035, 0.04, 0.05, 0.07, 0.1, 0.15))
 set.seed(2343)
 # simulaciones
-simulaciones <- parametros %>% 
-  mutate(muestra = map2(n, p, ~ simular_muestras(50000, .x, .y) %>% select(rep, k))) %>% 
+simulaciones <- parametros %>%
+  mutate(muestra = map2(n, p, ~ simular_muestras(50000, .x, .y) %>% select(rep, k))) %>%
   unnest(muestra)
 # calcular_cobertura
 calcular_cobertura <- function(simulaciones, construir_intervalo){
   # nombre de función
   intervalo_nombre <- substitute(construir_intervalo) %>% as.character()
-  cobertura_tbl <- simulaciones %>% 
+  cobertura_tbl <- simulaciones %>%
     mutate(intervalo  = construir_intervalo(n, k)) %>%
-    pull(intervalo) %>% 
-    bind_cols(simulaciones) %>% 
-    mutate(cubre = p >= inf & p <= sup) %>% 
-    group_by(n, p) %>% 
+    pull(intervalo) %>%
+    bind_cols(simulaciones) %>%
+    mutate(cubre = p >= inf & p <= sup) %>%
+    group_by(n, p) %>%
     summarise(cobertura = mean(cubre), long_media = mean(sup - inf))
   cobertura_tbl %>% mutate(tipo = intervalo_nombre)
 }
@@ -183,9 +179,9 @@ graficar_cobertura <- function(cobertura_tbl){
   geom_hline(yintercept = 0.95, colour = "black") +
   geom_line() + geom_point() +
   facet_wrap(~n) +
-  ylim(0, 1) 
+  ylim(0, 1)
 }
-cobertura_wald %>% 
+cobertura_wald %>%
   graficar_cobertura()
 ```
 
@@ -201,8 +197,8 @@ cobertura_bayes <- calcular_cobertura(simulaciones, intervalo_bayes)
 
 
 ```{r, out.width = "99%"}
-bind_rows(cobertura_wald, cobertura_bayes) %>% 
-  mutate(tipo = factor(tipo, levels = c('intervalo_wald', 'intervalo_bayes'))) %>% 
+bind_rows(cobertura_wald, cobertura_bayes) %>%
+  mutate(tipo = factor(tipo, levels = c('intervalo_wald', 'intervalo_bayes'))) %>%
   graficar_cobertura()
 ```
 
@@ -213,7 +209,7 @@ es para muestras muy chicas $n=5, 10$, con probabilidades de éxito chicas $p\le
 - Sin embargo, si tenemos información previa acerca del tamaño de la proporción que estamos
 estimando, es posible obtener buena calibración con el método bayesiano.
 
-En este caso particular, **tenemos argumentos frecuentistas** 
+En este caso particular, **tenemos argumentos frecuentistas**
 para utilizar el método bayesiano. Por ejemplo, si el INEGI utilizara estos
 intervalos creíbles, un análisis de calibración de este tipo sostendría esa decisión.
 
@@ -235,9 +231,9 @@ cobertura_ac <- calcular_cobertura(simulaciones, intervalo_agresti_coull)
 ```
 
 ```{r, out.width = "99%"}
-bind_rows(cobertura_wald, cobertura_bayes, cobertura_ac) %>% 
-  mutate(tipo = factor(tipo, levels = c('intervalo_wald', 'intervalo_bayes', 
-                                        'intervalo_agresti_coull'))) %>% 
+bind_rows(cobertura_wald, cobertura_bayes, cobertura_ac) %>%
+  mutate(tipo = factor(tipo, levels = c('intervalo_wald', 'intervalo_bayes',
+                                        'intervalo_agresti_coull'))) %>%
   graficar_cobertura()
 ```
 
@@ -307,13 +303,13 @@ graficar_cobertura(bind_rows(cobertura_bayes, cobertura_ac) %>% filter(p < 0.05)
 ```
 
 Y vemos que la calibración es similar. Notemos sin embargo que
-la longitud del intervalo bayesiano es **mucho menor** que el de 
+la longitud del intervalo bayesiano es **mucho menor** que el de
 Agresti-Coull cuando la muestra es chica:
 
 ```{r, out.width = "99%"}
-ggplot(bind_rows(cobertura_bayes, cobertura_ac), 
+ggplot(bind_rows(cobertura_bayes, cobertura_ac),
        aes(x = p, y = long_media, colour = tipo)) +
-  geom_point() + facet_wrap(~n) 
+  geom_point() + facet_wrap(~n)
 ```
 
 Cuando la muestra es chica, los intervalos bayesianos son similares a los
@@ -337,7 +333,7 @@ intervalo bayesiano es:
 ```{r}
 intervalo_bayes_2(50, k) %>% round(3)
 ```
-Aún quitando valores negativos, los intervalos de Agresti-Coull son mucho más anchos. 
+Aún quitando valores negativos, los intervalos de Agresti-Coull son mucho más anchos.
 La aproximación bayesiana, entonces, utiliza información previa
 para dar un resultado considerablemente
 más informativo, con calibración similar a Agresti-Coull.
@@ -347,9 +343,9 @@ más informativo, con calibración similar a Agresti-Coull.
 ```{r, out.width = "99%", fig.height=2}
 beta_sims_inicial <- tibble(prop = rbeta(5000, a, b), dist = "inicial")
 beta_sims_posterior <- tibble(prop = rbeta(5000, a + k, b + 50), dist = "posterior")
-bind_rows(beta_sims_inicial, beta_sims_posterior) %>% 
+bind_rows(beta_sims_inicial, beta_sims_posterior) %>%
   ggplot(aes(x = prop, fill = dist)) +
-    geom_histogram(alpha = 0.5, position = "identity") 
+    geom_histogram(alpha = 0.5, position = "identity")
 ```
 
 Donde vemos que no aprendimos mucho en este caso, pero nuestras creencias
@@ -376,9 +372,9 @@ c(a,b)
 
 ```{r}
 set.seed(2521)
-muestra_enigh <- read_csv("data/conjunto_de_datos_enigh_2018_ns_csv/conjunto_de_datos_concentradohogar_enigh_2018_ns/conjunto_de_datos/conjunto_de_datos_concentradohogar_enigh_2018_ns.csv") %>% 
-  select(ing_cor) %>% 
-  sample_n(120) %>% 
+muestra_enigh <- read_csv("data/conjunto_de_datos_enigh_2018_ns_csv/conjunto_de_datos_concentradohogar_enigh_2018_ns/conjunto_de_datos/conjunto_de_datos_concentradohogar_enigh_2018_ns.csv") %>%
+  select(ing_cor) %>%
+  sample_n(120) %>%
   mutate(mas_150mil = ing_cor > 150000)
 ```
 
@@ -406,9 +402,9 @@ k / 120
 ¿Cuál es la verdadera proporción?
 
 ```{r}
-read_csv("data/conjunto_de_datos_enigh_2018_ns_csv/conjunto_de_datos_concentradohogar_enigh_2018_ns/conjunto_de_datos/conjunto_de_datos_concentradohogar_enigh_2018_ns.csv") %>% 
-  select(ing_cor) %>% 
-  mutate(mas_150mil = ing_cor > 150000) %>% 
+read_csv("data/conjunto_de_datos_enigh_2018_ns_csv/conjunto_de_datos_concentradohogar_enigh_2018_ns/conjunto_de_datos/conjunto_de_datos_concentradohogar_enigh_2018_ns.csv") %>%
+  select(ing_cor) %>%
+  mutate(mas_150mil = ing_cor > 150000) %>%
   summarise(prop_pob = mean(mas_150mil))
 ```
 En este caso, nuestro intervalo cubre a la proporción poblacional.
@@ -483,7 +479,7 @@ sim_params <- function(m, pars){
   a <- pars[3]
   b <- pars[4]
   # simular sigmas
-  sims <- tibble(tau = rgamma(m, a, b)) %>% 
+  sims <- tibble(tau = rgamma(m, a, b)) %>%
     mutate(sigma = 1 / sqrt(tau))
   # simular mu
   sims <- sims %>% mutate(mu = rnorm(m, mu_0, sigma / sqrt(n_0)))
@@ -495,48 +491,48 @@ sim_params <- function(m, pars){
 ```{r}
 # simular muestras y calcular medias posteriores
 simular_muestra <- function(rep, mu_0, n_0, a_0, b_0){
-  cantantes <- lattice::singer %>% 
-    mutate(estatura_cm = 2.54 * height) %>% 
-    filter(str_detect(voice.part, "Tenor")) %>% 
+  cantantes <- lattice::singer %>%
+    mutate(estatura_cm = 2.54 * height) %>%
+    filter(str_detect(voice.part, "Tenor")) %>%
     sample_n(5, replace = FALSE)
   pars_posterior <- calcular_pars_posterior(cantantes$estatura_cm,
                                             c(mu_0, n_0, a_0, b_0))
-  medias_post <- 
-    sim_params(1000, pars_posterior) %>% 
-    summarise(across(everything(), mean)) %>% 
+  medias_post <-
+    sim_params(1000, pars_posterior) %>%
+    summarise(across(everything(), mean)) %>%
     select(mu, sigma)
   media <- mean(cantantes$estatura_cm)
   est_mv <- c("mu" = media,
               "sigma" = sqrt(mean((cantantes$estatura_cm - media)^2)))
-  bind_rows(medias_post, est_mv) %>% 
-    mutate(rep = rep, tipo = c("media_post", "max_verosim")) %>% 
+  bind_rows(medias_post, est_mv) %>%
+    mutate(rep = rep, tipo = c("media_post", "max_verosim")) %>%
     pivot_longer(mu:sigma, names_to = "parametro", values_to = "estimador")
 }
 ```
 
 
 ```{r}
-poblacion <- lattice::singer %>% 
-  mutate(estatura_cm = 2.54 * height) %>% 
-  filter(str_detect(voice.part, "Tenor")) %>% 
-  summarise(mu = mean(estatura_cm), sigma = sd(estatura_cm)) %>% 
+poblacion <- lattice::singer %>%
+  mutate(estatura_cm = 2.54 * height) %>%
+  filter(str_detect(voice.part, "Tenor")) %>%
+  summarise(mu = mean(estatura_cm), sigma = sd(estatura_cm)) %>%
   pivot_longer(mu:sigma, names_to = "parametro", values_to = "valor_pob")
 ```
 
 ```{r, cache = TRUE,  fig.height=2}
 errores <- map(1:2000, ~ simular_muestra(.x, mu_0, n_0, a, b)) %>%
-  bind_rows() %>% left_join(poblacion) %>% 
+  bind_rows() %>% left_join(poblacion) %>%
   mutate(error = (estimador - valor_pob))
 ggplot(errores, aes(x = error, fill = tipo)) +
-  geom_histogram(bins = 20, position = "identity", alpha = 0.5) + 
+  geom_histogram(bins = 20, position = "identity", alpha = 0.5) +
   facet_wrap(~parametro)
 ```
 Vemos claramente que la estimación de la desviación estándar de
 nuestro modelo es claramente superior a la de máxima verosimilitud. En resumen:
 ```{r}
-errores %>% 
-  group_by(tipo, parametro) %>% 
-  summarise(recm = sqrt(mean(error^2)) %>% round(2)) %>% 
+errores %>%
+  group_by(tipo, parametro) %>%
+  summarise(recm = sqrt(mean(error^2)) %>% round(2)) %>%
   arrange(parametro)
 ```
 
@@ -548,32 +544,32 @@ Podemos graficar las dos estimaciones, muestra a muestra, para entender
 cómo sucede esto:
 
 ```{r}
-errores %>% 
-  select(-error) %>% 
-  pivot_wider(names_from = tipo, values_from = estimador) %>% 
-  filter(parametro == "sigma") %>% 
+errores %>%
+  select(-error) %>%
+  pivot_wider(names_from = tipo, values_from = estimador) %>%
+  filter(parametro == "sigma") %>%
 ggplot(aes(x = max_verosim, y = media_post)) +
   geom_abline(colour = "red") +
-  geom_hline(yintercept = sqrt(b/(a - 1)), lty = 2, color = 'black') + 
+  geom_hline(yintercept = sqrt(b/(a - 1)), lty = 2, color = 'black') +
   geom_point() +
   labs(subtitle = "Estimación de sigma") +
   xlab("Estimador MV de sigma") +
   ylab("Media posterior de sigma") +
-  coord_fixed() + 
-  geom_segment(aes(x = 13, y = 11, xend = 13, yend = sqrt(b/(a - 1))), 
-               colour='red', size=1, arrow =arrow(length = unit(0.5, "cm"))) + 
-  geom_segment(aes(x = .5, y = 6, xend = .5, yend = sqrt(b/(a - 1))), 
+  coord_fixed() +
+  geom_segment(aes(x = 13, y = 11, xend = 13, yend = sqrt(b/(a - 1))),
+               colour='red', size=1, arrow =arrow(length = unit(0.5, "cm"))) +
+  geom_segment(aes(x = .5, y = 6, xend = .5, yend = sqrt(b/(a - 1))),
                colour='red', size=1, arrow =arrow(length = unit(0.5, "cm")))
 ```
 
 Nótese como estimaciones demasiado bajas o demasiada altas son contraídas
-hacia valores más consistentes con la inicial, lo cual resulta en 
-menor error. El valor esperado de $\sigma$ bajo la distribución inicial 
+hacia valores más consistentes con la inicial, lo cual resulta en
+menor error. El valor esperado de $\sigma$ bajo la distribución inicial
 se muestra como una horizontal punteada.
 
 ## Ejemplo: estimación de proporciones {-}
 
-Ahora repetimos el ejercicio 
+Ahora repetimos el ejercicio
 
 ```{r}
 # inicial
@@ -582,20 +578,20 @@ b <- 100
 qbeta(c(0.01, 0.99), a, b)
 
 # datos
-datos <- read_csv("data/conjunto_de_datos_enigh_2018_ns_csv/conjunto_de_datos_concentradohogar_enigh_2018_ns/conjunto_de_datos/conjunto_de_datos_concentradohogar_enigh_2018_ns.csv") %>% 
+datos <- read_csv("data/conjunto_de_datos_enigh_2018_ns_csv/conjunto_de_datos_concentradohogar_enigh_2018_ns/conjunto_de_datos/conjunto_de_datos_concentradohogar_enigh_2018_ns.csv") %>%
     select(ing_cor)
 # estimaciones
 obtener_estimados <- function(datos){
-  muestra_enigh <-  datos %>% 
-    sample_n(120) %>% 
+  muestra_enigh <-  datos %>%
+    sample_n(120) %>%
     mutate(mas_150mil = ing_cor > 150000)
   k <- sum(muestra_enigh$mas_150mil)
   tibble(k = k, est_mv = k/120, media_post = (a + k) / (120 + b), pob = 0.02769)
 }
-estimadores_sim <- map(1:200, ~obtener_estimados(datos)) %>% 
-  bind_rows() 
+estimadores_sim <- map(1:200, ~obtener_estimados(datos)) %>%
+  bind_rows()
 # calculo de errores
-error_cm <- estimadores_sim %>% 
+error_cm <- estimadores_sim %>%
   summarise(error_mv = sqrt(mean((est_mv - pob)^2)),
          error_post = sqrt(mean((media_post - pob)^2)))
 error_cm
@@ -605,10 +601,10 @@ más chicos (donde la inicial tiene densidad alta) comparadas con las
 estimaciones de máxima verosimilitud:
 
 ```{r, , fig.height=2.5}
-estimadores_sim_ag <- estimadores_sim %>% 
-  group_by(k, est_mv, media_post) %>% 
+estimadores_sim_ag <- estimadores_sim %>%
+  group_by(k, est_mv, media_post) %>%
   summarise(n = n())
-ggplot(estimadores_sim_ag, aes(x = est_mv, media_post, size = n)) + 
+ggplot(estimadores_sim_ag, aes(x = est_mv, media_post, size = n)) +
   geom_point() +
   geom_abline()
 ```
@@ -621,10 +617,10 @@ estimadores puntuales, y que esperemos ponga en contexto la parte
 anterior que acabamos de discutir. Usaremos algunos conceptos que vimos
 en la parte de propiedades de estimadores de máxima verosimilitud.
 
-Definimos una **función de pérdida** $L(\theta, \hat{\theta}_n)$, que 
-mide el costo de la discrepancia entre nuestro estimador 
+Definimos una **función de pérdida** $L(\theta, \hat{\theta}_n)$, que
+mide el costo de la discrepancia entre nuestro estimador
 
-$$\hat{\theta}_n = t(X_1,\ldots, X_n) = t(X)\,,$$ 
+$$\hat{\theta}_n = t(X_1,\ldots, X_n) = t(X)\,,$$
 
 y el verdadero valor $\theta$ poblacional. Es posible considerar distintas
 funciones de pérdida, pero como en secciones anteriores, usaremos la **pérdida
@@ -637,9 +633,9 @@ $\theta$, y necesitamos resumirla para dar una evaluación de qué tan bueno
 es el estimador $\hat{\theta}_n.$
 
 Ahora que hemos considerado tanto estadística bayesiana como frecuentista,
-podemos pensar en resumir esta función de distintas maneras. 
+podemos pensar en resumir esta función de distintas maneras.
 
-Comenzamos pensando de manera frecuentista. En este caso, consideramos a $\theta$ como 
+Comenzamos pensando de manera frecuentista. En este caso, consideramos a $\theta$ como
 un valor fijo, y nos preguntamos qué pasaría con la pérdida con distintas muestras
 potenciales que podríamos observar.
 
@@ -682,10 +678,10 @@ el error cuadrático usando simulación
 
 ```{r}
 perdida_cuad <- function(p, p_hat){
- (p - p_hat)^2 
+ (p - p_hat)^2
 }
 # dos estimadores
-t_1 <- function(n, x)  x / n 
+t_1 <- function(n, x)  x / n
 t_2 <- function(n, x)  (x + 2) / (n + 4)
 estimar_riesgo <- function(n = 20, theta, perdida, reps = 10000){
   x <- rbinom(reps, n, theta)
@@ -695,7 +691,7 @@ estimar_riesgo <- function(n = 20, theta, perdida, reps = 10000){
   # calcular pérdida
   media_perdida <- tibble(
     n = n, theta = theta,
-    estimador = c("MLE", "Posterior"), 
+    estimador = c("MLE", "Posterior"),
     riesgo = c(mean(perdida(theta, theta_1)), mean(perdida(theta, theta_2))))
   media_perdida
 }
@@ -709,12 +705,12 @@ se ven aproximadamente como sigue:
 
 ```{r, fig.height=2.5}
 p_seq <- seq(0, 1, 0.001)
-riesgo_tbl <- map(p_seq, ~ estimar_riesgo(n = 20, 
-                                          theta = .x, 
-                                          perdida = perdida_cuad)) %>% 
+riesgo_tbl <- map(p_seq, ~ estimar_riesgo(n = 20,
+                                          theta = .x,
+                                          perdida = perdida_cuad)) %>%
   bind_rows()
 ggplot(riesgo_tbl, aes(x = theta, y = riesgo, colour = estimador)) +
-  geom_line() 
+  geom_line()
 ```
 
 Y vemos que el riesgo depende del verdadero valor del parametro:
@@ -722,7 +718,7 @@ en los extremos, el estimador de máxima verosimilitud tiene menos riesgo,
 pero en el centro tiene más (esto es independiente del tipo de intervalos
 que construyamos y su cobertura).
 
-La razón es que las estimaciones de tipo Agresti-Coull ($\theta_2$) 
+La razón es que las estimaciones de tipo Agresti-Coull ($\theta_2$)
 están contraídas hacia 0.5 (agregamos dos éxitos y dos fracasos). Esto produce
 sesgo en la estimación para valores extremos de $\theta$. Sin embargo,
 para valores centrales de $\theta$  tiene menos variabilidad
@@ -743,8 +739,8 @@ estimar_riesgo_post <- function(n = 20, x, perdida, reps = 20000){
   # calcular pérdida
   media_perdida <- tibble(
     n = n, x = x,
-    estimador = c("MLE", "Posterior"), 
-    riesgo_post= c(mean(perdida(theta_post, theta_1)), 
+    estimador = c("MLE", "Posterior"),
+    riesgo_post= c(mean(perdida(theta_post, theta_1)),
                    mean(perdida(theta_post, theta_2))))
   media_perdida
 }
@@ -753,18 +749,18 @@ estimar_riesgo_post(n = 20, x = 8, perdida = perdida_cuad)
 Como dijimos, esta cantidad depende de los datos $x$ que no hemos observado. Así que
 calculamos para cada valor de $x$:
 
-Las funciones de pérdida promedio 
+Las funciones de pérdida promedio
 $\rho(x, t_1)$ y $\rho(x, t_2)$ (dependen de $x$)
 se ven aproximadamente como sigue:
 
 ```{r, fig.height=2.5}
 x_seq <- seq(0, 20, 1)
-riesgo_post_tbl <- 
-  map(x_seq, ~ estimar_riesgo_post(n = 20, x = .x, perdida = perdida_cuad)) %>% 
+riesgo_post_tbl <-
+  map(x_seq, ~ estimar_riesgo_post(n = 20, x = .x, perdida = perdida_cuad)) %>%
   bind_rows()
 ggplot(riesgo_post_tbl, aes(x = x, y = riesgo_post, colour = estimador)) +
-  geom_line() + 
-  geom_point() 
+  geom_line() +
+  geom_point()
 ```
 
 Donde vemos que la pérdida del estimador bayesiano es mejor para valores extremos
@@ -784,7 +780,7 @@ Finalmente, podemos crear un resumen unificado considerando:
 
 - Si no conocemos el valor del parámetro $\theta$, podemos promediar
 el riesgo frecuentista con la inicial $p(\theta)$
-- Si no conocemos los datos observados, podemos promediar usando 
+- Si no conocemos los datos observados, podemos promediar usando
 datos generados por la marginal $p(x)$ de $x$ bajo el modelo de datos
 $p(x|\theta)$ y la inicial $p(\theta)$.
 
@@ -802,30 +798,30 @@ Podemos calcular
 marginal_tbl <- function(n = 20, m = 5000){
   theta <- rbeta(m, 5, 3)
   x <- rbinom(m, size = n, p = theta)
-  tibble(x = x) %>% group_by(x) %>% 
+  tibble(x = x) %>% group_by(x) %>%
     summarise(n_x = n())
 }
-riesgo_post_tbl %>% left_join(marginal_tbl()) %>%  
-  group_by(estimador) %>% 
+riesgo_post_tbl %>% left_join(marginal_tbl()) %>%
+  group_by(estimador) %>%
   summarise(riesgo_bayes = sum(riesgo_post * n_x) / sum(n_x))
 ```
 
 o también
 
 ```{r}
-theta_tbl <- tibble(theta = rbeta(50000, 5, 3) %>% round(3)) %>% 
-  group_by(theta) %>% 
+theta_tbl <- tibble(theta = rbeta(50000, 5, 3) %>% round(3)) %>%
+  group_by(theta) %>%
     summarise(n_x = n())
-  
+
 riesgo_tbl %>% left_join(theta_tbl) %>%
-  mutate(n_x = ifelse(is.na(n_x), 0, n_x)) %>% 
-  group_by(estimador) %>% 
+  mutate(n_x = ifelse(is.na(n_x), 0, n_x)) %>%
+  group_by(estimador) %>%
   summarise(riesgo_bayes = sum(riesgo * n_x) / sum(n_x))
 ```
 
 
 Ahora consideremos cómo decidiríamos, desde el punto de vista Bayesiano, qué
-estimador usar: 
+estimador usar:
 
 1. (Estimador de Bayes) Si tenemos los datos $X$, escogeríamos una función $t_X$
 que minimice el riesgo posterior $\rho(t, X)$, y nuestro estimador es
@@ -864,12 +860,10 @@ insesgados.
 ```
 
 
-Desde el punto de vista frecuentista, la cuestión es más complicada y 
-hay varias maneras de proceder. En primer lugar, comenzaríamos con el 
-riesgo frecuentista $R(\theta, t)$. Una idea es,por ejemplo, calcular el 
+Desde el punto de vista frecuentista, la cuestión es más complicada y
+hay varias maneras de proceder. En primer lugar, comenzaríamos con el
+riesgo frecuentista $R(\theta, t)$. Una idea es,por ejemplo, calcular el
 riesgo máximo:
-<<<<<<< HEAD:11-bayesiana-calibracion.Rmd
-
 $$R_{\max} (t) = \underset{\theta}{\max} R(\theta, t)\,.$$
 
 En nuestro ejemplo de arriba el máximo se alcanza en 0.5, y tomaríamos eso
@@ -885,23 +879,3 @@ Finalmente, es posible demostrar (ver @Wasserman) que típicamente, para muestra
 grandes, el estimador de máxima verosimilitud  es cercano a ser minimax y además
 es una regla de Bayes. Estas son buenas propiedades, pero debemos contar con que
 el régimen asintótico se cumpla aproximadamente.
-=======
-
-$$R_{\max} (t) = \underset{\theta}{\max} R(\theta, t)\,.$$
->>>>>>> main:15-bayesiana-calibracion.Rmd
-
-En nuestro ejemplo de arriba el máximo se alcanza en 0.5, y tomaríamos eso
-evaluación de los estimadores $\theta_1$ o $\theta_2$.  Buscaríamos entonces
-estimadores que minimicen este máximo, es decir, **estimadores minimax**. Pero
-también es posible enfocar este problema considerando sólo estimadores
-*insesgados*, lo que nos lleva por ejemplo a buscar estimadores con mínima
-varianza. También podemos enfocarnos en buscar estimador *admisibles*, que son
-aquellos cuyo riesgo no está dominado para toda $\theta$ por otro estimador, y
-así sucesivamente.
-
-Finalmente, es posible demostrar (ver @Wasserman) que típicamente, para muestras
-grandes, el estimador de máxima verosimilitud  es cercano a ser minimax y además
-es una regla de Bayes. Estas son buenas propiedades, pero debemos contar con que
-el régimen asintótico se cumpla aproximadamente.
-
-
