@@ -811,14 +811,14 @@ experimentos relacionados.
 
 Los dos ejemplos que hemos visto arriba son ejemplos de análisis conjugado:
 
-- (Beta-bernoulli) Si las observaciones $X_i$ son $\mathsf{Bernoulli}(p)$ ($n$ fija)
+- ($\textsf{Beta-bernoulli}$) Si las observaciones $X_i$ son $\mathsf{Bernoulli}(p)$ ($n$ fija)
  queremos estimar $p$, y tomamos como distribución inicial para $p$ una $\mathsf{Beta}(a,b)$,
 entonces la posterior para $p$ cuando $S_n=k$ es $\mathsf{Beta}(k + a, n - k + b)$,
 donde $S_n = X_1 + X_2 +\cdots +X_n$.
 
 Y más en general:
 
-- (Beta-binomial) Si las observaciones $X_i, i=1,2,\ldots, m$
+- ($\textsf{Beta-binomial}$) Si las observaciones $X_i, i=1,2,\ldots, m$
 son $\mathsf{Binomial}(n_i, p)$ ($n_i$'s fijas) independientes,
  queremos estimar $p$, y tomamos como distribución inicial para $p$ una $\mathsf{Beta}(a,b)$,
 entonces la posterior para $p$ cuando $S_m=k$ es $\mathsf{Beta}(k + a, n - k + b)$,
@@ -826,7 +826,7 @@ donde $S_m = X_1 + X_2 +\cdots +X_m$ y $n= n_1+n_2+\cdots+n_m$
 
 También aplicamos:
 
-- (Uniforme-Pareto) Si el modelo de datos $X_i$ es uniforme $\mathsf{U}[0,\theta]$ ($n$ fija),
+- ($\textsf{Uniforme-Pareto}$) Si el modelo de datos $X_i$ es uniforme $\mathsf{U}[0,\theta]$ ($n$ fija),
 queremos estimar $\theta$, y tomamos como distribución inicial para $\theta$ una
 Pareto $(\theta_0, \alpha)$, entonces la posterior para $p$ si el máximo de las $X_i$'s
 es igual a $M$ es Pareto con parámetros $(\max\{\theta_0, M\}, \alpha + n)$.
@@ -846,9 +846,9 @@ Es decir, sea una muestra $X_1, \ldots, X_n \overset{iid}{\sim} f(X\,|\,
 la distribución previa para nuestro parámetro desconocido $\theta$ donde
 $\varphi_0$ denota los hiper-parámetros que definen dicha distribución. 
 
-Bajo un modelo conjugado, la distribución posterior $p(\theta | X_1, \ldots, X_n)$ 
+Bajo un modelo conjugado, la distribución posterior $P(\theta | X_1, \ldots, X_n)$ 
 satisface 
-$$p(\theta \, | \, X_1, \ldots, X_n) = \pi(\theta \, | \, \varphi_1)\,,$$
+$$P(\theta \, | \, X_1, \ldots, X_n) = \pi(\theta \, | \, \varphi_1)\,,$$
 donde $\varphi_1 = h(\varphi_0, X_1, \ldots, X_n)$ son los hiper-parámetros 
 actualizados del modelo que se usó para la previa.
 
@@ -857,7 +857,7 @@ actualizados del modelo que se usó para la previa.
 
 Otro ejemplo típico es el modelo normal-normal:
 
-- (Normal-normal) Si $X_i\sim \mathsf{N}(\mu,\sigma)$, con $\sigma$ conocida, y tomamos
+- ($\textsf{Normal-normal}$) Si $X_i\sim \mathsf{N}(\mu,\sigma)$, con $\sigma$ conocida, y tomamos
 como distribución inicial para $\mu \sim \mathsf{N}(\mu_0,\sigma_0)$, y definimos
 la *precisión* $\tau$ como el inverso de la varianza $\sigma^2$, entonces la posterior
 de $\mu$ es Normal con media $(1-\lambda) \mu_0 + \lambda\overline{x}$,
@@ -870,19 +870,19 @@ varianza conocida.
 
 Más útil es el siguiente modelo:
 
-- (Normal-Gamma inverso) Sean $X_i\sim \mathsf{N}(\mu, \sigma)$. Queremos estimar $\mu$ y $\sigma$. Tomamos
+- ($\textsf{Normal-Gamma}$ inverso) Sean $X_i\sim \mathsf{N}(\mu, \sigma)$. Queremos estimar $\mu$ y $\sigma$. Tomamos
 como distribuciones iniciales (dadas por 4 parámetros: $\mu_0, n_0, \alpha,\beta$):
 
   - $\tau = \frac{1}{\sigma^2} \sim \mathsf{Gamma}(\alpha,\beta)$
   - $\mu|\sigma$ es normal con media $\mu_0$ y varianza $\sigma^2 / {n_0}$ , y
-  - $p(\mu, \sigma) = p(\mu|\sigma)p(\sigma)$
+  - $P(\mu, \sigma) = P(\mu|\sigma)P(\sigma)$
 
 - Entonces la posterior es:
   - $\tau|x$ es $\mathsf{Gamma}(\alpha', \beta')$, con $\alpha' = \alpha + n/2$,
   $\beta' = \beta + \frac{1}{2}\sum_{i=1}^{n}(x_{i} - \bar{x})^2 + \frac{nn_0}{n+n_0}\frac{({\bar{x}}-\mu_{0})^2}{2}$.
   - $\mu|\sigma,x$ es normal con media $\mu' = \frac{n_0\mu_{0}+n{\bar{x}}}{n_0 +n}$ y varianza $\sigma^2/({n_0 +n})$.
 
-  - $p(\mu,\sigma|x) = p(\mu|x,\sigma)p(\sigma|x)$
+  - $P(\mu,\sigma|x) = P(\mu|x,\sigma)P(\sigma|x)$
 
 ```{block , type = 'mathblock'}
 
@@ -901,10 +901,10 @@ donde los factores siguen las siguientes distribuciones
 
 **Observaciones**
 
-1. Nótese que este último ejemplo tienen más de un parámetro. En estos casos, el
+1. Nótese que este último ejemplo tiene más de un parámetro. En estos casos, el
 objeto de interés es la **posterior conjunta** de los parámetros
-$p(\theta_1,\theta_2,\cdots, \theta_p|x)$. Este último ejemplo es relativamente
-simple pues por la selección de iniciales, para simular de la conjunta de $\mu$
+$P(\theta_1,\theta_2,\cdots, \theta_p|x)$. Este último ejemplo es relativamente
+simple pues, por la selección de iniciales, para simular de la conjunta de $\mu$
 y $\tau$ podemos simular primero $\tau$ (o $\sigma$), y después usar este valor
 para simular de $\mu$: el par de valores resultantes son una simulación de la
 conjunta.
@@ -1194,24 +1194,24 @@ a partir del modelo. Esto tiene dos utilidades:
 que de hecho observamos. Esto nos permite confirmar la calidad del ajuste del
 modelo, y se llama **verificación predictiva posterior**.
 
-Supongamos que tenemos la posterior $p(\theta | x)$. Podemos generar una nueva
+Supongamos que tenemos la posterior $P(\theta | x)$. Podemos generar una nueva
 *replicación* de los datos como sigue:
 
 ```{block, type='mathblock'}
 La distribución **predictiva posterior** genera nuevas observaciones a partir de
-la información observada. La denotamos como $p(\tilde{x}|x)$.
+la información observada. La denotamos como $P(\tilde{x}|x)$.
 
 Para simular de ella:
 
-- Muestreamos un valor $\tilde{\theta}$ de la posterior $p(\theta|x)$.
-- Simulamos del modelo de las observaciones $\tilde{x} \sim p(\tilde{x}|\tilde{\theta})$.
+- Muestreamos un valor $\tilde{\theta}$ de la posterior $P(\theta|x)$.
+- Simulamos del modelo de las observaciones $\tilde{x} \sim P(\tilde{x}|\tilde{\theta})$.
 - Repetimos el proceso hasta obtener una muestra grande.
 - Usamos este método para producir, por ejemplo, **intervalos de predicción** para nuevos datos.
 
 Si queremos una replicación de las observaciones de la predictiva posterior,
 
-- Muestreamos un valor $\tilde{\theta}$ de la posterior $p(\theta|x)$.
-- Simulamos del modelo de las observaciones $\tilde{x}_1, \tilde{x}_2,\ldots, \tilde{x}_n \sim p(\tilde{x}|\tilde{\theta})$,
+- Muestreamos un valor $\tilde{\theta}$ de la posterior $P(\theta|x)$.
+- Simulamos del modelo de las observaciones $\tilde{x}_1, \tilde{x}_2,\ldots, \tilde{x}_n \sim P(\tilde{x}|\tilde{\theta})$,
 done $n$ es el tamaño de muestra de la muestra original $x$.
 - Usamos este método para producir conjuntos de datos simulados que comparamos con los observados para verificar nuestro modelo.
 
@@ -1267,7 +1267,7 @@ media 10.
 
 Nótese que la posterior está dada por
 
-$$p(\lambda|x_1,\ldots, x_n) \propto e^{-n\lambda}\lambda^{\sum_i x_i} e^{-0.1\lambda} = \lambda^{n\overline{x}}e^{-\lambda(n + 0.1)}\,,$$
+$$P(\lambda|x_1,\ldots, x_n) \propto e^{-n\lambda}\lambda^{\sum_i x_i} e^{-0.1\lambda} = \lambda^{n\overline{x}}e^{-\lambda(n + 0.1)}\,,$$
 que es una distribución gamma con parámetros $(n\overline{x} + 1, n+0.1)$
 
 Ahora supongamos que observamos la siguiente muestra, ajustamos nuestro modelo
