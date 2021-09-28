@@ -8,87 +8,215 @@ comma <- function(x) format(x, digits = 2, big.mark = ",")
 theme_set(theme_minimal())
 ```
 
+Consideremos la siguiente situación que se utiliza en análisis de
+forense [@Lindley1977]. Cierto material se encuentra en la escena del
+crimen y en la ropa de un sospechoso. La pregunta clave es si este
+material tiene las mismas características en ambas muestras. Pues, si
+así lo fuera habría evidencia que sugiere que el sospechoso es quién
+incurrió en el crimen. Por ejemplo, si hay vidrios rotos en la escena
+del crimen y se encuentran vidrios rotos en la ropa del sospechoso se
+puede hacer un análisis forense para determinar si los vidrios
+provienen del mismo lugar. Para esto se estudia el índice de
+refracción de los vidrios.
+
+```{block, type = "ejercicio"}
+
+Dado lo que hemos visto hasta el momento, podemos pensar rápidamente en 
+hacer inferencia estadística y podemos proponer un contraste de hipótesis. 
+El más sencillo que podemos proponer es una prueba de diferencia en medias
+para muestras de dos subpoblaciones. Sin embargo, ¿cuáles crees que serían 
+las limitantes de este acercamiento? 
+
+*Pista:* ¿qué pasa si los vidrios de la escena del crimen son vidrios 
+comúnes y corrientes? ¿Qué pasa si los vidrios de la escena del crimen
+son vidrios polarizados?
+
+```
+
+En esta sección veremos un marco para realizar inferencia estadística
+que nos ayuda resolver situaciones como la planteada en el caso
+anterior.
+
+## Introducción {-}
+
 Para esta sección seguiremos principalmente @Kruschke. Adicionalmente
 puedes ver la sección correspondiente de @Chihara.
 
-En las secciones anteriores estudiamos el método de máxima verosimilitud y
-métodos de remuestreo. Esto lo hemos hecho para estimar parámetros, y
-cuantificar la incertidumbre qué tenemos acerca de valores poblacionales.
-Independiente del método utilizado, la incertidumbre que hemos aprendido a 
-incorporar en nuestros estimadores ha seguido el espirítu frecuentista. Es decir, 
-nuestra incertidumbre la hemos incorporado bajo distinats realizaciones
-hipotéticas de nuestro conjunto de datos. Estás realizaciones las hemos simulado 
+En las secciones anteriores estudiamos el método de máxima
+verosimilitud y métodos de remuestreo. Esto lo hemos hecho para
+estimar parámetros, y cuantificar la incertidumbre qué tenemos acerca
+de valores poblacionales.  Independiente del método utilizado, la
+incertidumbre que hemos aprendido a incorporar en nuestros estimadores
+ha seguido el espirítu frecuentista. Es decir, nuestra incertidumbre
+la hemos incorporado bajo distinats realizaciones hipotéticas de
+nuestro conjunto de datos. Estás realizaciones las hemos simulado
 considerando el proceso generador de datos, o aproximaciones razonables a éste.  
 
-La inferencia bayesiana tiene por objetivo incorporar incertidumbre en nuestras
-estimaciones. Sin embargo, la incertidumbre en el contexto bayesiano se deriva
-de principios diferentes. 
+La inferencia bayesiana tiene por objetivo incorporar incertidumbre en
+nuestras estimaciones. Sin embargo, la incertidumbre en el contexto
+bayesiano se deriva de principios diferentes.
 
 En particular tenemos las siguientes propiedades en el contexto bayesiano:  
 
-- Igual que en máxima verosimilitud, la inferencia bayesiana comienza con
-modelos probabilísticos y observaciones.
-- En contraste con máxima verosimilitud, la inferencia bayesiana está diseñada
-para incorporar información previa o de expertos que tengamos acerca de los
-parámetros de interés.
-- La inferencia bayesiana cubre como caso particular métodos basados en máxima
-verosimilitud.
+- Igual que en máxima verosimilitud, la inferencia bayesiana comienza
+con modelos probabilísticos y observaciones.
+- En contraste con máxima verosimilitud, la inferencia bayesiana está
+diseñada para incorporar información previa, o de expertos, que
+tengamos acerca de los parámetros de interés.
+- La inferencia bayesiana cubre como caso particular métodos basados
+en máxima verosimilitud.
 
-El concepto probabilístico básico que utilizamos para construir estos modelos y
-la inferencia es el de probabilidad condicional: la probabilidad de que ocurran
-ciertos eventos dada la información disponible del fenómeno que nos interesa.
+El concepto probabilístico básico que utilizamos para construir estos
+modelos y la inferencia es el de probabilidad condicional: la
+probabilidad de que ocurran ciertos eventos dada la información
+disponible del fenómeno que nos interesa. Lo cual nos lleva a pensar
+en la definición de probabilidad en sí.
+
+```{block, type = "ejercicio"}
+
+¿Cómo defines lo que es probabilidad? 
+
+```
+
+Posiblemente para contestar la pregunta anterior pensaste en lo que
+hemos hecho durante el curso. Es decir, consideraste construir un
+histograma donde la altura de las barras son proporcionales a la
+frecuencia de cada valor. Y has pensado que la probabilidad de la
+realización de un evento incierto es la frecuencia relativa de la
+realización de dicho suceso. Esto hace referencia a la construcción
+**frecuentista** del concepto de probabilidad.
+
+Sin embargo, ¿cómo puedes definir la probabilidad de un evento que
+nunca has observado? Es decir, para un evento el cual no hay registro
+anterior o no hay evidencia histórica. La construcción de probabilidad
+bajo el enfoque **bayesiano** considera que hay un agente
+interactuando con un medio incierto. Bajo este enfoque el agente toma
+decisiones de manera *coherente* entre distintas alternativas. Si el
+evento al que se enfrenta el tomador de decisión es incierto entonces
+el agente reflejará en la función de probabilidad sus *creencias*
+sobre la realización de dicho evento. Es decir, bajo el enfoque
+bayesiano la probabilidad se construye como el grado de creencia
+asociado a la realización de un evento incierto. Lo anterior lo podemos 
+escribir de manera formal, como sigue. 
+
+```{block, type = "mathblock"}
+
+**Definición.** (Elementos de un problema de decisión) Un problema 
+de decisión bajo un ambiente de incertidumbre se define por la 
+cuarteta $(\mathcal{D}, \mathcal{E}, \mathcal{C}, \leq)$, donde: 
+
+- $\mathcal{D}$: Espacio de alternativas. 
+- $\mathcal{E}$: Espacio de eventos inciertos. 
+- $\mathcal{C}$: Espacio de consequencias. 
+- $\leq$: Relación de preferencias$^*$. 
+
+```
+
+```{block2, type = "mathblock"}
+
+**Definición.** (Cuantificación de los eventos inciertos y consecuencias)
+
+- La información que el tomador de decisiones tiene sobre la posible 
+ocurrencia de los eventos inciertos puede ser cuantificada a través 
+de la *función de probabilidad* sobre el espacio $\mathcal{E}$. 
+
+- Las preferencias sobre el espacio de consecuencias se 
+pueden ordenar a través de una *función de utilidad* sobre el 
+espacio $\mathcal{C}$ de tal forma que 
+$$ c_{i,j} \leq c_{i',j'} \quad \text{si y sólo si} \quad u(c_{i,j}) \leq u(c_{i',j'})\,.$$ 
+
+```
+
+```{block2, type = "mathblock"}
+
+**Definición.** (Probabilidad). Sea $E \subset \mathcal{E}$ un evento incierto *relevante*, se define la probabilidad de $E$ como 
+$$P(E) = \textsf{Area}(R)\,,$$
+donde $R$ cumple que $d_R = d_E$. 
+
+De esta manera la función de probabilidad satisface:  
+
+- $0 \leq P(E) \leq 1.$
+- $P(\emptyset) = 0.$
+- $P(\mathcal{E}) = 1.$
+- Si $E \cap F = \emptyset$ entonces $P(E \cup F) = P(E) + P(F)$.
+
+```
 
 ## Un primer ejemplo completo de inferencia bayesiana {-}
 
-Consideremos el siguiente problema: Nos dan una moneda, y solo sabemos
-que la moneda puede tener probabilidad $3/5$ de tirar sol (está cargada a sol)
-o puede ser una moneda cargada a águila, con probabilidad $2/5$ de tirar sol.
+Consideremos el siguiente problema: Nos dan una moneda, y sólo sabemos
+que la moneda puede ser una de dos posibilidades. Una opción es que la
+moneda tiene probabilidad $3/5$ de tirar sol (está cargada a sol). O
+alternativamente, puede ser una moneda cargada a águila, con
+probabilidad $2/5$ de tirar sol. Es decir, tenemos información previa
+al lanzamiento de la moneda que nos dice qué posibilidades tenemos
+para la moneda que usaremos para nuestro experimento.
 
-Vamos a lanzar la moneda dos veces y observamos su resultado (águila o sol).
-Queremos decir algo acerca de qué tan probable es que hayamos tirado la moneda
-cargada a sol o la moneda cargada a águila.
+Vamos a lanzar la moneda dos veces y observamos su resultado (águila o
+sol).  Queremos decir algo acerca de qué tan probable es que hayamos
+tirado la moneda cargada a sol o la moneda cargada a águila. El proceso 
+generador de nuestras observaciones (verosimilitud) lo podemos escribir como 
 
-En este caso, tenemos dos variables: $X$, que cuenta el número
-de soles obtenidos en el experimento aleatorio, y $\theta$, que da la probabilidad
-de que un volado resulte en sol (por ejemplo, si la moneda es justa
-entonces $\theta = 0.5$).
+$$ P(X = x \,|\, \theta) = {2 \choose x} \theta^x (1- \theta)^{2-x}\,.$$ 
 
-¿Qué cantidades podríamos usar para evaluar
-qué moneda es la que estamos usando? Si hacemos el experimento,
-y tiramos la moneda 2 veces, podríamos considerar la probabilidad
-$$P(\theta = 0.4 | X = x)\,,$$
-donde $x$ es el número de soles que obtuvimos en el experimento. Esta es la probabilidad
-condicional de que estemos tirando la moneda con probabilidad de sol 2/5 dado
-que observamos $x$ soles. Por ejemplo, si tiramos 2 soles, deberíamos calcular
-$$P(\theta=0.4|X=2)\,.$$
+En este caso, tenemos dos variables: $X$, que cuenta el número de
+soles obtenidos en el experimento aleatorio, y $\theta$, que da la
+probabilidad de que un volado resulte en sol (por ejemplo, si la
+moneda es justa entonces $\theta = 0.5$). 
+
+¿Qué cantidades podríamos usar para evaluar qué moneda es la que
+estamos usando? Si hacemos el experimento, y tiramos la moneda 2
+veces, podríamos considerar la probabilidad
+$$P(\theta = 0.4 \,|\, X = x)\,,$$
+donde $x$ es el número de soles que obtuvimos en el experimento. Esta
+es la probabilidad condicional de que estemos tirando la moneda con
+probabilidad de sol 2/5 dado que observamos $x$ soles. Por ejemplo, si
+tiramos 2 soles, deberíamos calcular
+$$P(\theta=0.4 \,|\, X=2)\,.$$
 
 ¿Cómo calculamos esta probabilidad? ¿Qué sentido tiene?
 
-Usando reglas de probabildad (regla de Bayes en particular), podríamos calcular
+Usando reglas de probabilidad condicional, podríamos calcular
 $$P(\theta=0.4|X=2) = \frac{P(X=2 | \theta = 0.4) P(\theta =0.4)}{P(X=2)}\,.$$
 
 Nota que en el numerador uno de los factores, $P(X=2 | \theta = 0.4),$ es la
-verosimilitud. Así que primero necesitamos la verosimilitud:
+verosimilitud. Así que primero necesitamos evaluarla:
 $$P(X=2|\theta = 0.4) = (0.4)^2 = 0.16\,.$$
 
-La novedad es que ahora tenemos que considerar la probabilidad $P(\theta =
-0.4)$. Esta cantidad no la habíamos encontrado antes. Tenemos que pensar
-entonces que este parámetro es una *cantidad aleatoria*, y puede tomar dos
-valores $\theta=0.4$ ó $\theta = 0.6$.
+La novedad es que ahora tenemos que considerar la probabilidad
+$P(\theta = 0.4)$. Esta cantidad no la habíamos encontrado
+antes. Tenemos que pensar que bajo nuestro conocimiento previo, el
+tipo de moneda que recibimos para nuestro juego es aleatoria y en este
+caso sólo puede tomar dos valores.  
 
-Considerar esta cantidad como aleatoria requiere pensar, en este caso, en cómo
-se escogió la moneda, o qué sabemos acerca de las monedas que se usan para este
-experimento. Supongamos que en este caso, nos dicen que la moneda se escoge al
+```{block, type = "comentario"}
+
+En diversos textos esto se *simplifica* y se escribe que la moneda
+con la que hacemos los lanzamiento es una variable aleatoria. ¡Pero esto es un
+abuso de lenguaje! Una vez que recibimos la moneda, ésta la utilizamos para
+generar nuestros datos. No hay ningún mecanismo aleatorio que nos cambie la
+moneda entre lanzamientos. Entonces con $P(\theta)$ lo que estamos codificando
+son nuestros grados de creencia de haber recibido una moneda cargada a sol o
+cargada a águila.
+
+```
+
+Supongamos que en este caso, nos dicen que la moneda se escoge al
 azar de una bolsa donde hay una proporción similar de los dos tipos de moneda
 (0.4 ó 0.6). Es decir el espacio parametral es $\Theta = \{0.4, 0.6\},$  y las
 probabilidades asociadas a cada posibilidad son las mismas. Es decir, tenemos
-$$P(\theta = 0.4) = P(\theta = 0.6) =0.5\,,$$
+\begin{align}
+P(\text{tener la moneda cargada a águila}) &= P(\theta = 0.4) \\
+&= P(\theta = 0.6)\\
+&= P(\text{tener la moneda cargada a sol}) \\
+&= 0.5\,,
+\end{align}
 que representa la probabilidad de escoger de manera aleatoria la moneda con
 una carga en particular.
 
-Ahora queremos calcular $P(X=2)$, pero con el trabajo que hicimos esto es fácil.
-Pues requiere usar reglas de probabilidad usuales para hacerlo. Podemos utilizar
-probabilidad total
+Ahora, lo que nos falta es calcular $P(X=2)$, pero con el trabajo que
+hicimos esto es fácil.  Pues requiere usar reglas de probabilidad
+usuales para hacerlo. Podemos utilizar **probabilidad total** y después **probabilidad condicional**
 \begin{align}
 P(X) &= \sum_{\theta \in \Theta} P(X, \theta)\\
 &= \sum_{\theta \in \Theta} P(X\, |\, \theta) P(\theta),
@@ -99,31 +227,80 @@ $$ P(X=2) = P(X=2|\theta = 0.4)P(\theta = 0.4) + P(X=2|\theta=0.6)P(\theta =0.6)
 por lo que obtenemos
 $$P(X=2) = 0.16(0.5) + 0.36(0.5) = 0.26\,.$$
 
+```{block, type = "comentario"}
+
+La función de probabilidad $P(X)$ tiene un lugar muy especial en inferencia 
+bayesiana y dependiendo el uso recibe dos nombres. 
+
+- Si la evaluamos en nuestros datos $P(X = 2)$ se conoce como la **evidencia**
+de nuestros datos. 
+- Si la evaluamos en un caso hipótetico $P(X = x^*)$ se conoce como la **predictiva previa**.
+
+```
+
 Finalmente la probabilidad de haber escogido la moneda con carga $2/5$ dado que
 observamos dos soles en el lanzamiento es
 
 $$P(\theta=0.4|X=2) = \frac{0.16(0.5)}{0.26} \approx  0.31\,.$$
 
-Es decir, la **probabilidad posterior** de que estemos tirando la moneda $2/5$
-baja de 0.5 (nuestra información inicial) a 0.31.
+Esto se conoce como la **probabilidad posterior** de que estemos
+tirando la moneda con carga a águila.  Nota que nuestro conocimiento
+inicial baja de 0.5 (nuestra información inicial) a 0.31. Es decir, 
+los lanzamientos que realizamos aumentan nuestra creencia de haber recibido
+una moneda cargada a soles.
 
-Este es un ejemplo completo, aunque muy simple, de inferencia bayesiana. La
-estrategia de **inferencia bayesiana implica tomar decisiones basadas en las
-probabilidades posteriores.**
+Este es un ejemplo completo, aunque muy simple, de inferencia
+bayesiana. La estrategia de **inferencia bayesiana implica tomar
+decisiones basadas en probabilidades posteriores.** Y esto es por que
+bajo el marco de teoría de decisión en situaciones con incertidumbre
+tenemos el siguiente teorema.
+
+```{block, type = "mathblock"}
+
+**Teorema.** (Criterio de decisión Bayesiano)
+Considérese el problema de decisión definido por $D = \{d_1, \ldots, d_k\}$
+donde 
+$$ d_i = \{ c_{i,j} | E_j, j = 1, \ldots, m_i\}\qquad i = 1, \ldots, k\,.$$
+Sea $P(E_{i,j}| d_i)$ la probabilidad de que suceda $E_{i,j}$ si se elige
+la opción $d_i$ y sea $u(c_{i,j})$ la utilidad de la consecuencia $c_{i,j}$. 
+Entonces, la cuantificación de la opción $d_i$ es su utilidad esperada
+$$\mathbb{E}[u(d_i)] = \sum_{j=1}^{m_i} u(c_{i,j}) P(E_{i,j}| d_i)\,.$$
+La decisión óptima es aquella que 
+$$ d^* = \arg \max_i \mathbb{E}[u(d_i)]\,.$$
+
+```
+
+Nota que la derivación de la probabilidad posterior arriba (que
+argumentamos fue obtenida con reglas de probabilidad condicional) se
+extiende a la regla de Bayes o teorema de Bayes en situaciones mas
+generales.
+
+
+```{block, type = "mathblock"}
+
+**Teorema.** (Teorema de Bayes) Sea $\{E_j: j \in J\}$ una partición finita de 
+$\mathcal{E}$. Es decir, que $E_i\cap E_j = \emptyset$ y $\cup_{j \in J} E_j = \mathcal{E}$. Sea $Z \neq \emptyset$, entonces
+\begin{align}
+P(E_i |Z) = \frac{P(Z|E_i)P(E_i)}{\sum_{j \in J}P(Z|E_j)P(E_j)}\,.
+\end{align}
+
+
+```
+
 
 ```{block, type='ejercicio'}
 ¿Cuál sería la estimación de máxima verosimilitud para este problema? ¿Cómo
 cuantificaríamos la incertidumbre en la estimación de máxima verosimilitud?
 ```
 
-Finalmente, podríamos hacer predicciones usando la **posterior predictiva**.
-Si ${X}_{nv}$ es una nueva tirada adicional de la moneda que estamos usando, nos
+Finalmente, podríamos hacer predicciones para lanzamientos nuevos
+condicionando en nuestra información actualizada. Si ${X}_{nv}$ es una
+nueva tirada de la moneda que estamos usando, nos
 interesaría saber:
 $$P({X}_{nv}=\mathsf{sol}\, | \, X=2)\,.$$
-Notemos que un volado adicional es un resultado binario. Por lo que podemos
-calcular observando que $P({X}_{nv}|X=2, \theta)$ es una variable Bernoulli con
-probabilidad $\theta$, que puede valer 0.4 ó 0.6. Como tenemos las
-probabilidades posteriores $P(\theta|X=2)$ podemos usar probabilidad total,
+
+Notemos que un volado adicional es un resultado binario. Como tenemos las
+probabilidades posteriores $P(\theta|X=2)$, podemos usar probabilidad total
 condicionado en $X=2$:
 \begin{align*}
 P({X}_{nv}=\mathsf{sol}\, | \, X=2) & = \sum_{\theta \in \Theta} P({X}_{nv}=\mathsf{sol}, \theta \, | \, X=2) & \text{(probabilidad total)}\\
@@ -137,55 +314,46 @@ Es decir, promediamos ponderando con las probabilidades posteriores.
 Por lo tanto obtenemos
 $$P(X_{nv} = \mathsf{sol}|X=2) =  0.4 ( 0.31) + 0.6 (0.69) = 0.538\,.$$
 
-#### Observación 0 {-}
+```{block, type = "comentario"}
 
-Nótese que en contraste con máxima verosimilitud, en este ejemplo *cuantificamos
-con probabilidad condicional la incertidumbre de los parámetros que no
-conocemos*. En máxima verosimilitud esta probabilidad no tiene mucho sentido,
-pues nunca consideramos el parámetro desconocido como una cantidad aleatoria.
+La función de probabilidad $P(X_{nv} | X)$ recibe un nombre especial en 
+inferencia bayesiana. Se conoce como la función de probabilidad *predictiva posterior*. 
 
-#### Observación 1 {-}
 
-Nótese el factor $P(X=2)$ en la probabilidad posterior puede entenderse como un
-factor de normalización. Notemos que los denominadores en la distribución
-posterior son
-$$P(X=2 | \theta = 0.4) P(\theta =0.4) = 0.16(0.5) = 0.08\,,$$
-y
-$$P(X=2 | \theta = 0.6) P(\theta =0.6) = 0.36(0.5) = 0.18\,.$$
-Las probabilidades posteriores son proporcionales a estas dos cantidades,
-y como deben sumar uno, entonces normalizando estos dos números (dividiendo
-entre su suma) obtenemos las probabilidades.
+```
 
-#### Observación 2 {-}
+```{block, type = "mathblock"}
 
-La nomenclatura que usamos es la siguiente:
+**Definición.** La **función de probabilidad predictiva** es la función de probabilidad 
+marginal que determina qué valores de X son los mas probables. 
 
-- Como $X$ son los datos observados, llamamos a $P(X|\theta)$ la *verosimilitud*,
-o modelo de los datos.
-- A $P(\theta)$ le llamamos la distribución *inicial* o *previa*.
-- La distribución que usamos para hacer inferencia $P(\theta|X)$ es la
-distribución *final* o *posterior.*
+Lo que se conoce sobre nuestras mediciones $X$ es que condicionado en $\theta$ resulta en el proceso
+generador de datos (verosimilitud). Cuando no hemos visto realizaciones de este 
+proceso. Es decir, que no tenemos información $X \sim P(X|\theta)$ entonces 
+nuestro estado de conocimiento marginal, $P(X)$, se conoce como la 
+**distribución predictiva previa** y se obtiene 
+$$ P(X) = \sum_{\theta \in \Theta}^{} P(X | \theta) P(\theta)\,.$$
 
-Para utilizar inferencia bayesiana, hay que hacer supuestos para definir las
-primeras dos partes del modelo. La parte de iniciales o previas está ausente de
-enfoques como máxima verosimlitud usual.
+Cuando hemos recabado información, utilizamos probabilidad condicional para
+determinar qué valores nuevos $X^*$ son los mas probables una vez que hemos observado mediciones. Esto es $P(X^*|X)$ y se obtiene al marginalizar utilizando 
+nuestro estado actual de conocimiento. Es decir, 
+$$ P(X^*|X) = \sum_{\theta \in \Theta}^{} P(X^* | \theta) P(\theta|X)\,.$$
+Esta última es la **distribución predictiva posterior**.
 
-#### Observación 3 {-}
+```
 
-¿Cómo decidimos las probabilidades iniciales, por ejemplo $P(\theta=0.4)$ ?
+```{block, type = "comentario"}
 
-Quizá es un supuesto y no tenemos razón para pensar que se hace de otra manera.
-O quizá conocemos el mecanismo concreto con el que se selecciona la moneda.
-Discutiremos esto más adelante.
+Nota que para definir las función de probabilidad predictiva previa (posterior)
+marginalizamos con respecto a nuestro estado de conocimiento previo (posterior)
+que denotamos por $P(\theta)$ (o respectivamente $P(\theta | \textsf{datos})$).
+En este sentido decimos, que nuestra incertidumbre sobre el valor del parámetro
+$\theta$ ha sido incorporada para expresar nuestras predicciones
+(probabilisticas) de una realización hipotética.
 
-#### Observación 4 {-}
+```
 
-¿Cómo decidimos el modelo de los datos? Aquí típicamente también tenemos que
-hacer algunos supuestos, aunque algunos de estos pueden estar basados en el
-diseño del estudio, por ejemplo. Igual que cuando usamos máxima verosimilitud,
-es necesario checar que nuestro modelo ajusta razonablemente a los datos.
-
-#### Ejercicio {-}
+#### Ejercicios {-}
 
 Cambia distintos parámetros del número de soles observados, las probabilidades
 de sol de las monedas, y las probabilidades iniciales de selección de las
@@ -263,13 +431,13 @@ distribución *final* o *posterior*
 
 Hacemos inferencia usando la ecuación
 
-$$P(\theta | X) = \frac{P(X | \theta) P(\theta)}{P(X)}\,,$$
+$$P(\theta | X) = \frac{P(X | \theta) P(\theta)}{P(X)} = \frac{P(X | \theta) P(\theta)}{\sum_{\theta \in \Theta} P(X | \theta) P(\theta)}\,,$$
 
 que también escribimos:
 
 $$P(\theta | X) \propto P(X | \theta) P(\theta)\,,$$
 donde $\propto$ significa "proporcional a". No ponemos $P(X)$ pues como vimos
-arriba, es una constante de normalización.
+arriba, es una constante de normalización (y en la mayoría de los casos es muy dificil poder derivar analiticamente).
 
 ```
 
@@ -294,7 +462,7 @@ población dada usando una muestra iid $X_1,X_2,\ldots, X_n$ de variables
 Bernoulli.  Ya sabemos calcular la
 verosimilitud (el modelo de los datos):
 
-$$P(X_1=x_1,X_2 =x_2,\ldots, X_n=x_n|\theta) = \theta^k(1-\theta)^{n-k}\,,$$
+$$P(X_1=x_1,X_2 =x_2,\ldots, X_n=x_n|\theta) = {n \choose k} \theta^k(1-\theta)^{n-k}\,,$$
 
 donde $k = x_1 + x_2 +\cdots + x_k$ es el número de éxitos que observamos.
 
@@ -302,8 +470,9 @@ Ahora necesitamos una distribución inicial o previa $P(\theta)$. Aunque esta
 distribución puede tener cualquier forma, supongamos que nuestro conocimiento
 actual podemos resumirlo con una distribución $\mathsf{Beta}(3, 3)$:
 
-$$P(\theta) \propto \theta^2(1-\theta)^2\,.$$
-La constante de normalización es 1/30, pero no la requerimos. Podemos simular para examinar su forma:
+$$P(\theta) = \frac{1}{B(3,3)} \theta^{3-1}(1-\theta)^{3-1}\,,$$
+donde $B(a, b)$ es la constante de normalización de una distribución 
+$\mathsf{Beta}$. Podemos simular para examinar su forma:
 
 ```{r}
 sim_inicial <- tibble(theta = rbeta(10000, 3, 3))
@@ -323,12 +492,15 @@ $\theta$ sea muy cercana a 0 o muy cercana a 1.
 
 Ahora podemos construir nuestra posterior. Tenemos que
 
-$$P(\theta| X_1=x_1, \ldots, X_n=x_n) \propto P(X_1 = x_1,\ldots X_n=x_n | \theta)P(\theta) = \theta^{k+2}(1-\theta)^{n-k + 2}\,,$$
-donde la constante de normalización no depende de $\theta$. Como $\theta$ es un
-parámetro continuo, la expresión de la derecha nos debe dar una densidad posterior.
+$$P(\theta| X_1=x_1, \ldots, X_n=x_n) \propto P(X_1 = x_1,\ldots
+X_n=x_n | \theta)P(\theta) = \theta^{k+2}(1-\theta)^{n-k + 2}\,,$$
 
-Supongamos entonces que hicimos la prueba con $n = 30$ (número de prueba) y observamos
-19 éxitos. Tendríamos entonces
+donde la constante de normalización no depende de $\theta$. Como
+$\theta$ es un parámetro continuo, la expresión de la derecha nos debe
+dar una función de densidad.
+
+Supongamos entonces que hicimos la prueba con $n = 30$ (número de
+prueba) y observamos 19 éxitos. Tendríamos que 
 
 $$P(\theta | S_n = 19) \propto \theta^{19 + 2} (1-\theta)^{30 - 19 +2} = \theta^{21}(1-\theta)^{13}\,.$$
 
@@ -374,11 +546,11 @@ sims %>% group_by(dist) %>%
 El segundo renglón nos da un intervalo posterior para $\theta$ de *credibilidad*
 95\%. En inferencia bayesiana esto sustituye a los intervalos de confianza.
 
-- El intervalo de la inicial expresa nuestras creencias a priori acerca de $\theta$. Este
-intervalo es muy amplio (va de 0.15 a 0.85)
-- El **intervalo de la posterior** actualiza nuestras creencias acerca de $\theta$
-una vez que observamos los datos, y es considerablemente más angosto y por lo tanto
-informativo.
+- El **intervalo de la inicial** expresa nuestras creencias a priori
+acerca de $\theta$. Este intervalo es muy amplio (va de 0.15 a 0.85)
+- El **intervalo de la posterior** actualiza nuestras creencias acerca
+de $\theta$ una vez que observamos los datos, y es considerablemente
+más angosto y por lo tanto informativo.
 
 
 **Observaciones**:
@@ -410,7 +582,79 @@ qbeta(0.025, shape1 = 22, shape2 = 14) %>% round(2)
 qbeta(0.975, shape1 = 22, shape2 = 14) %>% round(2)
 ```
 
+**Predictivas**:
 
+Ahora escribiremos las funciones predictivas (previa y posterior) en
+este caso.  Primero notemos lo siguiente. La previa corresponde a una
+variable aleatoria Beta y la posterior también. Esto aliviará nuestros 
+cálculos. 
+
+Para la predictiva previa tenemos que calcular la integral
+$$P(X = k) = \int_0^1 P(X = k|\theta) P(\theta) d\theta\,,$$
+lo cual cual nos lleva a
+\begin{align}
+P(X = k) &= \int_{0}^{1} {n \choose k} \theta^{k}(1- \theta)^{n-k} \frac{1}{B(a,b)} \theta^{a-1} (1-\theta)^{b-1} d\theta\\
+&= {n \choose k} \frac{1}{B(a,b)} \int_{0}^{1} \theta^{k + a -1}(1- \theta)^{n-k + b -1} d\theta\\
+&= {n \choose k} \frac{B(k + a, n-k+b)}{B(a,b)} \,,
+\end{align}
+donde hemos utilizado lo que sabemos del *núcleo* de una
+$\mathsf{Beta}$.  La distribución resultante es parte de un catálogo
+*extenso* de distribuciones. De hecho, decimos que $X \in \mathbb{N}$
+condicionado en $n$ tiene una distribución $\mathsf{Beta-Binomial}$ si
+su función de densidad es igual a la expresión de arriba. Como vimos
+esta distribución tiene su origen al *mezclar* una $\mathsf{Beta}$ y
+una $\mathsf{Binomial}$.
+
+En el contexto de nuestro ejemplo, al usar una $\mathsf{Beta}(3,3)$ podemos
+explorar el número de éxitos que creemos probables bajo esta distribución
+previa. Para esto podemos simular como sigue:
+
+```{r}
+
+rbetabinom <- function(parametros){
+  tibble(theta  = rbeta(n = 1, parametros$a, parametros$b), 
+         exitos = rbinom(n = 1, size = parametros$n, prob = theta))
+}
+
+tibble(id = seq(1, 5000), 
+       n = 30,             # Número de lanzamientos
+       a = 3, b = 3) |>    # Parámetros de la beta
+  nest(-id) |> 
+  mutate(samples = map(data, rbetabinom)) |> 
+  unnest(samples) |> 
+  ggplot(aes(x = exitos)) + 
+    geom_histogram(binwidth = 2)
+
+```
+
+Lo cual nos da otro mecanismo de validar (antes de analizar los datos) si 
+nuestras creencias previas tienen sentido **en el contexto** del problema. 
+Es decir, podríamos verificar si tiene sentido que el promedio de éxitos se 
+concentre alrededor de 15 cuando estamos recolectando 30 experimentos totales. 
+También podemos expresar los intervalos de credibilidad sobre el número de
+éxitos en 30 experimentos:
+
+```{r}
+
+tibble(id = seq(1, 5000), 
+       n = 30,             # Número de lanzamientos
+       a = 3, b = 3) |>    # Parámetros de la beta
+  nest(-id) |> 
+  mutate(samples = map(data, rbetabinom)) |> 
+  unnest(samples) |> 
+  pull(exitos) |> 
+  quantile(probs = c(.025, .975))
+
+```
+
+```{block, type = "ejercicio"}
+
+Repite lo anterior con la distribución predictiva posterior considerando que hemos observado 
+19 éxitos en 30 experimentos, y que queremos realizar 30 experimentos más. Utiliza como 
+previa una $\mathsf{Beta}(3,3)$. ¿Cómo se ve el histograma y el intervalo de credibilidad 
+posterior?
+
+```
 
 
 ## Ejemplo: observaciones uniformes {-}
@@ -534,39 +778,47 @@ para ejemplos como este (Monte Carlo por medio de Cadenas de Markov, que veremos
 
 ## Probabilidad a priori {-}
 
-La inferencia bayesiana es conceptualmente simple: siempre hay que calcular
-la posterior a partir de verosimilitud (modelo de datos) y distribución inicial
-o a priori. Sin embargo, una crítica usual que se hace de la inferencia bayesiana
-es precisamente que hay que tener esa información inicial, y que distintos analistas
-llegan a distintos resultados si tienen información inicial distinta.
+La inferencia bayesiana es conceptualmente simple: siempre hay que
+calcular la posterior a partir de verosimilitud (modelo de datos) y
+distribución inicial o a priori. Sin embargo, una crítica usual que se
+hace de la inferencia bayesiana es precisamente que hay que tener esa
+información inicial, y que distintos analistas llegan a distintos
+resultados si tienen información inicial distinta.
 
-Eso realmente no es un defecto, es una ventaja de la inferencia bayesiana. Los datos
-y los problemas que queremos resolver no viven en un vacío donde podemos creer
-que la estatura de las personas, por ejemplo, puede variar de 0 a mil kilómetros,
-el número de boletos de una lotería puede ir de 2 o 3 boletos o también quizá 500 millones
-de boletos, o la proporción de personas infectadas de una enfermedad puede ser de unos cuantos
-hasta miles de millones.
+Eso realmente no es un defecto, es una ventaja de la inferencia
+bayesiana. Los datos y los problemas que queremos resolver no viven en
+un vacío donde podemos creer que la estatura de las personas, por
+ejemplo, puede variar de 0 a mil kilómetros; o el número de boletos de
+una lotería puede variar de 2 a 3 boletos o quizá 500 millones de
+boletos; incluso la proporción de personas infectadas de una
+enfermedad puede ser de unos cuantos hasta miles de millones.
 
-- En todos estos casos tenemos cierta información
-inicial que podemos usar para informar nuestras estimaciones. Esta información debe
+- En todos estos casos tenemos cierta información inicial que podemos
+usar para informar nuestras estimaciones. Esta información debe
 usarse.
-- Antes de tener datos, las probabilidades iniciales deben ser examinadas
-en términos del conocimiento de expertos.
-- Las probabilidades iniciales son supuestos que hacemos acerca del problema de
-interés, y también están sujetas a críticas y confrontación con datos.
+- Antes de tener datos, las probabilidades iniciales deben ser
+examinadas en términos del conocimiento de expertos.
+- Las probabilidades iniciales son supuestos que hacemos acerca del
+problema de interés, y también están sujetas a críticas y
+confrontación con datos.
+
+Las fuentes usuales de información que podemos utilizar varía de
+acuerdo al estudio. Por ejemplo, puede provenir de datos
+históricos. Incluso puede provenir de datos en la literatura o de
+experimentos relacionados.
 
 ## Análisis conjugado {-}
 
 Los dos ejemplos que hemos visto arriba son ejemplos de análisis conjugado:
 
-- (Beta-bernoulli) Si las observaciones $X_i$ son $\mathsf{Bernoulli}(p)$ ($n$ fija)
+- ($\textsf{Beta-bernoulli}$) Si las observaciones $X_i$ son $\mathsf{Bernoulli}(p)$ ($n$ fija)
  queremos estimar $p$, y tomamos como distribución inicial para $p$ una $\mathsf{Beta}(a,b)$,
 entonces la posterior para $p$ cuando $S_n=k$ es $\mathsf{Beta}(k + a, n - k + b)$,
 donde $S_n = X_1 + X_2 +\cdots +X_n$.
 
 Y más en general:
 
-- (Beta-binomial) Si las observaciones $X_i, i=1,2,\ldots, m$
+- ($\textsf{Beta-binomial}$) Si las observaciones $X_i, i=1,2,\ldots, m$
 son $\mathsf{Binomial}(n_i, p)$ ($n_i$'s fijas) independientes,
  queremos estimar $p$, y tomamos como distribución inicial para $p$ una $\mathsf{Beta}(a,b)$,
 entonces la posterior para $p$ cuando $S_m=k$ es $\mathsf{Beta}(k + a, n - k + b)$,
@@ -574,7 +826,7 @@ donde $S_m = X_1 + X_2 +\cdots +X_m$ y $n= n_1+n_2+\cdots+n_m$
 
 También aplicamos:
 
-- (Uniforme-Pareto) Si el modelo de datos $X_i$ es uniforme $\mathsf{U}[0,\theta]$ ($n$ fija),
+- ($\textsf{Uniforme-Pareto}$) Si el modelo de datos $X_i$ es uniforme $\mathsf{U}[0,\theta]$ ($n$ fija),
 queremos estimar $\theta$, y tomamos como distribución inicial para $\theta$ una
 Pareto $(\theta_0, \alpha)$, entonces la posterior para $p$ si el máximo de las $X_i$'s
 es igual a $M$ es Pareto con parámetros $(\max\{\theta_0, M\}, \alpha + n)$.
@@ -594,9 +846,9 @@ Es decir, sea una muestra $X_1, \ldots, X_n \overset{iid}{\sim} f(X\,|\,
 la distribución previa para nuestro parámetro desconocido $\theta$ donde
 $\varphi_0$ denota los hiper-parámetros que definen dicha distribución. 
 
-Bajo un modelo conjugado, la distribución posterior $p(\theta | X_1, \ldots, X_n)$ 
+Bajo un modelo conjugado, la distribución posterior $P(\theta | X_1, \ldots, X_n)$ 
 satisface 
-$$p(\theta \, | \, X_1, \ldots, X_n) = \pi(\theta \, | \, \varphi_1)\,,$$
+$$P(\theta \, | \, X_1, \ldots, X_n) = \pi(\theta \, | \, \varphi_1)\,,$$
 donde $\varphi_1 = h(\varphi_0, X_1, \ldots, X_n)$ son los hiper-parámetros 
 actualizados del modelo que se usó para la previa.
 
@@ -605,7 +857,7 @@ actualizados del modelo que se usó para la previa.
 
 Otro ejemplo típico es el modelo normal-normal:
 
-- (Normal-normal) Si $X_i\sim \mathsf{N}(\mu,\sigma)$, con $\sigma$ conocida, y tomamos
+- ($\textsf{Normal-normal}$) Si $X_i\sim \mathsf{N}(\mu,\sigma)$, con $\sigma$ conocida, y tomamos
 como distribución inicial para $\mu \sim \mathsf{N}(\mu_0,\sigma_0)$, y definimos
 la *precisión* $\tau$ como el inverso de la varianza $\sigma^2$, entonces la posterior
 de $\mu$ es Normal con media $(1-\lambda) \mu_0 + \lambda\overline{x}$,
@@ -618,19 +870,19 @@ varianza conocida.
 
 Más útil es el siguiente modelo:
 
-- (Normal-Gamma inverso) Sean $X_i\sim \mathsf{N}(\mu, \sigma)$. Queremos estimar $\mu$ y $\sigma$. Tomamos
+- ($\textsf{Normal-Gamma}$ inverso) Sean $X_i\sim \mathsf{N}(\mu, \sigma)$. Queremos estimar $\mu$ y $\sigma$. Tomamos
 como distribuciones iniciales (dadas por 4 parámetros: $\mu_0, n_0, \alpha,\beta$):
 
   - $\tau = \frac{1}{\sigma^2} \sim \mathsf{Gamma}(\alpha,\beta)$
   - $\mu|\sigma$ es normal con media $\mu_0$ y varianza $\sigma^2 / {n_0}$ , y
-  - $p(\mu, \sigma) = p(\mu|\sigma)p(\sigma)$
+  - $P(\mu, \sigma) = P(\mu|\sigma)P(\sigma)$
 
 - Entonces la posterior es:
   - $\tau|x$ es $\mathsf{Gamma}(\alpha', \beta')$, con $\alpha' = \alpha + n/2$,
   $\beta' = \beta + \frac{1}{2}\sum_{i=1}^{n}(x_{i} - \bar{x})^2 + \frac{nn_0}{n+n_0}\frac{({\bar{x}}-\mu_{0})^2}{2}$.
   - $\mu|\sigma,x$ es normal con media $\mu' = \frac{n_0\mu_{0}+n{\bar{x}}}{n_0 +n}$ y varianza $\sigma^2/({n_0 +n})$.
 
-  - $p(\mu,\sigma|x) = p(\mu|x,\sigma)p(\sigma|x)$
+  - $P(\mu,\sigma|x) = P(\mu|x,\sigma)P(\sigma|x)$
 
 ```{block , type = 'mathblock'}
 
@@ -649,10 +901,10 @@ donde los factores siguen las siguientes distribuciones
 
 **Observaciones**
 
-1. Nótese que este último ejemplo tienen más de un parámetro. En estos casos, el
+1. Nótese que este último ejemplo tiene más de un parámetro. En estos casos, el
 objeto de interés es la **posterior conjunta** de los parámetros
-$p(\theta_1,\theta_2,\cdots, \theta_p|x)$. Este último ejemplo es relativamente
-simple pues por la selección de iniciales, para simular de la conjunta de $\mu$
+$P(\theta_1,\theta_2,\cdots, \theta_p|x)$. Este último ejemplo es relativamente
+simple pues, por la selección de iniciales, para simular de la conjunta de $\mu$
 y $\tau$ podemos simular primero $\tau$ (o $\sigma$), y después usar este valor
 para simular de $\mu$: el par de valores resultantes son una simulación de la
 conjunta.
@@ -942,24 +1194,24 @@ a partir del modelo. Esto tiene dos utilidades:
 que de hecho observamos. Esto nos permite confirmar la calidad del ajuste del
 modelo, y se llama **verificación predictiva posterior**.
 
-Supongamos que tenemos la posterior $p(\theta | x)$. Podemos generar una nueva
+Supongamos que tenemos la posterior $P(\theta | x)$. Podemos generar una nueva
 *replicación* de los datos como sigue:
 
 ```{block, type='mathblock'}
 La distribución **predictiva posterior** genera nuevas observaciones a partir de
-la información observada. La denotamos como $p(\tilde{x}|x)$.
+la información observada. La denotamos como $P(\tilde{x}|x)$.
 
 Para simular de ella:
 
-- Muestreamos un valor $\tilde{\theta}$ de la posterior $p(\theta|x)$.
-- Simulamos del modelo de las observaciones $\tilde{x} \sim p(\tilde{x}|\tilde{\theta})$.
+- Muestreamos un valor $\tilde{\theta}$ de la posterior $P(\theta|x)$.
+- Simulamos del modelo de las observaciones $\tilde{x} \sim P(\tilde{x}|\tilde{\theta})$.
 - Repetimos el proceso hasta obtener una muestra grande.
 - Usamos este método para producir, por ejemplo, **intervalos de predicción** para nuevos datos.
 
 Si queremos una replicación de las observaciones de la predictiva posterior,
 
-- Muestreamos un valor $\tilde{\theta}$ de la posterior $p(\theta|x)$.
-- Simulamos del modelo de las observaciones $\tilde{x}_1, \tilde{x}_2,\ldots, \tilde{x}_n \sim p(\tilde{x}|\tilde{\theta})$,
+- Muestreamos un valor $\tilde{\theta}$ de la posterior $P(\theta|x)$.
+- Simulamos del modelo de las observaciones $\tilde{x}_1, \tilde{x}_2,\ldots, \tilde{x}_n \sim P(\tilde{x}|\tilde{\theta})$,
 done $n$ es el tamaño de muestra de la muestra original $x$.
 - Usamos este método para producir conjuntos de datos simulados que comparamos con los observados para verificar nuestro modelo.
 
@@ -1015,7 +1267,7 @@ media 10.
 
 Nótese que la posterior está dada por
 
-$$p(\lambda|x_1,\ldots, x_n) \propto e^{-n\lambda}\lambda^{\sum_i x_i} e^{-0.1\lambda} = \lambda^{n\overline{x}}e^{-\lambda(n + 0.1)}\,,$$
+$$P(\lambda|x_1,\ldots, x_n) \propto e^{-n\lambda}\lambda^{\sum_i x_i} e^{-0.1\lambda} = \lambda^{n\overline{x}}e^{-\lambda(n + 0.1)}\,,$$
 que es una distribución gamma con parámetros $(n\overline{x} + 1, n+0.1)$
 
 Ahora supongamos que observamos la siguiente muestra, ajustamos nuestro modelo
@@ -1123,8 +1375,6 @@ qt(c(0.025, 0.5, 0.975), 2 * alpha_post) * s + mu_post
 - (Más difícil) Calcula la posterior predictiva del modelo Poisson-Gamma.
 
 ```
-
-
 
 ### Ejemplo: posterior predictiva de Pareto-Uniforme. {-}
 
