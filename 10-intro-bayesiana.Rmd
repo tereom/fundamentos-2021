@@ -778,26 +778,34 @@ para ejemplos como este (Monte Carlo por medio de Cadenas de Markov, que veremos
 
 ## Probabilidad a priori {-}
 
-La inferencia bayesiana es conceptualmente simple: siempre hay que calcular
-la posterior a partir de verosimilitud (modelo de datos) y distribución inicial
-o a priori. Sin embargo, una crítica usual que se hace de la inferencia bayesiana
-es precisamente que hay que tener esa información inicial, y que distintos analistas
-llegan a distintos resultados si tienen información inicial distinta.
+La inferencia bayesiana es conceptualmente simple: siempre hay que
+calcular la posterior a partir de verosimilitud (modelo de datos) y
+distribución inicial o a priori. Sin embargo, una crítica usual que se
+hace de la inferencia bayesiana es precisamente que hay que tener esa
+información inicial, y que distintos analistas llegan a distintos
+resultados si tienen información inicial distinta.
 
-Eso realmente no es un defecto, es una ventaja de la inferencia bayesiana. Los datos
-y los problemas que queremos resolver no viven en un vacío donde podemos creer
-que la estatura de las personas, por ejemplo, puede variar de 0 a mil kilómetros,
-el número de boletos de una lotería puede ir de 2 o 3 boletos o también quizá 500 millones
-de boletos, o la proporción de personas infectadas de una enfermedad puede ser de unos cuantos
-hasta miles de millones.
+Eso realmente no es un defecto, es una ventaja de la inferencia
+bayesiana. Los datos y los problemas que queremos resolver no viven en
+un vacío donde podemos creer que la estatura de las personas, por
+ejemplo, puede variar de 0 a mil kilómetros; o el número de boletos de
+una lotería puede variar de 2 a 3 boletos o quizá 500 millones de
+boletos; incluso la proporción de personas infectadas de una
+enfermedad puede ser de unos cuantos hasta miles de millones.
 
-- En todos estos casos tenemos cierta información
-inicial que podemos usar para informar nuestras estimaciones. Esta información debe
+- En todos estos casos tenemos cierta información inicial que podemos
+usar para informar nuestras estimaciones. Esta información debe
 usarse.
-- Antes de tener datos, las probabilidades iniciales deben ser examinadas
-en términos del conocimiento de expertos.
-- Las probabilidades iniciales son supuestos que hacemos acerca del problema de
-interés, y también están sujetas a críticas y confrontación con datos.
+- Antes de tener datos, las probabilidades iniciales deben ser
+examinadas en términos del conocimiento de expertos.
+- Las probabilidades iniciales son supuestos que hacemos acerca del
+problema de interés, y también están sujetas a críticas y
+confrontación con datos.
+
+Las fuentes usuales de información que podemos utilizar varía de
+acuerdo al estudio. Por ejemplo, puede provenir de datos
+históricos. Incluso puede provenir de datos en la literatura o de
+experimentos relacionados.
 
 ## Análisis conjugado {-}
 
