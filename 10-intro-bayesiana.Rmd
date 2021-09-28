@@ -37,7 +37,7 @@ En esta sección veremos un marco para realizar inferencia estadística
 que nos ayuda resolver situaciones como la planteada en el caso
 anterior.
 
-## Introducción 
+## Introducción {-}
 
 Para esta sección seguiremos principalmente @Kruschke. Adicionalmente
 puedes ver la sección correspondiente de @Chihara.
@@ -470,8 +470,9 @@ Ahora necesitamos una distribución inicial o previa $P(\theta)$. Aunque esta
 distribución puede tener cualquier forma, supongamos que nuestro conocimiento
 actual podemos resumirlo con una distribución $\mathsf{Beta}(3, 3)$:
 
-$$P(\theta) \propto \theta^2(1-\theta)^2\,.$$
-La constante de normalización es 1/30, pero no la requerimos. Podemos simular para examinar su forma:
+$$P(\theta) = \frac{1}{B(3,3)} \theta^{3-1}(1-\theta)^{3-1}\,,$$
+donde $B(a, b)$ es la constante de normalización de una distribución 
+$\mathsf{Beta}$. Podemos simular para examinar su forma:
 
 ```{r}
 sim_inicial <- tibble(theta = rbeta(10000, 3, 3))
@@ -491,12 +492,15 @@ $\theta$ sea muy cercana a 0 o muy cercana a 1.
 
 Ahora podemos construir nuestra posterior. Tenemos que
 
-$$P(\theta| X_1=x_1, \ldots, X_n=x_n) \propto P(X_1 = x_1,\ldots X_n=x_n | \theta)P(\theta) = \theta^{k+2}(1-\theta)^{n-k + 2}\,,$$
-donde la constante de normalización no depende de $\theta$. Como $\theta$ es un
-parámetro continuo, la expresión de la derecha nos debe dar una densidad posterior.
+$$P(\theta| X_1=x_1, \ldots, X_n=x_n) \propto P(X_1 = x_1,\ldots
+X_n=x_n | \theta)P(\theta) = \theta^{k+2}(1-\theta)^{n-k + 2}\,,$$
 
-Supongamos entonces que hicimos la prueba con $n = 30$ (número de prueba) y observamos
-19 éxitos. Tendríamos entonces
+donde la constante de normalización no depende de $\theta$. Como
+$\theta$ es un parámetro continuo, la expresión de la derecha nos debe
+dar una función de densidad.
+
+Supongamos entonces que hicimos la prueba con $n = 30$ (número de
+prueba) y observamos 19 éxitos. Tendríamos que 
 
 $$P(\theta | S_n = 19) \propto \theta^{19 + 2} (1-\theta)^{30 - 19 +2} = \theta^{21}(1-\theta)^{13}\,.$$
 
@@ -542,11 +546,11 @@ sims %>% group_by(dist) %>%
 El segundo renglón nos da un intervalo posterior para $\theta$ de *credibilidad*
 95\%. En inferencia bayesiana esto sustituye a los intervalos de confianza.
 
-- El intervalo de la inicial expresa nuestras creencias a priori acerca de $\theta$. Este
-intervalo es muy amplio (va de 0.15 a 0.85)
-- El **intervalo de la posterior** actualiza nuestras creencias acerca de $\theta$
-una vez que observamos los datos, y es considerablemente más angosto y por lo tanto
-informativo.
+- El **intervalo de la inicial** expresa nuestras creencias a priori
+acerca de $\theta$. Este intervalo es muy amplio (va de 0.15 a 0.85)
+- El **intervalo de la posterior** actualiza nuestras creencias acerca
+de $\theta$ una vez que observamos los datos, y es considerablemente
+más angosto y por lo tanto informativo.
 
 
 **Observaciones**:
@@ -578,7 +582,79 @@ qbeta(0.025, shape1 = 22, shape2 = 14) %>% round(2)
 qbeta(0.975, shape1 = 22, shape2 = 14) %>% round(2)
 ```
 
+**Predictivas**:
 
+Ahora escribiremos las funciones predictivas (previa y posterior) en
+este caso.  Primero notemos lo siguiente. La previa corresponde a una
+variable aleatoria Beta y la posterior también. Esto aliviará nuestros 
+cálculos. 
+
+Para la predictiva previa tenemos que calcular la integral
+$$P(X = k) = \int_0^1 P(X = k|\theta) P(\theta) d\theta\,,$$
+lo cual cual nos lleva a
+\begin{align}
+P(X = k) &= \int_{0}^{1} {n \choose k} \theta^{k}(1- \theta)^{n-k} \frac{1}{B(a,b)} \theta^{a-1} (1-\theta)^{b-1} d\theta\\
+&= {n \choose k} \frac{1}{B(a,b)} \int_{0}^{1} \theta^{k + a -1}(1- \theta)^{n-k + b -1} d\theta\\
+&= {n \choose k} \frac{B(k + a, n-k+b)}{B(a,b)} \,,
+\end{align}
+donde hemos utilizado lo que sabemos del *núcleo* de una
+$\mathsf{Beta}$.  La distribución resultante es parte de un catálogo
+*extenso* de distribuciones. De hecho, decimos que $X \in \mathbb{N}$
+condicionado en $n$ tiene una distribución $\mathsf{Beta-Binomial}$ si
+su función de densidad es igual a la expresión de arriba. Como vimos
+esta distribución tiene su origen al *mezclar* una $\mathsf{Beta}$ y
+una $\mathsf{Binomial}$.
+
+En el contexto de nuestro ejemplo, al usar una $\mathsf{Beta}(3,3)$ podemos
+explorar el número de éxitos que creemos probables bajo esta distribución
+previa. Para esto podemos simular como sigue:
+
+```{r}
+
+rbetabinom <- function(parametros){
+  tibble(theta  = rbeta(n = 1, parametros$a, parametros$b), 
+         exitos = rbinom(n = 1, size = parametros$n, prob = theta))
+}
+
+tibble(id = seq(1, 5000), 
+       n = 30,             # Número de lanzamientos
+       a = 3, b = 3) |>    # Parámetros de la beta
+  nest(-id) |> 
+  mutate(samples = map(data, rbetabinom)) |> 
+  unnest(samples) |> 
+  ggplot(aes(x = exitos)) + 
+    geom_histogram(binwidth = 2)
+
+```
+
+Lo cual nos da otro mecanismo de validar (antes de analizar los datos) si 
+nuestras creencias previas tienen sentido **en el contexto** del problema. 
+Es decir, podríamos verificar si tiene sentido que el promedio de éxitos se 
+concentre alrededor de 15 cuando estamos recolectando 30 experimentos totales. 
+También podemos expresar los intervalos de credibilidad sobre el número de
+éxitos en 30 experimentos:
+
+```{r}
+
+tibble(id = seq(1, 5000), 
+       n = 30,             # Número de lanzamientos
+       a = 3, b = 3) |>    # Parámetros de la beta
+  nest(-id) |> 
+  mutate(samples = map(data, rbetabinom)) |> 
+  unnest(samples) |> 
+  pull(exitos) |> 
+  quantile(probs = c(.025, .975))
+
+```
+
+```{block, type = "ejercicio"}
+
+Repite lo anterior con la distribución predictiva posterior considerando que hemos observado 
+19 éxitos en 30 experimentos, y que queremos realizar 30 experimentos más. Utiliza como 
+previa una $\mathsf{Beta}(3,3)$. ¿Cómo se ve el histograma y el intervalo de credibilidad 
+posterior?
+
+```
 
 
 ## Ejemplo: observaciones uniformes {-}
