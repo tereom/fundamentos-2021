@@ -1469,10 +1469,69 @@ La función de pérdida la definimos en términos de la decisión que tomamos
 y lo que en realidad sucede. Esta función de pérdida la representamos como
 
 \begin{center}
-\begin{tabular}{lll}
-      & $H_0$     & $H_1$     \\
+\begin{tabular}{l|l|l|}
+$  v(d, \theta)$ & $H_0$     & $H_1$     \\
+    \hline
 $H_0$ & $v_{0,0}$ & $v_{0,1}$ \\
-$H_1$ & $v_{1,0}$ & $v_{1,1}$
+$H_1$ & $v_{1,0}$ & $v_{1,1}$\\
+\hline
 \end{tabular}
 \end{center}
+
+donde $v_{0,0}$, $v_{1,1}$ son la pérdida de tomar una decisión correcta 
+(usualmente igual a 0). El costo $v_{1,0}$ es la pérdida de rechazar $H_0$
+cuando $H_0$ es cierta y $v_{0,1}$ es la pérdida de no rechazar $H_0$ cuando 
+$H_0$ es falsa. 
+
+Se denotamos por $p_0 = P(H_0)$ la probabildiad asociada a la hipótesis $H_0$ 
+al momento de tomar una decisión. Entonces la pérdida esperada para cada decisión
+es 
+\begin{gather}
+\mathbb{E}[v(H_0)] = v_{0,0} p_0 + v_{0,1} (1 - p_0) = v_{0,1} - (v_{0,1}  - v_{0,0} ) p_0\,, \\
+\mathbb{E}[v(H_1)] = v_{1,0} p_0 + v_{1,1} (1 - p_0) = v_{1,1} - (v_{1,1}  - v_{1,0} ) p_0\,. \\
+\end{gather}
+
+Que podemos pensar son dos rectas que intersectan en el punto 
+\begin{align}
+p^* = \frac{v_{0,1} - v_{1,1}}{v_{1,0}- v_{1,1} + v_{0,1} - v_{0,0}} \,.
+\end{align}
+
+De donde se sigue que si 
+\begin{align}
+\mathbb{E}[v(H_0)] < \mathbb{E}[v(H_1)] \Leftrightarrow \frac{p_0}{1 - p_0} < \frac{ v_{0,1} - v_{0,0}}{v_{1,0}- v_{1,1}} \Leftrightarrow p_0 > p^*\,,
+\end{align}
+que implica escoger $H_0$. Lo cual indica que si $p_0$ es
+*suficientemente* grande comparada con $1 - p_0$ entonces decidiríamos
+por $H_0$.
+
+El caso contrario es análogo y podemos ver si $p_0$ es *suficientemente*
+pequeña comparada con $1-p_0$ entonces decidimos por $H_1$. 
+
+Desde el punto de vista bayesiano tenemos una tercera opción que no teníamos bajo 
+el enfoque frecuentista de contraste de hipótesis. Si $p_0 = p^*$ entonces somos 
+indiferentes y no podemos decir por una u otra alternativa. 
+
+### Incorporando observaciones para contraste hipótesis {-}
+
+Siguiendo con el marco de contraste de hipótesis bayesiana podemos considerar que
+en las ecuaciones de arriba sólo hemos utilizado $P(H_0)$. Es decir, 
+la probabilidad a priori de que ocurra $H_0$. Sin embargo, siguiendo un poco la 
+intuición de nuestra discusión con las función predictiva, es natural considerar 
+la distribución posterior de $H_0$ una vez observados los datos $P(H_0|X)$. 
+
+Suponiendo que los costos de no equivocarnos son 0, entonces escogeríamos $H_0$ si 
+y sólo si 
+\begin{align}
+\frac{P(H_0|X)}{P(H_1|X)} < \frac{v_{0,1}}{v_{1,0}}\,.\\
+\end{align}
+Lo cual es equivalente a 
+\begin{align}
+\frac{P(X|H_0)}{P(X|H_1)} < \frac{P(H_1)}{P(H_0)} \times \frac{v_{0,1}}{v_{1,0}}\,,\\
+\end{align}
+
+que nos indica que la decisión (o indecisión) se toma de acuerdo al
+contraste del ajuste de un modelo sobre otro (cociente de
+verosimilitudes) contra un factor que incorpora un balance entre los
+costos asociados a la decisión incorrecta y los pesos relativos de
+nuestras creencias iniciales.
 
