@@ -1469,10 +1469,14 @@ La función de pérdida la definimos en términos de la decisión que tomamos
 y lo que en realidad sucede. Esta función de pérdida la representamos como
 
 \begin{center}
-\begin{tabular}{lll}
-      & $H_0$     & $H_1$     \\
+\begin{tabular}{l|l|l|}
+$  v(d, \theta)$ & $H_0$     & $H_1$     \\
+    \hline
 $H_0$ & $v_{0,0}$ & $v_{0,1}$ \\
-$H_1$ & $v_{1,0}$ & $v_{1,1}$
+$H_1$ & $v_{1,0}$ & $v_{1,1}$\\
+\hline
 \end{tabular}
 \end{center}
 
+donde $v_{0,0}$, $v_{1,1}$ son la pérdida de tomar una decisión correcta 
+(usualmente igual a 0). Y $v_{1,0}$
