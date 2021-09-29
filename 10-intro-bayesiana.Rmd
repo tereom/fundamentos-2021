@@ -21,13 +21,13 @@ refracción de los vidrios.
 
 ```{block, type = "ejercicio"}
 
-Dado lo que hemos visto hasta el momento, podemos pensar rápidamente en 
-hacer inferencia estadística y podemos proponer un contraste de hipótesis. 
+Dado lo que hemos visto hasta el momento, podemos pensar rápidamente en
+hacer inferencia estadística y podemos proponer un contraste de hipótesis.
 El más sencillo que podemos proponer es una prueba de diferencia en medias
-para muestras de dos subpoblaciones. Sin embargo, ¿cuáles crees que serían 
-las limitantes de este acercamiento? 
+para muestras de dos subpoblaciones. Sin embargo, ¿cuáles crees que serían
+las limitantes de este acercamiento?
 
-*Pista:* ¿qué pasa si los vidrios de la escena del crimen son vidrios 
+*Pista:* ¿qué pasa si los vidrios de la escena del crimen son vidrios
 comúnes y corrientes? ¿Qué pasa si los vidrios de la escena del crimen
 son vidrios polarizados?
 
@@ -50,13 +50,13 @@ incertidumbre que hemos aprendido a incorporar en nuestros estimadores
 ha seguido el espirítu frecuentista. Es decir, nuestra incertidumbre
 la hemos incorporado bajo distinats realizaciones hipotéticas de
 nuestro conjunto de datos. Estás realizaciones las hemos simulado
-considerando el proceso generador de datos, o aproximaciones razonables a éste.  
+considerando el proceso generador de datos, o aproximaciones razonables a éste.
 
 La inferencia bayesiana tiene por objetivo incorporar incertidumbre en
 nuestras estimaciones. Sin embargo, la incertidumbre en el contexto
 bayesiano se deriva de principios diferentes.
 
-En particular tenemos las siguientes propiedades en el contexto bayesiano:  
+En particular tenemos las siguientes propiedades en el contexto bayesiano:
 
 - Igual que en máxima verosimilitud, la inferencia bayesiana comienza
 con modelos probabilísticos y observaciones.
@@ -74,7 +74,7 @@ en la definición de probabilidad en sí.
 
 ```{block, type = "ejercicio"}
 
-¿Cómo defines lo que es probabilidad? 
+¿Cómo defines lo que es probabilidad?
 
 ```
 
@@ -96,19 +96,19 @@ evento al que se enfrenta el tomador de decisión es incierto entonces
 el agente reflejará en la función de probabilidad sus *creencias*
 sobre la realización de dicho evento. Es decir, bajo el enfoque
 bayesiano la probabilidad se construye como el grado de creencia
-asociado a la realización de un evento incierto. Lo anterior lo podemos 
-escribir de manera formal, como sigue. 
+asociado a la realización de un evento incierto. Lo anterior lo podemos
+escribir de manera formal, como sigue.
 
 ```{block, type = "mathblock"}
 
-**Definición.** (Elementos de un problema de decisión) Un problema 
-de decisión bajo un ambiente de incertidumbre se define por la 
-cuarteta $(\mathcal{D}, \mathcal{E}, \mathcal{C}, \leq)$, donde: 
+**Definición.** (Elementos de un problema de decisión) Un problema
+de decisión bajo un ambiente de incertidumbre se define por la
+cuarteta $(\mathcal{D}, \mathcal{E}, \mathcal{C}, \leq)$, donde:
 
-- $\mathcal{D}$: Espacio de alternativas. 
-- $\mathcal{E}$: Espacio de eventos inciertos. 
-- $\mathcal{C}$: Espacio de consequencias. 
-- $\leq$: Relación de preferencias$^*$. 
+- $\mathcal{D}$: Espacio de alternativas.
+- $\mathcal{E}$: Espacio de eventos inciertos.
+- $\mathcal{C}$: Espacio de consequencias.
+- $\leq$: Relación de preferencias$^*$.
 
 ```
 
@@ -116,24 +116,24 @@ cuarteta $(\mathcal{D}, \mathcal{E}, \mathcal{C}, \leq)$, donde:
 
 **Definición.** (Cuantificación de los eventos inciertos y consecuencias)
 
-- La información que el tomador de decisiones tiene sobre la posible 
-ocurrencia de los eventos inciertos puede ser cuantificada a través 
-de la *función de probabilidad* sobre el espacio $\mathcal{E}$. 
+- La información que el tomador de decisiones tiene sobre la posible
+ocurrencia de los eventos inciertos puede ser cuantificada a través
+de la *función de probabilidad* sobre el espacio $\mathcal{E}$.
 
-- Las preferencias sobre el espacio de consecuencias se 
-pueden ordenar a través de una *función de utilidad* sobre el 
-espacio $\mathcal{C}$ de tal forma que 
-$$ c_{i,j} \leq c_{i',j'} \quad \text{si y sólo si} \quad u(c_{i,j}) \leq u(c_{i',j'})\,.$$ 
+- Las preferencias sobre el espacio de consecuencias se
+pueden ordenar a través de una *función de utilidad* sobre el
+espacio $\mathcal{C}$ de tal forma que
+$$ c_{i,j} \leq c_{i',j'} \quad \text{si y sólo si} \quad u(c_{i,j}) \leq u(c_{i',j'})\,.$$
 
 ```
 
 ```{block2, type = "mathblock"}
 
-**Definición.** (Probabilidad). Sea $E \subset \mathcal{E}$ un evento incierto *relevante*, se define la probabilidad de $E$ como 
+**Definición.** (Probabilidad). Sea $E \subset \mathcal{E}$ un evento incierto *relevante*, se define la probabilidad de $E$ como
 $$P(E) = \textsf{Area}(R)\,,$$
-donde $R$ cumple que $d_R = d_E$. 
+donde $R$ cumple que $d_R = d_E$.
 
-De esta manera la función de probabilidad satisface:  
+De esta manera la función de probabilidad satisface:
 
 - $0 \leq P(E) \leq 1.$
 - $P(\emptyset) = 0.$
@@ -154,15 +154,15 @@ para la moneda que usaremos para nuestro experimento.
 
 Vamos a lanzar la moneda dos veces y observamos su resultado (águila o
 sol).  Queremos decir algo acerca de qué tan probable es que hayamos
-tirado la moneda cargada a sol o la moneda cargada a águila. El proceso 
-generador de nuestras observaciones (verosimilitud) lo podemos escribir como 
+tirado la moneda cargada a sol o la moneda cargada a águila. El proceso
+generador de nuestras observaciones (verosimilitud) lo podemos escribir como
 
-$$ P(X = x \,|\, \theta) = {2 \choose x} \theta^x (1- \theta)^{2-x}\,.$$ 
+$$ P(X = x \,|\, \theta) = {2 \choose x} \theta^x (1- \theta)^{2-x}\,.$$
 
 En este caso, tenemos dos variables: $X$, que cuenta el número de
 soles obtenidos en el experimento aleatorio, y $\theta$, que da la
 probabilidad de que un volado resulte en sol (por ejemplo, si la
-moneda es justa entonces $\theta = 0.5$). 
+moneda es justa entonces $\theta = 0.5$).
 
 ¿Qué cantidades podríamos usar para evaluar qué moneda es la que
 estamos usando? Si hacemos el experimento, y tiramos la moneda 2
@@ -187,7 +187,7 @@ La novedad es que ahora tenemos que considerar la probabilidad
 $P(\theta = 0.4)$. Esta cantidad no la habíamos encontrado
 antes. Tenemos que pensar que bajo nuestro conocimiento previo, el
 tipo de moneda que recibimos para nuestro juego es aleatoria y en este
-caso sólo puede tomar dos valores.  
+caso sólo puede tomar dos valores.
 
 ```{block, type = "comentario"}
 
@@ -229,11 +229,11 @@ $$P(X=2) = 0.16(0.5) + 0.36(0.5) = 0.26\,.$$
 
 ```{block, type = "comentario"}
 
-La función de probabilidad $P(X)$ tiene un lugar muy especial en inferencia 
-bayesiana y dependiendo el uso recibe dos nombres. 
+La función de probabilidad $P(X)$ tiene un lugar muy especial en inferencia
+bayesiana y dependiendo el uso recibe dos nombres.
 
 - Si la evaluamos en nuestros datos $P(X = 2)$ se conoce como la **evidencia**
-de nuestros datos. 
+de nuestros datos.
 - Si la evaluamos en un caso hipótetico $P(X = x^*)$ se conoce como la **predictiva previa**.
 
 ```
@@ -245,7 +245,7 @@ $$P(\theta=0.4|X=2) = \frac{0.16(0.5)}{0.26} \approx  0.31\,.$$
 
 Esto se conoce como la **probabilidad posterior** de que estemos
 tirando la moneda con carga a águila.  Nota que nuestro conocimiento
-inicial baja de 0.5 (nuestra información inicial) a 0.31. Es decir, 
+inicial baja de 0.5 (nuestra información inicial) a 0.31. Es decir,
 los lanzamientos que realizamos aumentan nuestra creencia de haber recibido
 una moneda cargada a soles.
 
@@ -259,13 +259,13 @@ tenemos el siguiente teorema.
 
 **Teorema.** (Criterio de decisión Bayesiano)
 Considérese el problema de decisión definido por $D = \{d_1, \ldots, d_k\}$
-donde 
+donde
 $$ d_i = \{ c_{i,j} | E_j, j = 1, \ldots, m_i\}\qquad i = 1, \ldots, k\,.$$
 Sea $P(E_{i,j}| d_i)$ la probabilidad de que suceda $E_{i,j}$ si se elige
-la opción $d_i$ y sea $u(c_{i,j})$ la utilidad de la consecuencia $c_{i,j}$. 
+la opción $d_i$ y sea $u(c_{i,j})$ la utilidad de la consecuencia $c_{i,j}$.
 Entonces, la cuantificación de la opción $d_i$ es su utilidad esperada
 $$\mathbb{E}[u(d_i)] = \sum_{j=1}^{m_i} u(c_{i,j}) P(E_{i,j}| d_i)\,.$$
-La decisión óptima es aquella que 
+La decisión óptima es aquella que
 $$ d^* = \arg \max_i \mathbb{E}[u(d_i)]\,.$$
 
 ```
@@ -278,7 +278,7 @@ generales.
 
 ```{block, type = "mathblock"}
 
-**Teorema.** (Teorema de Bayes) Sea $\{E_j: j \in J\}$ una partición finita de 
+**Teorema.** (Teorema de Bayes) Sea $\{E_j: j \in J\}$ una partición finita de
 $\mathcal{E}$. Es decir, que $E_i\cap E_j = \emptyset$ y $\cup_{j \in J} E_j = \mathcal{E}$. Sea $Z \neq \emptyset$, entonces
 \begin{align}
 P(E_i |Z) = \frac{P(Z|E_i)P(E_i)}{\sum_{j \in J}P(Z|E_j)P(E_j)}\,.
@@ -316,27 +316,27 @@ $$P(X_{nv} = \mathsf{sol}|X=2) =  0.4 ( 0.31) + 0.6 (0.69) = 0.538\,.$$
 
 ```{block, type = "comentario"}
 
-La función de probabilidad $P(X_{nv} | X)$ recibe un nombre especial en 
-inferencia bayesiana. Se conoce como la función de probabilidad *predictiva posterior*. 
+La función de probabilidad $P(X_{nv} | X)$ recibe un nombre especial en
+inferencia bayesiana. Se conoce como la función de probabilidad *predictiva posterior*.
 
 
 ```
 
 ```{block, type = "mathblock"}
 
-**Definición.** La **función de probabilidad predictiva** es la función de probabilidad 
-marginal que determina qué valores de X son los mas probables. 
+**Definición.** La **función de probabilidad predictiva** es la función de probabilidad
+marginal que determina qué valores de X son los mas probables.
 
 Lo que se conoce sobre nuestras mediciones $X$ es que condicionado en $\theta$ resulta en el proceso
-generador de datos (verosimilitud). Cuando no hemos visto realizaciones de este 
-proceso. Es decir, que no tenemos información $X \sim P(X|\theta)$ entonces 
-nuestro estado de conocimiento marginal, $P(X)$, se conoce como la 
-**distribución predictiva previa** y se obtiene 
+generador de datos (verosimilitud). Cuando no hemos visto realizaciones de este
+proceso. Es decir, que no tenemos información $X \sim P(X|\theta)$ entonces
+nuestro estado de conocimiento marginal, $P(X)$, se conoce como la
+**distribución predictiva previa** y se obtiene
 $$ P(X) = \sum_{\theta \in \Theta}^{} P(X | \theta) P(\theta)\,.$$
 
 Cuando hemos recabado información, utilizamos probabilidad condicional para
-determinar qué valores nuevos $X^*$ son los mas probables una vez que hemos observado mediciones. Esto es $P(X^*|X)$ y se obtiene al marginalizar utilizando 
-nuestro estado actual de conocimiento. Es decir, 
+determinar qué valores nuevos $X^*$ son los mas probables una vez que hemos observado mediciones. Esto es $P(X^*|X)$ y se obtiene al marginalizar utilizando
+nuestro estado actual de conocimiento. Es decir,
 $$ P(X^*|X) = \sum_{\theta \in \Theta}^{} P(X^* | \theta) P(\theta|X)\,.$$
 Esta última es la **distribución predictiva posterior**.
 
@@ -471,7 +471,7 @@ distribución puede tener cualquier forma, supongamos que nuestro conocimiento
 actual podemos resumirlo con una distribución $\mathsf{Beta}(3, 3)$:
 
 $$P(\theta) = \frac{1}{B(3,3)} \theta^{3-1}(1-\theta)^{3-1}\,,$$
-donde $B(a, b)$ es la constante de normalización de una distribución 
+donde $B(a, b)$ es la constante de normalización de una distribución
 $\mathsf{Beta}$. Podemos simular para examinar su forma:
 
 ```{r}
@@ -500,7 +500,7 @@ $\theta$ es un parámetro continuo, la expresión de la derecha nos debe
 dar una función de densidad.
 
 Supongamos entonces que hicimos la prueba con $n = 30$ (número de
-prueba) y observamos 19 éxitos. Tendríamos que 
+prueba) y observamos 19 éxitos. Tendríamos que
 
 $$P(\theta | S_n = 19) \propto \theta^{19 + 2} (1-\theta)^{30 - 19 +2} = \theta^{21}(1-\theta)^{13}\,.$$
 
@@ -613,46 +613,46 @@ previa. Para esto podemos simular como sigue:
 ```{r}
 
 rbetabinom <- function(parametros){
-  tibble(theta  = rbeta(n = 1, parametros$a, parametros$b), 
+  tibble(theta  = rbeta(n = 1, parametros$a, parametros$b),
          exitos = rbinom(n = 1, size = parametros$n, prob = theta))
 }
 
-tibble(id = seq(1, 5000), 
+tibble(id = seq(1, 5000),
        n = 30,             # Número de lanzamientos
        a = 3, b = 3) |>    # Parámetros de la beta
-  nest(-id) |> 
-  mutate(samples = map(data, rbetabinom)) |> 
-  unnest(samples) |> 
-  ggplot(aes(x = exitos)) + 
+  nest(-id) |>
+  mutate(samples = map(data, rbetabinom)) |>
+  unnest(samples) |>
+  ggplot(aes(x = exitos)) +
     geom_histogram(binwidth = 2)
 
 ```
 
-Lo cual nos da otro mecanismo de validar (antes de analizar los datos) si 
-nuestras creencias previas tienen sentido **en el contexto** del problema. 
-Es decir, podríamos verificar si tiene sentido que el promedio de éxitos se 
-concentre alrededor de 15 cuando estamos recolectando 30 experimentos totales. 
+Lo cual nos da otro mecanismo de validar (antes de analizar los datos) si
+nuestras creencias previas tienen sentido **en el contexto** del problema.
+Es decir, podríamos verificar si tiene sentido que el promedio de éxitos se
+concentre alrededor de 15 cuando estamos recolectando 30 experimentos totales.
 También podemos expresar los intervalos de credibilidad sobre el número de
 éxitos en 30 experimentos:
 
 ```{r}
 
-tibble(id = seq(1, 5000), 
+tibble(id = seq(1, 5000),
        n = 30,             # Número de lanzamientos
        a = 3, b = 3) |>    # Parámetros de la beta
-  nest(-id) |> 
-  mutate(samples = map(data, rbetabinom)) |> 
-  unnest(samples) |> 
-  pull(exitos) |> 
+  nest(-id) |>
+  mutate(samples = map(data, rbetabinom)) |>
+  unnest(samples) |>
+  pull(exitos) |>
   quantile(probs = c(.025, .975))
 
 ```
 
 ```{block, type = "ejercicio"}
 
-Repite lo anterior con la distribución predictiva posterior considerando que hemos observado 
-19 éxitos en 30 experimentos, y que queremos realizar 30 experimentos más. Utiliza como 
-previa una $\mathsf{Beta}(3,3)$. ¿Cómo se ve el histograma y el intervalo de credibilidad 
+Repite lo anterior con la distribución predictiva posterior considerando que hemos observado
+19 éxitos en 30 experimentos, y que queremos realizar 30 experimentos más. Utiliza como
+previa una $\mathsf{Beta}(3,3)$. ¿Cómo se ve el histograma y el intervalo de credibilidad
 posterior?
 
 ```
@@ -840,17 +840,17 @@ posterior de manera fácil, o usar sus propiedades teóricas.
 ```{block, type = 'mathblock'}
 
 **Definición.** Un *modelo bayesiano conjugado* es aquel que mantiene la
-distribución posterior dentro de la misma familia que la distribución previa. 
+distribución posterior dentro de la misma familia que la distribución previa.
 
 Es decir, sea una muestra $X_1, \ldots, X_n \overset{iid}{\sim} f(X\,|\,
-\theta),$ y sea $p (\theta ) = \pi(\theta \, | \, \varphi_0)$ 
+\theta),$ y sea $p (\theta ) = \pi(\theta \, | \, \varphi_0)$
 la distribución previa para nuestro parámetro desconocido $\theta$ donde
-$\varphi_0$ denota los hiper-parámetros que definen dicha distribución. 
+$\varphi_0$ denota los hiper-parámetros que definen dicha distribución.
 
-Bajo un modelo conjugado, la distribución posterior $P(\theta | X_1, \ldots, X_n)$ 
-satisface 
+Bajo un modelo conjugado, la distribución posterior $P(\theta | X_1, \ldots, X_n)$
+satisface
 $$P(\theta \, | \, X_1, \ldots, X_n) = \pi(\theta \, | \, \varphi_1)\,,$$
-donde $\varphi_1 = h(\varphi_0, X_1, \ldots, X_n)$ son los hiper-parámetros 
+donde $\varphi_1 = h(\varphi_0, X_1, \ldots, X_n)$ son los hiper-parámetros
 actualizados del modelo que se usó para la previa.
 
 ```
@@ -887,7 +887,7 @@ como distribuciones iniciales (dadas por 4 parámetros: $\mu_0, n_0, \alpha,\bet
 
 ```{block , type = 'mathblock'}
 
-**Definición.** Decimos que la distribución conjunta de dos variables aleatorias 
+**Definición.** Decimos que la distribución conjunta de dos variables aleatorias
 $\theta = (\mu, \tau)$ sigue una distribución Normal--Gamma-Inversa, si podemos
 establecer la siguiente estructura de dependencia condicional
 $$\pi(\mu, \tau ) = \pi(\mu \, | \, \tau) \, \pi(\tau),$$
@@ -1007,10 +1007,10 @@ set.seed(3461)
 sims_tbl <- tibble(rep = 1:20) %>%
   mutate(estatura = map(rep, ~ simular_normal_invgamma(500, c(mu_0, n_0, a, b)))) %>%
   unnest(cols = c(estatura))
-ggplot(sims_tbl, aes(x = estatura)) + 
+ggplot(sims_tbl, aes(x = estatura)) +
   geom_rect(inherit.aes = FALSE,
-            aes(xmin=150, xmax=180, ymin=0, ymax=+Inf), 
-            fill='gray', alpha=0.1) + 
+            aes(xmin=150, xmax=180, ymin=0, ymax=+Inf),
+            fill='gray', alpha=0.1) +
   geom_histogram() +
   facet_wrap(~ rep) +
   ggtitle("Realizaciones de datos bajo la previa")
@@ -1410,52 +1410,52 @@ Hasta ahora hemos argumentado que el tipo de resultado de
 un análisis de datos bayesiano considera la distribución posterior completa. Se
 puede resumir esta distribución y reportar ciertas cantidades
 puntuales (para realizar estimación puntual) o se pueden reportar
-intervalos de probabilidad (para realizar estimación por intervalos). 
-Ambas ideas también las hemos explorado bajo un enfoque frecuentista. 
+intervalos de probabilidad (para realizar estimación por intervalos).
+Ambas ideas también las hemos explorado bajo un enfoque frecuentista.
 
 Para **estimación puntual** consideremos que $\mathcal{D} = \mathcal{E} =
 \Theta$.  Para la función de utilidad consideraremos $v(\hat \theta,
 \theta)$ la pérdida de estimar $\hat \theta$ el verdadero parámetro de
-interés $\theta$. Ahora consideraremos casos puntuales: 
+interés $\theta$. Ahora consideraremos casos puntuales:
 
 1. **Pérdida cuadrática**:
 $$v(\hat \theta,\theta) = (\hat \theta- \theta)^2\,.$$
 
-En este caso la decisión óptima que minimiza la pérdida esperada es 
+En este caso la decisión óptima que minimiza la pérdida esperada es
 $$\hat \theta = \mathbb{E}(\theta)\,.$$
-Es decir, la media de la distribución que contempla nuestro estado de 
-conocimiento. 
+Es decir, la media de la distribución que contempla nuestro estado de
+conocimiento.
 
 2. **Pérdida en valor absoluto**:
 $$v(\hat \theta,\theta) = |\hat \theta- \theta|\,.$$
 
-En este caso la decisión óptima que minimiza la pérdida esperada es 
+En este caso la decisión óptima que minimiza la pérdida esperada es
 $$\hat \theta = \mathsf{mediana}(\theta)\,.$$
-Es decir, la mediana de la distribución que contempla nuestro estado de 
-conocimiento. 
+Es decir, la mediana de la distribución que contempla nuestro estado de
+conocimiento.
 
 3. **Pérdida vecindad**:
 $$v(\hat \theta,\theta) = 1 - \mathbb{I}_{B_\epsilon(\hat \theta)}(\theta)\,,$$
-denota la vecindad con radio $\epsilon$ alrededor de $\hat \theta$. 
-En este caso, la decisión óptima que minimiza la pérdida esperada 
-cuando $\epsilon \rightarrow 0$ es 
+denota la vecindad con radio $\epsilon$ alrededor de $\hat \theta$.
+En este caso, la decisión óptima que minimiza la pérdida esperada
+cuando $\epsilon \rightarrow 0$ es
 
 $$\hat \theta = \mathsf{moda}(\theta)\,.$$
-Es decir, la moda media de la distribución que contempla nuestro estado de 
-conocimiento. 
+Es decir, la moda media de la distribución que contempla nuestro estado de
+conocimiento.
 
 Para **estimación por intervalos** consideramos que $\mathcal{D} = \{
 I : I \subset \Theta\}$, donde $I$ es un intervalo de probabilidad
-$(1-\alpha)$ si 
+$(1-\alpha)$ si
 $$ \int_{I}^{} P(\theta)d\theta = 1 - \alpha\,.$$
 
 **Nota** que para una $\alpha$ fija no existe un intervalo único de
-probabilidad. 
+probabilidad.
 
 El espacio de eventos es el espacio parametral y la función de pérdida es
-$$v(I, \theta) = \|D\| - \mathbb{I}_I(\theta)\,.$$ 
+$$v(I, \theta) = \|D\| - \mathbb{I}_I(\theta)\,.$$
 De lo anterior, observamos que para un nivel dado $\alpha$ es preferible
-reportar el intervalo de probabilidad que sea de tamaño mínimo. 
+reportar el intervalo de probabilidad que sea de tamaño mínimo.
 
 Para **contraste de hipótesis** consideremos por simplicidad, dos hipótesis que
 denotaremos por $H_0$ y $H_1$. Estas pueden representar dos modelos
@@ -1463,7 +1463,7 @@ distintos. En este caso (en el marco de decisión) el espacio de
 alternativas está definido por
 $$ \mathcal{D} = \{H_0, H_1\}\,.$$
 El espacio parametral (espacio de eventos) está definido en términos
-de estas posibilidades. Es decir,   
+de estas posibilidades. Es decir,
 $$ \mathcal{E}= \{H_0, H_1\}\,.$$
 La función de pérdida la definimos en términos de la decisión que tomamos
 y lo que en realidad sucede. Esta función de pérdida la representamos como
@@ -1478,5 +1478,59 @@ $H_1$ & $v_{1,0}$ & $v_{1,1}$\\
 \end{tabular}
 \end{center}
 
-donde $v_{0,0}$, $v_{1,1}$ son la pérdida de tomar una decisión correcta 
-(usualmente igual a 0). Y $v_{1,0}$
+donde $v_{0,0}$, $v_{1,1}$ son la pérdida de tomar una decisión correcta
+(usualmente igual a 0). El costo $v_{1,0}$ es la pérdida de rechazar $H_0$
+cuando $H_0$ es cierta y $v_{0,1}$ es la pérdida de no rechazar $H_0$ cuando
+$H_0$ es falsa.
+
+Se denotamos por $p_0 = P(H_0)$ la probabildiad asociada a la hipótesis $H_0$
+al momento de tomar una decisión. Entonces la pérdida esperada para cada decisión
+es
+\begin{gather}
+\mathbb{E}[v(H_0)] = v_{0,0} p_0 + v_{0,1} (1 - p_0) = v_{0,1} - (v_{0,1}  - v_{0,0} ) p_0\,, \\
+\mathbb{E}[v(H_1)] = v_{1,0} p_0 + v_{1,1} (1 - p_0) = v_{1,1} - (v_{1,1}  - v_{1,0} ) p_0\,. \\
+\end{gather}
+
+Que podemos pensar son dos rectas que intersectan en el punto
+\begin{align}
+p^* = \frac{v_{0,1} - v_{1,1}}{v_{1,0}- v_{1,1} + v_{0,1} - v_{0,0}} \,.
+\end{align}
+
+De donde se sigue que si
+\begin{align}
+\mathbb{E}[v(H_0)] < \mathbb{E}[v(H_1)] \Leftrightarrow \frac{p_0}{1 - p_0} < \frac{ v_{0,1} - v_{0,0}}{v_{1,0}- v_{1,1}} \Leftrightarrow p_0 > p^*\,,
+\end{align}
+que implica escoger $H_0$. Lo cual indica que si $p_0$ es
+*suficientemente* grande comparada con $1 - p_0$ entonces decidiríamos
+por $H_0$.
+
+El caso contrario es análogo y podemos ver si $p_0$ es *suficientemente*
+pequeña comparada con $1-p_0$ entonces decidimos por $H_1$.
+
+Desde el punto de vista bayesiano tenemos una tercera opción que no teníamos bajo
+el enfoque frecuentista de contraste de hipótesis. Si $p_0 = p^*$ entonces somos
+indiferentes y no podemos decir por una u otra alternativa.
+
+### Incorporando observaciones para contraste hipótesis {-}
+
+Siguiendo con el marco de contraste de hipótesis bayesiana podemos considerar que
+en las ecuaciones de arriba sólo hemos utilizado $P(H_0)$. Es decir,
+la probabilidad a priori de que ocurra $H_0$. Sin embargo, siguiendo un poco la
+intuición de nuestra discusión con las función predictiva, es natural considerar
+la distribución posterior de $H_0$ una vez observados los datos $P(H_0|X)$.
+
+Suponiendo que los costos de no equivocarnos son 0, entonces escogeríamos $H_0$ si
+y sólo si
+\begin{align}
+\frac{P(H_0|X)}{P(H_1|X)} < \frac{v_{0,1}}{v_{1,0}}\,.\\
+\end{align}
+Lo cual es equivalente a
+\begin{align}
+\frac{P(X|H_0)}{P(X|H_1)} < \frac{P(H_1)}{P(H_0)} \times \frac{v_{0,1}}{v_{1,0}}\,,\\
+\end{align}
+
+que nos indica que la decisión (o indecisión) se toma de acuerdo al
+contraste del ajuste de un modelo sobre otro (cociente de
+verosimilitudes) contra un factor que incorpora un balance entre los
+costos asociados a la decisión incorrecta y los pesos relativos de
+nuestras creencias iniciales.
