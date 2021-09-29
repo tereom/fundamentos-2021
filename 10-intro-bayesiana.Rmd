@@ -192,7 +192,7 @@ caso sólo puede tomar dos valores.
 ```{block, type = "comentario"}
 
 En diversos textos esto se *simplifica* y se escribe que la moneda
-con la que hacemos los lanzamiento es una variable aleatoria. ¡Pero esto es un
+con la que hacemos los lanzamientos es una variable aleatoria. ¡Pero esto es un
 abuso de lenguaje! Una vez que recibimos la moneda, ésta la utilizamos para
 generar nuestros datos. No hay ningún mecanismo aleatorio que nos cambie la
 moneda entre lanzamientos. Entonces con $P(\theta)$ lo que estamos codificando
@@ -584,10 +584,11 @@ qbeta(0.975, shape1 = 22, shape2 = 14) %>% round(2)
 
 **Predictivas**:
 
-Ahora escribiremos las funciones predictivas (previa y posterior) en
-este caso.  Primero notemos lo siguiente. La previa corresponde a una
-variable aleatoria Beta y la posterior también. Esto aliviará nuestros 
-cálculos. 
+Ahora escribiremos la función predictiva previa para este caso. La
+derivación de la predictiva posterior se deja como ejercicio
+adicional. Primero notemos lo siguiente. La previa corresponde a una
+variable aleatoria Beta (la posterior también). Esto aliviará nuestros
+cálculos.
 
 Para la predictiva previa tenemos que calcular la integral
 $$P(X = k) = \int_0^1 P(X = k|\theta) P(\theta) d\theta\,,$$
@@ -1402,3 +1403,76 @@ ggplot(sims_post_pred, aes(x = x_pred)) +
 ```
 
 Que es una mezcla de una uniforme con una Pareto.
+
+## Inferencia estadística como un problema de decisión {-}
+
+Hasta ahora hemos argumentado que el tipo de resultado de
+un análisis de datos bayesiano considera la distribución posterior completa. Se
+puede resumir esta distribución y reportar ciertas cantidades
+puntuales (para realizar estimación puntual) o se pueden reportar
+intervalos de probabilidad (para realizar estimación por intervalos). 
+Ambas ideas también las hemos explorado bajo un enfoque frecuentista. 
+
+Para **estimación puntual** consideremos que $\mathcal{D} = \mathcal{E} =
+\Theta$.  Para la función de utilidad consideraremos $v(\hat \theta,
+\theta)$ la pérdida de estimar $\hat \theta$ el verdadero parámetro de
+interés $\theta$. Ahora consideraremos casos puntuales: 
+
+1. **Pérdida cuadrática**:
+$$v(\hat \theta,\theta) = (\hat \theta- \theta)^2\,.$$
+
+En este caso la decisión óptima que minimiza la pérdida esperada es 
+$$\hat \theta = \mathbb{E}(\theta)\,.$$
+Es decir, la media de la distribución que contempla nuestro estado de 
+conocimiento. 
+
+2. **Pérdida en valor absoluto**:
+$$v(\hat \theta,\theta) = |\hat \theta- \theta|\,.$$
+
+En este caso la decisión óptima que minimiza la pérdida esperada es 
+$$\hat \theta = \mathsf{mediana}(\theta)\,.$$
+Es decir, la mediana de la distribución que contempla nuestro estado de 
+conocimiento. 
+
+3. **Pérdida vecindad**:
+$$v(\hat \theta,\theta) = 1 - \mathbb{I}_{B_\epsilon(\hat \theta)}(\theta)\,,$$
+denota la vecindad con radio $\epsilon$ alrededor de $\hat \theta$. 
+En este caso, la decisión óptima que minimiza la pérdida esperada 
+cuando $\epsilon \rightarrow 0$ es 
+
+$$\hat \theta = \mathsf{moda}(\theta)\,.$$
+Es decir, la moda media de la distribución que contempla nuestro estado de 
+conocimiento. 
+
+Para **estimación por intervalos** consideramos que $\mathcal{D} = \{
+I : I \subset \Theta\}$, donde $I$ es un intervalo de probabilidad
+$(1-\alpha)$ si 
+$$ \int_{I}^{} P(\theta)d\theta = 1 - \alpha\,.$$
+
+**Nota** que para una $\alpha$ fija no existe un intervalo único de
+probabilidad. 
+
+El espacio de eventos es el espacio parametral y la función de pérdida es
+$$v(I, \theta) = \|D\| - \mathbb{I}_I(\theta)\,.$$ 
+De lo anterior, observamos que para un nivel dado $\alpha$ es preferible
+reportar el intervalo de probabilidad que sea de tamaño mínimo. 
+
+Para **contraste de hipótesis** consideremos por simplicidad, dos hipótesis que
+denotaremos por $H_0$ y $H_1$. Estas pueden representar dos modelos
+distintos. En este caso (en el marco de decisión) el espacio de
+alternativas está definido por
+$$ \mathcal{D} = \{H_0, H_1\}\,.$$
+El espacio parametral (espacio de eventos) está definido en términos
+de estas posibilidades. Es decir,   
+$$ \mathcal{E}= \{H_0, H_1\}\,.$$
+La función de pérdida la definimos en términos de la decisión que tomamos
+y lo que en realidad sucede. Esta función de pérdida la representamos como
+
+\begin{center}
+\begin{tabular}{lll}
+      & $H_0$     & $H_1$     \\
+$H_0$ & $v_{0,0}$ & $v_{0,1}$ \\
+$H_1$ & $v_{1,0}$ & $v_{1,1}$
+\end{tabular}
+\end{center}
+
