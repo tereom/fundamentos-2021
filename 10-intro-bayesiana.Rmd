@@ -1488,7 +1488,7 @@ al momento de tomar una decisión. Entonces la pérdida esperada para cada decis
 es
 \begin{gather}
 \mathbb{E}[v(H_0)] = v_{0,0} p_0 + v_{0,1} (1 - p_0) = v_{0,1} - (v_{0,1}  - v_{0,0} ) p_0\,, \\
-\mathbb{E}[v(H_1)] = v_{1,0} p_0 + v_{1,1} (1 - p_0) = v_{1,1} - (v_{1,1}  - v_{1,0} ) p_0\,. \\
+\mathbb{E}[v(H_1)] = v_{1,0} p_0 + v_{1,1} (1 - p_0) = v_{1,1} - (v_{1,1}  - v_{1,0} ) p_0\,. 
 \end{gather}
 
 Que podemos pensar son dos rectas que intersectan en el punto
@@ -1522,11 +1522,11 @@ la distribución posterior de $H_0$ una vez observados los datos $P(H_0|X)$.
 Suponiendo que los costos de no equivocarnos son 0, entonces escogeríamos $H_0$ si
 y sólo si
 \begin{align}
-\frac{P(H_0|X)}{P(H_1|X)} < \frac{v_{0,1}}{v_{1,0}}\,.\\
+\frac{P(H_0|X)}{P(H_1|X)} < \frac{v_{0,1}}{v_{1,0}}\,.
 \end{align}
 Lo cual es equivalente a
 \begin{align}
-\frac{P(X|H_0)}{P(X|H_1)} < \frac{P(H_1)}{P(H_0)} \times \frac{v_{0,1}}{v_{1,0}}\,,\\
+\frac{P(X|H_0)}{P(X|H_1)} < \frac{P(H_1)}{P(H_0)} \times \frac{v_{0,1}}{v_{1,0}}\,,
 \end{align}
 
 que nos indica que la decisión (o indecisión) se toma de acuerdo al
