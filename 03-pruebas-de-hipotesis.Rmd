@@ -493,15 +493,16 @@ La hipótesis alternativa la denotamos por $H_1$ y representa el supuesto que
 está a prueba y para el cual buscamos evidencia en los datos.
 ```
 
-```{block, type='mathblock'}
+```{block2, type='mathblock'}
 **Definición.** La hipótesis normalmente se plantea en términos de un parámetro
 ($\theta\in\mathbb{R}$) o conjunto de parámetros ($\theta\in\mathbb{R}^p$) de la
 distribución de interés (por ejemplo media, moda, varianza). Para una hipótesis
 nula del estilo $H_0: \theta = \theta_0,$ la hipótesis a contrastar se puede
 denominar como:
 
-- *Hipótesis alternativa de una cola* $H_1: \theta \gt \theta_0$   
+- *Hipótesis alternativa de una cola* $H_1: \theta > \theta_0$   
 - *Hipótesis alternativa de dos colas* $H_1: \theta \neq \theta_0$
+  
 ```
 
 En el ejemplo anterior planteamos hipótesis nula (proporciones iguales) e
