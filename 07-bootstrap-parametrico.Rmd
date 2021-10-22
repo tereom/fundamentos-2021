@@ -305,6 +305,91 @@ El ajuste es considerablemente mejor para la distribución gamma
 (puedes hacer el protocolo *Rorschach* para
 afinar tu diagnóstico de este tipo de gráficas).
 
+
+```{r}
+ks.test(muestra, "pexp", rate_mle)
+```
+
+
+```{r}
+x      <- seq(0, 10, by = 0.01)
+Fn     <- ecdf(muestra)
+exp_ks <- max(Fn(x) - pexp(x, rate_mle))
+exp_ks
+
+```
+
+```{r, fig.asp = .4}
+
+n <- length(muestra)
+
+ks_statistic <- function(id){
+  sample <- rexp(n, rate_mle)
+  Fb     <- ecdf(sample)
+  D_b    <- max(Fb(x) - pexp(x, rate_mle))
+  D_b
+}
+
+boot.samples <- tibble(id = seq(1, 10000)) |> 
+  mutate(statistic = map_dbl(id, ks_statistic)) 
+
+boot.samples |> 
+  mutate(bool = statistic >= exp_ks) |> 
+  summarise(p.value = mean(bool))
+
+
+boot.samples |> 
+  ggplot(aes(x = statistic)) +
+  geom_histogram() + 
+  geom_vline(xintercept = exp_ks, color = 'red', lty = 2) + 
+  ggtitle("Prueba de ajuste: Kolmogorov-Smirnoff modelo exponencial")
+
+```
+
+```{r}
+
+ks.test(muestra, "pgamma", est_mle[1], est_mle[2])
+
+```
+
+```{r}
+
+gamma_ks <- max((n-1)/(n-2) * Fn(muestra) - pgamma(muestra, shape = est_mle[1], rate = est_mle[2]))
+gamma_ks
+
+```
+
+```{r, fig.asp = .4}
+ks_statistic <- function(id){
+  sample <- rgamma(n, est_mle[1], est_mle[2])
+  est_boot <- MASS::fitdistr(sample, "gamma")$estimate
+  Fb     <- ecdf(sample)
+  D_b    <- max((n-1)/(n-2) * Fb(muestra) - pgamma(muestra, est_boot[1], est_boot[2]))
+  D_b
+}
+```
+
+
+```{r, fig.asp = .4}
+boot.samples <- tibble(id = seq(1, 5000)) |> 
+  mutate(statistic = map_dbl(id, ks_statistic)) 
+
+boot.samples |> 
+  mutate(bool = statistic >= gamma_ks) |> 
+  summarise(p.value = 2 * min(mean(bool), 1 - mean(bool)))
+```
+
+
+```{r, fig.asp = .4}
+boot.samples |> 
+  ggplot(aes(x = statistic)) +
+  geom_histogram() + 
+  geom_vline(xintercept = gamma_ks, color = 'red', lty = 2) +
+  ggtitle("Prueba de ajuste: Kolmogorov-Smirnoff modelo gamma")
+
+```
+
+
 **Ejemplo**. Examinamos un modelo teórico para las cuentas totales del
 conjunto de datos de propinas. En primer lugar:
 
