@@ -129,9 +129,12 @@ $$ c_{i,j} \leq c_{i',j'} \quad \text{si y sólo si} \quad u(c_{i,j}) \leq u(c_{
 
 ```{block2, type = "mathblock"}
 
-**Definición.** (Probabilidad). Sea $E \subset \mathcal{E}$ un evento incierto *relevante*, se define la probabilidad de $E$ como
+**Definición.** (Probabilidad). Sea $E \subset \mathcal{E}$ un evento incierto 
+*relevante*, se define la probabilidad de $E$ como
 $$P(E) = \textsf{Area}(R)\,,$$
-donde $R$ cumple que $d_R = d_E$.
+donde $R$ es un conjunto de referencia con el cual comparamos las decisiones 
+que son indiferentes a la realización del evento incierto. Esto lo 
+denotamos por $d_R = d_E$.
 
 De esta manera la función de probabilidad satisface:
 
@@ -205,12 +208,12 @@ Supongamos que en este caso, nos dicen que la moneda se escoge al
 azar de una bolsa donde hay una proporción similar de los dos tipos de moneda
 (0.4 ó 0.6). Es decir el espacio parametral es $\Theta = \{0.4, 0.6\},$  y las
 probabilidades asociadas a cada posibilidad son las mismas. Es decir, tenemos
-\begin{align}
+\begin{align*}
 P(\text{tener la moneda cargada a águila}) &= P(\theta = 0.4) \\
 &= P(\theta = 0.6)\\
 &= P(\text{tener la moneda cargada a sol}) \\
 &= 0.5\,,
-\end{align}
+\end{align*}
 que representa la probabilidad de escoger de manera aleatoria la moneda con
 una carga en particular.
 
