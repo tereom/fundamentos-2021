@@ -1,3 +1,5 @@
+\mainmatter
+
 # Analisis exploratorio
 
 
@@ -986,7 +988,7 @@ if(!fs::file_exists(here::here("images", "02_loess-spans.gif"))){
   anim_save(here::here("images", "02_loess-spans.gif"), loess_anim)
 }
 
-knitr::include_graphics(here::here("images", "02_loess-spans.gif"))
+# knitr::include_graphics(here::here("images", "02_loess-spans.gif"))
 ```
 
 **Escogiendo de los parámetros.** El parámetro de suavizamiento se
@@ -1045,7 +1047,7 @@ if(!fs::file_exists(here::here("images", "02_loess-spans-cuad.gif"))){
   anim_save(here::here("images", "02_loess-spans-cuad.gif"), loess_anim)
 }
 
-knitr::include_graphics(here::here("images", "02_loess-spans-cuad.gif"))
+# knitr::include_graphics(here::here("images", "02_loess-spans-cuad.gif"))
 ```
 
 
