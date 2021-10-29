@@ -131,17 +131,17 @@ $$ c_{i,j} \leq c_{i',j'} \quad \text{si y sólo si} \quad u(c_{i,j}) \leq u(c_{
 
 **Definición.** (Probabilidad). Sea $E \subset \mathcal{E}$ un evento incierto 
 *relevante*, se define la probabilidad de $E$ como
-$$P(E) = \textsf{Area}(R)\,,$$
+$$\mathbb{P}(E) = \textsf{Area}(R)\,,$$
 donde $R$ es un conjunto de referencia con el cual comparamos las decisiones 
 que son indiferentes a la realización del evento incierto. Esto lo 
 denotamos por $d_R = d_E$.
 
 De esta manera la función de probabilidad satisface:
 
-- $0 \leq P(E) \leq 1.$
-- $P(\emptyset) = 0.$
-- $P(\mathcal{E}) = 1.$
-- Si $E \cap F = \emptyset$ entonces $P(E \cup F) = P(E) + P(F)$.
+- $0 \leq \mathbb{P}(E) \leq 1.$
+- $\mathbb{P}(\emptyset) = 0.$
+- $\mathbb{P}(\mathcal{E}) = 1.$
+- Si $E \cap F = \emptyset$ entonces $\mathbb{P}(E \cup F) = \mathbb{P}(E) + \mathbb{P}(F)$.
 
 ```
 
@@ -160,7 +160,7 @@ sol).  Queremos decir algo acerca de qué tan probable es que hayamos
 tirado la moneda cargada a sol o la moneda cargada a águila. El proceso
 generador de nuestras observaciones (verosimilitud) lo podemos escribir como
 
-$$ P(X = x \,|\, \theta) = {2 \choose x} \theta^x (1- \theta)^{2-x}\,.$$
+$$ \mathbb{P}(X = x \,|\, \theta) = {2 \choose x} \theta^x (1- \theta)^{2-x}\,.$$
 
 En este caso, tenemos dos variables: $X$, que cuenta el número de
 soles obtenidos en el experimento aleatorio, y $\theta$, que da la
@@ -170,24 +170,24 @@ moneda es justa entonces $\theta = 0.5$).
 ¿Qué cantidades podríamos usar para evaluar qué moneda es la que
 estamos usando? Si hacemos el experimento, y tiramos la moneda 2
 veces, podríamos considerar la probabilidad
-$$P(\theta = 0.4 \,|\, X = x)\,,$$
+$$\mathbb{P}(\theta = 0.4 \,|\, X = x)\,,$$
 donde $x$ es el número de soles que obtuvimos en el experimento. Esta
 es la probabilidad condicional de que estemos tirando la moneda con
 probabilidad de sol 2/5 dado que observamos $x$ soles. Por ejemplo, si
 tiramos 2 soles, deberíamos calcular
-$$P(\theta=0.4 \,|\, X=2)\,.$$
+$$\mathbb{P}(\theta=0.4 \,|\, X=2)\,.$$
 
 ¿Cómo calculamos esta probabilidad? ¿Qué sentido tiene?
 
 Usando reglas de probabilidad condicional, podríamos calcular
-$$P(\theta=0.4|X=2) = \frac{P(X=2 | \theta = 0.4) P(\theta =0.4)}{P(X=2)}\,.$$
+$$\mathbb{P}(\theta=0.4|X=2) = \frac{\mathbb{P}(X=2 | \theta = 0.4) \mathbb{P}(\theta =0.4)}{\mathbb{P}(X=2)}\,.$$
 
-Nota que en el numerador uno de los factores, $P(X=2 | \theta = 0.4),$ es la
+Nota que en el numerador uno de los factores, $\mathbb{P}(X=2 | \theta = 0.4),$ es la
 verosimilitud. Así que primero necesitamos evaluarla:
-$$P(X=2|\theta = 0.4) = (0.4)^2 = 0.16\,.$$
+$$\mathbb{P}(X=2|\theta = 0.4) = (0.4)^2 = 0.16\,.$$
 
 La novedad es que ahora tenemos que considerar la probabilidad
-$P(\theta = 0.4)$. Esta cantidad no la habíamos encontrado
+$\mathbb{P}(\theta = 0.4)$. Esta cantidad no la habíamos encontrado
 antes. Tenemos que pensar que bajo nuestro conocimiento previo, el
 tipo de moneda que recibimos para nuestro juego es aleatoria y en este
 caso sólo puede tomar dos valores.
@@ -198,7 +198,7 @@ En diversos textos esto se *simplifica* y se escribe que la moneda
 con la que hacemos los lanzamientos es una variable aleatoria. ¡Pero esto es un
 abuso de lenguaje! Una vez que recibimos la moneda, ésta la utilizamos para
 generar nuestros datos. No hay ningún mecanismo aleatorio que nos cambie la
-moneda entre lanzamientos. Entonces con $P(\theta)$ lo que estamos codificando
+moneda entre lanzamientos. Entonces con $\mathbb{P}(\theta)$ lo que estamos codificando
 son nuestros grados de creencia de haber recibido una moneda cargada a sol o
 cargada a águila.
 
@@ -209,42 +209,42 @@ azar de una bolsa donde hay una proporción similar de los dos tipos de moneda
 (0.4 ó 0.6). Es decir el espacio parametral es $\Theta = \{0.4, 0.6\},$  y las
 probabilidades asociadas a cada posibilidad son las mismas. Es decir, tenemos
 \begin{align*}
-P(\text{tener la moneda cargada a águila}) &= P(\theta = 0.4) \\
-&= P(\theta = 0.6)\\
-&= P(\text{tener la moneda cargada a sol}) \\
+\mathbb{P}(\text{tener la moneda cargada a águila}) &= \mathbb{P}(\theta = 0.4) \\
+&= \mathbb{P}(\theta = 0.6)\\
+&= \mathbb{P}(\text{tener la moneda cargada a sol}) \\
 &= 0.5\,,
 \end{align*}
 que representa la probabilidad de escoger de manera aleatoria la moneda con
 una carga en particular.
 
-Ahora, lo que nos falta es calcular $P(X=2)$, pero con el trabajo que
+Ahora, lo que nos falta es calcular $\mathbb{P}(X=2)$, pero con el trabajo que
 hicimos esto es fácil.  Pues requiere usar reglas de probabilidad
 usuales para hacerlo. Podemos utilizar **probabilidad total** y después **probabilidad condicional**
 \begin{align}
-P(X) &= \sum_{\theta \in \Theta} P(X, \theta)\\
-&= \sum_{\theta \in \Theta} P(X\, |\, \theta) P(\theta),
+\mathbb{P}(X) &= \sum_{\theta \in \Theta} \mathbb{P}(X, \theta)\\
+&= \sum_{\theta \in \Theta} \mathbb{P}(X\, |\, \theta) \mathbb{P}(\theta),
 \end{align}
 lo cual en nuestro ejemplo se traduce en escribir
 
-$$ P(X=2) = P(X=2|\theta = 0.4)P(\theta = 0.4) + P(X=2|\theta=0.6)P(\theta =0.6)\,,$$
+$$ \mathbb{P}(X=2) = \mathbb{P}(X=2|\theta = 0.4)\mathbb{P}(\theta = 0.4) + \mathbb{P}(X=2|\theta=0.6)\mathbb{P}(\theta =0.6)\,,$$
 por lo que obtenemos
-$$P(X=2) = 0.16(0.5) + 0.36(0.5) = 0.26\,.$$
+$$\mathbb{P}(X=2) = 0.16(0.5) + 0.36(0.5) = 0.26\,.$$
 
 ```{block, type = "comentario"}
 
-La función de probabilidad $P(X)$ tiene un lugar muy especial en inferencia
+La función de probabilidad $\mathbb{P}(X)$ tiene un lugar muy especial en inferencia
 bayesiana y dependiendo el uso recibe dos nombres.
 
-- Si la evaluamos en nuestros datos $P(X = 2)$ se conoce como la **evidencia**
+- Si la evaluamos en nuestros datos $\mathbb{P}(X = 2)$ se conoce como la **evidencia**
 de nuestros datos.
-- Si la evaluamos en un caso hipótetico $P(X = x^*)$ se conoce como la **predictiva previa**.
+- Si la evaluamos en un caso hipótetico $\mathbb{P}(X = x^*)$ se conoce como la **predictiva previa**.
 
 ```
 
 Finalmente la probabilidad de haber escogido la moneda con carga $2/5$ dado que
 observamos dos soles en el lanzamiento es
 
-$$P(\theta=0.4|X=2) = \frac{0.16(0.5)}{0.26} \approx  0.31\,.$$
+$$\mathbb{P}(\theta=0.4|X=2) = \frac{0.16(0.5)}{0.26} \approx  0.31\,.$$
 
 Esto se conoce como la **probabilidad posterior** de que estemos
 tirando la moneda con carga a águila.  Nota que nuestro conocimiento
@@ -264,10 +264,10 @@ tenemos el siguiente teorema.
 Considérese el problema de decisión definido por $D = \{d_1, \ldots, d_k\}$
 donde
 $$ d_i = \{ c_{i,j} | E_j, j = 1, \ldots, m_i\}\qquad i = 1, \ldots, k\,.$$
-Sea $P(E_{i,j}| d_i)$ la probabilidad de que suceda $E_{i,j}$ si se elige
+Sea $\mathbb{P}(E_{i,j}| d_i)$ la probabilidad de que suceda $E_{i,j}$ si se elige
 la opción $d_i$ y sea $u(c_{i,j})$ la utilidad de la consecuencia $c_{i,j}$.
 Entonces, la cuantificación de la opción $d_i$ es su utilidad esperada
-$$\mathbb{E}[u(d_i)] = \sum_{j=1}^{m_i} u(c_{i,j}) P(E_{i,j}| d_i)\,.$$
+$$\mathbb{E}[u(d_i)] = \sum_{j=1}^{m_i} u(c_{i,j}) \mathbb{P}(E_{i,j}| d_i)\,.$$
 La decisión óptima es aquella que
 $$ d^* = \arg \max_i \mathbb{E}[u(d_i)]\,.$$
 
@@ -284,7 +284,7 @@ generales.
 **Teorema.** (Teorema de Bayes) Sea $\{E_j: j \in J\}$ una partición finita de
 $\mathcal{E}$. Es decir, que $E_i\cap E_j = \emptyset$ y $\cup_{j \in J} E_j = \mathcal{E}$. Sea $Z \neq \emptyset$, entonces
 \begin{align}
-P(E_i |Z) = \frac{P(Z|E_i)P(E_i)}{\sum_{j \in J}P(Z|E_j)P(E_j)}\,.
+\mathbb{P}(E_i |Z) = \frac{\mathbb{P}(Z|E_i)\mathbb{P}(E_i)}{\sum_{j \in J}\mathbb{P}(Z|E_j)\mathbb{P}(E_j)}\,.
 \end{align}
 
 
@@ -300,26 +300,26 @@ Finalmente, podríamos hacer predicciones para lanzamientos nuevos
 condicionando en nuestra información actualizada. Si ${X}_{nv}$ es una
 nueva tirada de la moneda que estamos usando, nos
 interesaría saber:
-$$P({X}_{nv}=\mathsf{sol}\, | \, X=2)\,.$$
+$$\mathbb{P}({X}_{nv}=\mathsf{sol}\, | \, X=2)\,.$$
 
 Notemos que un volado adicional es un resultado binario. Como tenemos las
-probabilidades posteriores $P(\theta|X=2)$, podemos usar probabilidad total
+probabilidades posteriores $\mathbb{P}(\theta|X=2)$, podemos usar probabilidad total
 condicionado en $X=2$:
 \begin{align*}
-P({X}_{nv}=\mathsf{sol}\, | \, X=2) & = \sum_{\theta \in \Theta} P({X}_{nv}=\mathsf{sol}, \theta \, | \, X=2) & \text{(probabilidad total)}\\
-&= \sum_{\theta \in \Theta} P({X}_{nv}=\mathsf{sol}\, | \theta , X=2) P(\theta \, | \, X=2) & \text{(probabilidad condicional)}\\
-&= \sum_{\theta \in \Theta} P({X}_{nv}=\mathsf{sol}\, | \theta ) P(\theta \, | \, X=2)\,, & \text{(independencia condicional)}
+\mathbb{P}({X}_{nv}=\mathsf{sol}\, | \, X=2) & = \sum_{\theta \in \Theta} \mathbb{P}({X}_{nv}=\mathsf{sol}, \theta \, | \, X=2) & \text{(probabilidad total)}\\
+&= \sum_{\theta \in \Theta} \mathbb{P}({X}_{nv}=\mathsf{sol}\, | \theta , X=2) \mathbb{P}(\theta \, | \, X=2) & \text{(probabilidad condicional)}\\
+&= \sum_{\theta \in \Theta} \mathbb{P}({X}_{nv}=\mathsf{sol}\, | \theta ) \mathbb{P}(\theta \, | \, X=2)\,, & \text{(independencia condicional)}
 \end{align*}
 
 lo que nos da el siguiente cálculo
-$$P(X_{nv}=\mathsf{sol}\, |\, \theta=0.4) \,  P(\theta=0.4|X=2) \,  +\, P(X_{nv}=\mathsf{sol}|\theta = 0.6) \, P(\theta =0.6|X=2)\,.$$
+$$\mathbb{P}(X_{nv}=\mathsf{sol}\, |\, \theta=0.4) \,  \mathbb{P}(\theta=0.4|X=2) \,  +\, \mathbb{P}(X_{nv}=\mathsf{sol}|\theta = 0.6) \, \mathbb{P}(\theta =0.6|X=2)\,.$$
 Es decir, promediamos ponderando con las probabilidades posteriores.
 Por lo tanto obtenemos
-$$P(X_{nv} = \mathsf{sol}|X=2) =  0.4 ( 0.31) + 0.6 (0.69) = 0.538\,.$$
+$$\mathbb{P}(X_{nv} = \mathsf{sol}|X=2) =  0.4 ( 0.31) + 0.6 (0.69) = 0.538\,.$$
 
 ```{block, type = "comentario"}
 
-La función de probabilidad $P(X_{nv} | X)$ recibe un nombre especial en
+La función de probabilidad $\mathbb{P}(X_{nv} | X)$ recibe un nombre especial en
 inferencia bayesiana. Se conoce como la función de probabilidad *predictiva posterior*.
 
 
@@ -332,15 +332,15 @@ marginal que determina qué valores de X son los mas probables.
 
 Lo que se conoce sobre nuestras mediciones $X$ es que condicionado en $\theta$ resulta en el proceso
 generador de datos (verosimilitud). Cuando no hemos visto realizaciones de este
-proceso. Es decir, que no tenemos información $X \sim P(X|\theta)$ entonces
-nuestro estado de conocimiento marginal, $P(X)$, se conoce como la
+proceso. Es decir, que no tenemos información $X \sim \mathbb{P}(X|\theta)$ entonces
+nuestro estado de conocimiento marginal, $\mathbb{P}(X)$, se conoce como la
 **distribución predictiva previa** y se obtiene
-$$ P(X) = \sum_{\theta \in \Theta}^{} P(X | \theta) P(\theta)\,.$$
+$$ \mathbb{P}(X) = \sum_{\theta \in \Theta}^{} \mathbb{P}(X | \theta) \mathbb{P}(\theta)\,.$$
 
 Cuando hemos recabado información, utilizamos probabilidad condicional para
-determinar qué valores nuevos $X^*$ son los mas probables una vez que hemos observado mediciones. Esto es $P(X^*|X)$ y se obtiene al marginalizar utilizando
+determinar qué valores nuevos $X^*$ son los mas probables una vez que hemos observado mediciones. Esto es $\mathbb{P}(X^*|X)$ y se obtiene al marginalizar utilizando
 nuestro estado actual de conocimiento. Es decir,
-$$ P(X^*|X) = \sum_{\theta \in \Theta}^{} P(X^* | \theta) P(\theta|X)\,.$$
+$$ \mathbb{P}(X^*|X) = \sum_{\theta \in \Theta}^{} \mathbb{P}(X^* | \theta) \mathbb{P}(\theta|X)\,.$$
 Esta última es la **distribución predictiva posterior**.
 
 ```
@@ -349,7 +349,7 @@ Esta última es la **distribución predictiva posterior**.
 
 Nota que para definir las función de probabilidad predictiva previa (posterior)
 marginalizamos con respecto a nuestro estado de conocimiento previo (posterior)
-que denotamos por $P(\theta)$ (o respectivamente $P(\theta | \textsf{datos})$).
+que denotamos por $\mathbb{P}(\theta)$ (o respectivamente $\mathbb{P}(\theta | \textsf{datos})$).
 En este sentido decimos, que nuestra incertidumbre sobre el valor del parámetro
 $\theta$ ha sido incorporada para expresar nuestras predicciones
 (probabilisticas) de una realización hipotética.
@@ -426,26 +426,26 @@ relativamente simples:
 ```{block, type='mathblock'}
 **Inferencia bayesiana.** Con la notación de arriba:
 
-- Como $X$ son los datos observados, llamamos a $P(X|\theta)$ la *verosimilitud*,
+- Como $X$ son los datos observados, llamamos a $\mathbb{P}(X|\theta)$ la *verosimilitud*,
 proceso generador de datos o modelo de los datos.
-- El factor $P(\theta)$ le llamamos la distribución *inicial* o *previa*.
-- La distribución que usamos para hacer inferencia $P(\theta|X)$ es la
+- El factor $\mathbb{P}(\theta)$ le llamamos la distribución *inicial* o *previa*.
+- La distribución que usamos para hacer inferencia $\mathbb{P}(\theta|X)$ es la
 distribución *final* o *posterior*
 
 Hacemos inferencia usando la ecuación
 
-$$P(\theta | X) = \frac{P(X | \theta) P(\theta)}{P(X)} = \frac{P(X | \theta) P(\theta)}{\sum_{\theta \in \Theta} P(X | \theta) P(\theta)}\,,$$
+$$\mathbb{P}(\theta | X) = \frac{\mathbb{P}(X | \theta) \mathbb{P}(\theta)}{\mathbb{P}(X)} = \frac{\mathbb{P}(X | \theta) \mathbb{P}(\theta)}{\sum_{\theta \in \Theta} \mathbb{P}(X | \theta) \mathbb{P}(\theta)}\,,$$
 
 que también escribimos:
 
-$$P(\theta | X) \propto P(X | \theta) P(\theta)\,,$$
-donde $\propto$ significa "proporcional a". No ponemos $P(X)$ pues como vimos
+$$\mathbb{P}(\theta | X) \propto \mathbb{P}(X | \theta) \mathbb{P}(\theta)\,,$$
+donde $\propto$ significa "proporcional a". No ponemos $\mathbb{P}(X)$ pues como vimos
 arriba, es una constante de normalización (y en la mayoría de los casos es muy dificil poder derivar analiticamente).
 
 ```
 
 
-En estadística Bayesiana, las probablidades posteriores $P(\theta|X)$ dan toda
+En estadística Bayesiana, las probablidades posteriores $\mathbb{P}(\theta|X)$ dan toda
 la información que necesitamos para hacer inferencia. ¿Cuándo damos probablidad
 alta a un parámetro particular $\theta$? Cuando su verosimilitud es alta y/o
 cuando su probabilidad inicial es alta. De este modo, la posterior combina la
@@ -465,15 +465,15 @@ población dada usando una muestra iid $X_1,X_2,\ldots, X_n$ de variables
 Bernoulli.  Ya sabemos calcular la
 verosimilitud (el modelo de los datos):
 
-$$P(X_1=x_1,X_2 =x_2,\ldots, X_n=x_n|\theta) = {n \choose k} \theta^k(1-\theta)^{n-k}\,,$$
+$$\mathbb{P}(X_1=x_1,X_2 =x_2,\ldots, X_n=x_n|\theta) = {n \choose k} \theta^k(1-\theta)^{n-k}\,,$$
 
 donde $k = x_1 + x_2 +\cdots + x_k$ es el número de éxitos que observamos.
 
-Ahora necesitamos una distribución inicial o previa $P(\theta)$. Aunque esta
+Ahora necesitamos una distribución inicial o previa $\mathbb{P}(\theta)$. Aunque esta
 distribución puede tener cualquier forma, supongamos que nuestro conocimiento
 actual podemos resumirlo con una distribución $\mathsf{Beta}(3, 3)$:
 
-$$P(\theta) = \frac{1}{B(3,3)} \theta^{3-1}(1-\theta)^{3-1}\,,$$
+$$\mathbb{P}(\theta) = \frac{1}{B(3,3)} \theta^{3-1}(1-\theta)^{3-1}\,,$$
 donde $B(a, b)$ es la constante de normalización de una distribución
 $\mathsf{Beta}$. Podemos simular para examinar su forma:
 
@@ -495,8 +495,8 @@ $\theta$ sea muy cercana a 0 o muy cercana a 1.
 
 Ahora podemos construir nuestra posterior. Tenemos que
 
-$$P(\theta| X_1=x_1, \ldots, X_n=x_n) \propto P(X_1 = x_1,\ldots
-X_n=x_n | \theta)P(\theta) = \theta^{k+2}(1-\theta)^{n-k + 2}\,,$$
+$$\mathbb{P}(\theta| X_1=x_1, \ldots, X_n=x_n) \propto \mathbb{P}(X_1 = x_1,\ldots
+X_n=x_n | \theta)\mathbb{P}(\theta) = \theta^{k+2}(1-\theta)^{n-k + 2}\,,$$
 
 donde la constante de normalización no depende de $\theta$. Como
 $\theta$ es un parámetro continuo, la expresión de la derecha nos debe
@@ -505,9 +505,9 @@ dar una función de densidad.
 Supongamos entonces que hicimos la prueba con $n = 30$ (número de
 prueba) y observamos 19 éxitos. Tendríamos que
 
-$$P(\theta | S_n = 19) \propto \theta^{19 + 2} (1-\theta)^{30 - 19 +2} = \theta^{21}(1-\theta)^{13}\,.$$
+$$\mathbb{P}(\theta | S_n = 19) \propto \theta^{19 + 2} (1-\theta)^{30 - 19 +2} = \theta^{21}(1-\theta)^{13}\,.$$
 
-La cantidad de la derecha, una vez que normalizemos por el número $P(X=19)$, nos
+La cantidad de la derecha, una vez que normalizemos por el número $\mathbb{P}(X=19)$, nos
 dará una densidad posterior (tal cual, esta expresion no integra a 1). Podemos
 obtenerla usando cálculo, pero recordamos que una distribución
 $\mathsf{\mathsf{Beta}}(a,b)$ tiene como fórmula
@@ -594,10 +594,10 @@ variable aleatoria Beta (la posterior también). Esto aliviará nuestros
 cálculos.
 
 Para la predictiva previa tenemos que calcular la integral
-$$P(X = k) = \int_0^1 P(X = k|\theta) P(\theta) d\theta\,,$$
+$$\mathbb{P}(X = k) = \int_0^1 \mathbb{P}(X = k|\theta) \mathbb{P}(\theta) d\theta\,,$$
 lo cual cual nos lleva a
 \begin{align}
-P(X = k) &= \int_{0}^{1} {n \choose k} \theta^{k}(1- \theta)^{n-k} \frac{1}{B(a,b)} \theta^{a-1} (1-\theta)^{b-1} d\theta\\
+\mathbb{P}(X = k) &= \int_{0}^{1} {n \choose k} \theta^{k}(1- \theta)^{n-k} \frac{1}{B(a,b)} \theta^{a-1} (1-\theta)^{b-1} d\theta\\
 &= {n \choose k} \frac{1}{B(a,b)} \int_{0}^{1} \theta^{k + a -1}(1- \theta)^{n-k + b -1} d\theta\\
 &= {n \choose k} \frac{B(k + a, n-k+b)}{B(a,b)} \,,
 \end{align}
@@ -672,14 +672,14 @@ ya haremos una aproximación continua, suponiendo que
 $$X_i \sim U[0,\theta]\,.$$
 
 La verosimilitud es entonces
-$$P(X_1,\ldots, X_n|\theta) = \theta^{-n}\,,$$
+$$\mathbb{P}(X_1,\ldots, X_n|\theta) = \theta^{-n}\,,$$
 cuando $\theta$ es mayor que todas las $X_i$, y cero en otro caso. Necesitaremos
-una inicial $P(\theta)$.
+una inicial $\mathbb{P}(\theta)$.
 
 Por la forma que tiene la verosimilitud, podemos intentar una distribución Pareto,
 que tiene la forma
 
-$$P(\theta) = \frac{\alpha \theta_0^\alpha}{\theta^{\alpha + 1}}\,,$$
+$$\mathbb{P}(\theta) = \frac{\alpha \theta_0^\alpha}{\theta^{\alpha + 1}}\,,$$
 con soporte en $[\theta_0,\infty]$. Tenemos que escoger entonces el mínimo $\theta_0$ y
 el parámetro $\alpha$. En primer lugar, como sabemos que es una lotería nacional,
 creemos que no puede haber menos de unos 300 mil números, así que $\theta_0 = 300$.
@@ -693,7 +693,7 @@ es decir, alrededor de 20 millones de números.  Creemos que es un poco probable
 que el número de boletos sea mayor a esta cota.
 Nótese ahora que la posterior cumple (multiplicando verosimilitud por inicial):
 
-$$P(\theta|X_1,\ldots, X_n |\theta) \propto \theta^{-(n + 2.1)}\,,$$
+$$\mathbb{P}(\theta|X_1,\ldots, X_n |\theta) \propto \theta^{-(n + 2.1)}\,,$$
 
 para $\theta$ mayor que el máximo de las $X_n$'s y 300, y cero en otro caso. Esta distribución
 es pareto con $\theta_0' = \max\{300, X_1,\ldots, X_n\}$ y $\alpha = n + 1.1$
@@ -850,9 +850,9 @@ Es decir, sea una muestra $X_1, \ldots, X_n \overset{iid}{\sim} f(X\,|\,
 la distribución previa para nuestro parámetro desconocido $\theta$ donde
 $\varphi_0$ denota los hiper-parámetros que definen dicha distribución.
 
-Bajo un modelo conjugado, la distribución posterior $P(\theta | X_1, \ldots, X_n)$
+Bajo un modelo conjugado, la distribución posterior $\mathbb{P}(\theta | X_1, \ldots, X_n)$
 satisface
-$$P(\theta \, | \, X_1, \ldots, X_n) = \pi(\theta \, | \, \varphi_1)\,,$$
+$$\mathbb{P}(\theta \, | \, X_1, \ldots, X_n) = \pi(\theta \, | \, \varphi_1)\,,$$
 donde $\varphi_1 = h(\varphi_0, X_1, \ldots, X_n)$ son los hiper-parámetros
 actualizados del modelo que se usó para la previa.
 
@@ -879,14 +879,14 @@ como distribuciones iniciales (dadas por 4 parámetros: $\mu_0, n_0, \alpha,\bet
 
   - $\tau = \frac{1}{\sigma^2} \sim \mathsf{Gamma}(\alpha,\beta)$
   - $\mu|\sigma$ es normal con media $\mu_0$ y varianza $\sigma^2 / {n_0}$ , y
-  - $P(\mu, \sigma) = P(\mu|\sigma)P(\sigma)$
+  - $\mathbb{P}(\mu, \sigma) = \mathbb{P}(\mu|\sigma)\mathbb{P}(\sigma)$
 
 - Entonces la posterior es:
   - $\tau|x$ es $\mathsf{Gamma}(\alpha', \beta')$, con $\alpha' = \alpha + n/2$,
   $\beta' = \beta + \frac{1}{2}\sum_{i=1}^{n}(x_{i} - \bar{x})^2 + \frac{nn_0}{n+n_0}\frac{({\bar{x}}-\mu_{0})^2}{2}$.
   - $\mu|\sigma,x$ es normal con media $\mu' = \frac{n_0\mu_{0}+n{\bar{x}}}{n_0 +n}$ y varianza $\sigma^2/({n_0 +n})$.
 
-  - $P(\mu,\sigma|x) = P(\mu|x,\sigma)P(\sigma|x)$
+  - $\mathbb{P}(\mu,\sigma|x) = \mathbb{P}(\mu|x,\sigma)\mathbb{P}(\sigma|x)$
 
 ```{block , type = 'mathblock'}
 
@@ -907,7 +907,7 @@ donde los factores siguen las siguientes distribuciones
 
 1. Nótese que este último ejemplo tiene más de un parámetro. En estos casos, el
 objeto de interés es la **posterior conjunta** de los parámetros
-$P(\theta_1,\theta_2,\cdots, \theta_p|x)$. Este último ejemplo es relativamente
+$\mathbb{P}(\theta_1,\theta_2,\cdots, \theta_p|x)$. Este último ejemplo es relativamente
 simple pues, por la selección de iniciales, para simular de la conjunta de $\mu$
 y $\tau$ podemos simular primero $\tau$ (o $\sigma$), y después usar este valor
 para simular de $\mu$: el par de valores resultantes son una simulación de la
@@ -1198,24 +1198,24 @@ a partir del modelo. Esto tiene dos utilidades:
 que de hecho observamos. Esto nos permite confirmar la calidad del ajuste del
 modelo, y se llama **verificación predictiva posterior**.
 
-Supongamos que tenemos la posterior $P(\theta | x)$. Podemos generar una nueva
+Supongamos que tenemos la posterior $\mathbb{P}(\theta | x)$. Podemos generar una nueva
 *replicación* de los datos como sigue:
 
 ```{block, type='mathblock'}
 La distribución **predictiva posterior** genera nuevas observaciones a partir de
-la información observada. La denotamos como $P(\tilde{x}|x)$.
+la información observada. La denotamos como $\mathbb{P}(\tilde{x}|x)$.
 
 Para simular de ella:
 
-- Muestreamos un valor $\tilde{\theta}$ de la posterior $P(\theta|x)$.
-- Simulamos del modelo de las observaciones $\tilde{x} \sim P(\tilde{x}|\tilde{\theta})$.
+- Muestreamos un valor $\tilde{\theta}$ de la posterior $\mathbb{P}(\theta|x)$.
+- Simulamos del modelo de las observaciones $\tilde{x} \sim \mathbb{P}(\tilde{x}|\tilde{\theta})$.
 - Repetimos el proceso hasta obtener una muestra grande.
 - Usamos este método para producir, por ejemplo, **intervalos de predicción** para nuevos datos.
 
 Si queremos una replicación de las observaciones de la predictiva posterior,
 
-- Muestreamos un valor $\tilde{\theta}$ de la posterior $P(\theta|x)$.
-- Simulamos del modelo de las observaciones $\tilde{x}_1, \tilde{x}_2,\ldots, \tilde{x}_n \sim P(\tilde{x}|\tilde{\theta})$,
+- Muestreamos un valor $\tilde{\theta}$ de la posterior $\mathbb{P}(\theta|x)$.
+- Simulamos del modelo de las observaciones $\tilde{x}_1, \tilde{x}_2,\ldots, \tilde{x}_n \sim \mathbb{P}(\tilde{x}|\tilde{\theta})$,
 done $n$ es el tamaño de muestra de la muestra original $x$.
 - Usamos este método para producir conjuntos de datos simulados que comparamos con los observados para verificar nuestro modelo.
 
@@ -1271,7 +1271,7 @@ media 10.
 
 Nótese que la posterior está dada por
 
-$$P(\lambda|x_1,\ldots, x_n) \propto e^{-n\lambda}\lambda^{\sum_i x_i} e^{-0.1\lambda} = \lambda^{n\overline{x}}e^{-\lambda(n + 0.1)}\,,$$
+$$\mathbb{P}(\lambda|x_1,\ldots, x_n) \propto e^{-n\lambda}\lambda^{\sum_i x_i} e^{-0.1\lambda} = \lambda^{n\overline{x}}e^{-\lambda(n + 0.1)}\,,$$
 que es una distribución gamma con parámetros $(n\overline{x} + 1, n+0.1)$
 
 Ahora supongamos que observamos la siguiente muestra, ajustamos nuestro modelo
@@ -1450,7 +1450,7 @@ conocimiento.
 Para **estimación por intervalos** consideramos que $\mathcal{D} = \{
 I : I \subset \Theta\}$, donde $I$ es un intervalo de probabilidad
 $(1-\alpha)$ si
-$$ \int_{I}^{} P(\theta)d\theta = 1 - \alpha\,.$$
+$$ \int_{I}^{} \mathbb{P}(\theta)d\theta = 1 - \alpha\,.$$
 
 **Nota** que para una $\alpha$ fija no existe un intervalo único de
 probabilidad.
@@ -1486,7 +1486,7 @@ donde $v_{0,0}$, $v_{1,1}$ son la pérdida de tomar una decisión correcta
 cuando $H_0$ es cierta y $v_{0,1}$ es la pérdida de no rechazar $H_0$ cuando
 $H_0$ es falsa.
 
-Se denotamos por $p_0 = P(H_0)$ la probabildiad asociada a la hipótesis $H_0$
+Se denotamos por $p_0 = \mathbb{P}(H_0)$ la probabildiad asociada a la hipótesis $H_0$
 al momento de tomar una decisión. Entonces la pérdida esperada para cada decisión
 es
 \begin{gather}
@@ -1517,19 +1517,19 @@ indiferentes y no podemos decir por una u otra alternativa.
 ### Incorporando observaciones para contraste hipótesis {-}
 
 Siguiendo con el marco de contraste de hipótesis bayesiana podemos considerar que
-en las ecuaciones de arriba sólo hemos utilizado $P(H_0)$. Es decir,
+en las ecuaciones de arriba sólo hemos utilizado $\mathbb{P}(H_0)$. Es decir,
 la probabilidad a priori de que ocurra $H_0$. Sin embargo, siguiendo un poco la
 intuición de nuestra discusión con las función predictiva, es natural considerar
-la distribución posterior de $H_0$ una vez observados los datos $P(H_0|X)$.
+la distribución posterior de $H_0$ una vez observados los datos $\mathbb{P}(H_0|X)$.
 
 Suponiendo que los costos de no equivocarnos son 0, entonces escogeríamos $H_0$ si
 y sólo si
 \begin{align}
-\frac{P(H_0|X)}{P(H_1|X)} < \frac{v_{0,1}}{v_{1,0}}\,.
+\frac{\mathbb{P}(H_0|X)}{\mathbb{P}(H_1|X)} < \frac{v_{0,1}}{v_{1,0}}\,.
 \end{align}
 Lo cual es equivalente a
 \begin{align}
-\frac{P(X|H_0)}{P(X|H_1)} < \frac{P(H_1)}{P(H_0)} \times \frac{v_{0,1}}{v_{1,0}}\,,
+\frac{\mathbb{P}(X|H_0)}{\mathbb{P}(X|H_1)} < \frac{\mathbb{P}(H_1)}{\mathbb{P}(H_0)} \times \frac{v_{0,1}}{v_{1,0}}\,,
 \end{align}
 
 que nos indica que la decisión (o indecisión) se toma de acuerdo al
