@@ -475,7 +475,8 @@ donde $B(a, b)$ es la constante de normalización de una distribución
 $\mathsf{Beta}$. Podemos simular para examinar su forma:
 
 ```{r}
-sim_inicial <- tibble(theta = rbeta(10000, 3, 3))
+params.inicial <- list(a = 3, b = 3)
+sim_inicial <- tibble(theta = rbeta(10000, params.inicial$a, params.inicial$b))
 ggplot(sim_inicial) + geom_histogram(aes(x = theta, y = ..density..), bins = 15)
 ```
 De modo que nuestra información inicial es que la proporción puede tomar
@@ -524,7 +525,10 @@ verosimilitud <- dbinom_verosimilitud(tibble(x = 19, n = 30))
 
 ```{r}
 sim_inicial <- sim_inicial %>% mutate(dist = "inicial")
-sim_posterior <- tibble(theta = rbeta(10000, 22, 14)) %>% mutate(dist = "posterior")
+sim_posterior <- tibble(theta = rbeta(10000, 
+                                      params.inicial$a + 19, 
+                                      params.inicial$b + 30 - 19)) %>% 
+  mutate(dist = "posterior")
 
 sims <- bind_rows(sim_inicial, sim_posterior)
 ggplot(sims, aes(x = theta, fill = dist)) +
