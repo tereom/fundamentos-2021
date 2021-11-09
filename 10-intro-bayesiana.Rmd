@@ -129,11 +129,11 @@ $$ c_{i,j} \leq c_{i',j'} \quad \text{si y sólo si} \quad u(c_{i,j}) \leq u(c_{
 
 ```{block2, type = "mathblock"}
 
-**Definición.** (Probabilidad). Sea $E \subset \mathcal{E}$ un evento incierto 
+**Definición.** (Probabilidad). Sea $E \subset \mathcal{E}$ un evento incierto
 *relevante*, se define la probabilidad de $E$ como
 $$\mathbb{P}(E) = \textsf{Area}(R)\,,$$
-donde $R$ es un conjunto de referencia con el cual comparamos las decisiones 
-que son indiferentes a la realización del evento incierto. Esto lo 
+donde $R$ es un conjunto de referencia con el cual comparamos las decisiones
+que son indiferentes a la realización del evento incierto. Esto lo
 denotamos por $d_R = d_E$.
 
 De esta manera la función de probabilidad satisface:
@@ -528,16 +528,16 @@ verosimilitud <- dbinom_verosimilitud(tibble(x = 19, n = 30))
 
 ```{r}
 sim_inicial <- sim_inicial %>% mutate(dist = "inicial")
-sim_posterior <- tibble(theta = rbeta(10000, 
-                                      params.inicial$a + 19, 
-                                      params.inicial$b + 30 - 19)) %>% 
+sim_posterior <- tibble(theta = rbeta(10000,
+                                      params.inicial$a + 19,
+                                      params.inicial$b + 30 - 19)) %>%
   mutate(dist = "posterior")
 
 sims <- bind_rows(sim_inicial, sim_posterior)
 ggplot(sims, aes(x = theta, fill = dist)) +
-  geom_histogram(aes(x = theta), bins = 30, 
-                 alpha = 0.5, position = "identity") + 
-  geom_function(aes(group = 'verosimilitud'), fun = verosimilitud, 
+  geom_histogram(aes(x = theta), bins = 30,
+                 alpha = 0.5, position = "identity") +
+  geom_function(aes(group = 'verosimilitud'), fun = verosimilitud,
                 args = list(scale = 1e4), lty = 2, show.legend = TRUE)
 ```
 La posterior nos dice cuáles son las *posibilidades* de dónde puede estar
@@ -585,11 +585,10 @@ generalmente no es factible, y en este ejemplo preferimos hacer una aproximació
 particular es posible usando cálculo, y sabemos que la media de una $\mathsf{\mathsf{Beta}}(a,b)$ es
 $a/(a+b)$, de modo que nuestra media posterior es
 
-$$\hat{\mu} = (19 + 2)/(30 + 4) = 21/34 = 0.617\,, $$
+$$\hat{\mu} = (19 + 3)/(30 + 6) = 22/36 = 0.611\,, $$
 que podemos interpretar como sigue: para calcular la media posterior, a nuestras
-$n$ pruebas iniciales agregamos
-4 pruebas adicionales fijas, con 2 éxitos y 2 fracasos, y calculamos la proporción
-usual de éxitos.
+$n$ pruebas iniciales agregamos 6 pruebas adicionales fijas, con 3 éxitos y 3
+fracasos, y calculamos la proporción usual de éxitos.
 
 ```{block, type='ejercicio'}
 Repite el análisis considerando en general $n$ pruebas, con $k$ éxitos. Utiliza la
@@ -689,19 +688,21 @@ ya haremos una aproximación continua, suponiendo que
 
 $$X_i \sim U[0,\theta]\,.$$
 
-La verosimilitud es entonces
-$$\mathbb{P}(X_1,\ldots, X_n|\theta) = \theta^{-n}\,,$$
-cuando $\theta$ es mayor que todas las $X_i$, y cero en otro caso. Necesitaremos
-una inicial $\mathbb{P}(\theta)$.
+La verosimilitud es entonces (recuerda la ecuación (6.5))
+$$\mathbb{P}(X_1,\ldots, X_n|\theta) = \theta^{-n} 1_{[X_\max,\infty)}(\theta)\,,$$
+cuando $\theta$ es mayor que todas las $X_i$ (o bien, cuando $\theta$ es mayor
+que el máximo de las observaciones $X_\max$), y cero en otro caso. Necesitaremos
+una inicial $P(\theta)$.
 
 Por la forma que tiene la verosimilitud, podemos intentar una distribución Pareto,
-que tiene la forma
-
-$$\mathbb{P}(\theta) = \frac{\alpha \theta_0^\alpha}{\theta^{\alpha + 1}}\,,$$
-con soporte en $[\theta_0,\infty]$. Tenemos que escoger entonces el mínimo $\theta_0$ y
-el parámetro $\alpha$. En primer lugar, como sabemos que es una lotería nacional,
-creemos que no puede haber menos de unos 300 mil números, así que $\theta_0 = 300$.
-La función acumulada de la pareto es $1- (300/\theta)^\alpha$, así que el cuantil 99% es
+que tiene la expresióñ
+$$\mathbb{P}(\theta) = \frac{\alpha \theta_0^\alpha}{\theta^{\alpha + 1}} 1_{[\theta_0,\infty]}(\theta) \,,$$
+con soporte en $[\theta_0,\infty]$ (esto se refleja al incorporar la función
+indicadora). Tenemos que escoger entonces el mínimo $\theta_0$ y el parámetro
+$\alpha$. En primer lugar, como sabemos que es una lotería nacional, creemos que
+no puede haber menos de unos 300 mil números, así que $\theta_0 = 300$. La
+función acumulada de la pareto es $1- (300/\theta)^\alpha$, así que el cuantil
+99% es
 
 ```{r}
 alpha <- 1.1
@@ -711,15 +712,15 @@ es decir, alrededor de 20 millones de números.  Creemos que es un poco probable
 que el número de boletos sea mayor a esta cota.
 Nótese ahora que la posterior cumple (multiplicando verosimilitud por inicial):
 
-$$\mathbb{P}(\theta|X_1,\ldots, X_n |\theta) \propto \theta^{-(n + 2.1)}\,,$$
+$$\mathbb{P}(\theta|X_1,\ldots, X_n |\theta) \propto \theta^{-(n + 2.1)} \left(1_{[X_\max,\infty]}(\theta)  \times 1_{[\theta_0,\infty]}(\theta)\right) \,,$$
 
-para $\theta$ mayor que el máximo de las $X_n$'s y 300, y cero en otro caso. Esta distribución
-es pareto con $\theta_0' = \max\{300, X_1,\ldots, X_n\}$ y $\alpha = n + 1.1$
+para $\theta$ mayor que el máximo de las $X_n$'s y $\theta_0 = 300$, y cero en
+otro caso. **Recuerda** que $1_A(x) \times 1_B(x) = 1_{A\cap B}(x)$. Esta
+distribución es Pareto con $\theta_0' = \max\{300, X_1,\ldots, X_n\}$ y $\alpha
+= n + 1.1$
 
 Una vez planteado nuestro modelo, veamos los datos. Obtuvimos la siguiente
 muestra de números:
-
-
 ```{r}
 loteria_tbl <- read_csv("data/nums_loteria_avion.csv", col_names = c("id", "numero")) %>%
   mutate(numero = as.integer(numero))
@@ -772,7 +773,7 @@ Si obtenemos percentiles,
 obtenemos el intervalo
 
 ```{r}
-f <- c(0.025, 0.5, 0.975)
+f <- c(0.01, 0.5, 0.99)
 sims_theta %>% group_by(dist) %>%
   summarise(cuantiles = quantile(theta, f) %>% round(2), f = f) %>%
   pivot_wider(names_from = f, values_from = cuantiles)
@@ -796,7 +797,8 @@ qplot(rgamma(2000, 5, 0.001), geom="histogram", bins = 20) +
 
 Sin embargo, los cálculos no son tan simples en este caso, pues la posterior
 no tiene un forma reconocible. Tendremos que usar otras estrategias de simulación
-para ejemplos como este (Monte Carlo por medio de Cadenas de Markov, que veremos más adelante).
+para ejemplos como este (integración Monte Carlo por medio de Cadenas de Markov,
+que veremos en el próximo curso).
 
 ## Probabilidad a priori {-}
 
@@ -1509,7 +1511,7 @@ al momento de tomar una decisión. Entonces la pérdida esperada para cada decis
 es
 \begin{gather}
 \mathbb{E}[v(H_0)] = v_{0,0} p_0 + v_{0,1} (1 - p_0) = v_{0,1} - (v_{0,1}  - v_{0,0} ) p_0\,, \\
-\mathbb{E}[v(H_1)] = v_{1,0} p_0 + v_{1,1} (1 - p_0) = v_{1,1} - (v_{1,1}  - v_{1,0} ) p_0\,. 
+\mathbb{E}[v(H_1)] = v_{1,0} p_0 + v_{1,1} (1 - p_0) = v_{1,1} - (v_{1,1}  - v_{1,0} ) p_0\,.
 \end{gather}
 
 Que podemos pensar son dos rectas que intersectan en el punto
