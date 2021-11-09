@@ -689,13 +689,13 @@ ya haremos una aproximación continua, suponiendo que
 $$X_i \sim U[0,\theta]\,.$$
 
 La verosimilitud es entonces (recuerda la ecuación (6.5))
-$$\mathbb{P}(X_1,\ldots, X_n|\theta) = \theta^{-n} 1_{[X_\max,\infty)}(\theta)\,,$$
+$$\mathbb{P}(X_1,\ldots, X_n|\theta) = \theta^{-n} \times 1_{[M_n,\infty)}(\theta)\,,$$
 cuando $\theta$ es mayor que todas las $X_i$ (o bien, cuando $\theta$ es mayor
-que el máximo de las observaciones $X_\max$), y cero en otro caso. Necesitaremos
-una inicial $P(\theta)$.
+que el máximo de las observaciones $M_n = \max(X_1, \ldots, X_n)$), y cero en
+otro caso. Necesitaremos una inicial $P(\theta)$.
 
 Por la forma que tiene la verosimilitud, podemos intentar una distribución Pareto,
-que tiene la expresióñ
+que tiene la expresión
 $$\mathbb{P}(\theta) = \frac{\alpha \theta_0^\alpha}{\theta^{\alpha + 1}} 1_{[\theta_0,\infty]}(\theta) \,,$$
 con soporte en $[\theta_0,\infty]$ (esto se refleja al incorporar la función
 indicadora). Tenemos que escoger entonces el mínimo $\theta_0$ y el parámetro
@@ -712,7 +712,7 @@ es decir, alrededor de 20 millones de números.  Creemos que es un poco probable
 que el número de boletos sea mayor a esta cota.
 Nótese ahora que la posterior cumple (multiplicando verosimilitud por inicial):
 
-$$\mathbb{P}(\theta|X_1,\ldots, X_n |\theta) \propto \theta^{-(n + 2.1)} \left(1_{[X_\max,\infty]}(\theta)  \times 1_{[\theta_0,\infty]}(\theta)\right) \,,$$
+$$\mathbb{P}(\theta|X_1,\ldots, X_n |\theta) \propto \theta^{-(n + 2.1)} \left(1_{[M_n,\infty)}(\theta)  \times 1_{[\theta_0,\infty]}(\theta)\right) \,,$$
 
 para $\theta$ mayor que el máximo de las $X_n$'s y $\theta_0 = 300$, y cero en
 otro caso. **Recuerda** que $1_A(x) \times 1_B(x) = 1_{A\cap B}(x)$. Esta
