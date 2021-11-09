@@ -478,7 +478,8 @@ donde $B(a, b)$ es la constante de normalización de una distribución
 $\mathsf{Beta}$. Podemos simular para examinar su forma:
 
 ```{r}
-sim_inicial <- tibble(theta = rbeta(10000, 3, 3))
+params.inicial <- list(a = 3, b = 3)
+sim_inicial <- tibble(theta = rbeta(10000, params.inicial$a, params.inicial$b))
 ggplot(sim_inicial) + geom_histogram(aes(x = theta, y = ..density..), bins = 15)
 ```
 De modo que nuestra información inicial es que la proporción puede tomar
@@ -516,11 +517,28 @@ Concluimos entonces que la posterior tiene una distribución $\mathsf{Beta}(22,
 14)$. Podemos simular de la posterior usando código estándar para ver cómo luce:
 
 ```{r}
+dbinom_verosimilitud <- function(data){
+  function(theta, scale = 1){
+    scale * dbinom(x = data$x, size = data$n, prob = theta)
+  }
+}
+
+verosimilitud <- dbinom_verosimilitud(tibble(x = 19, n = 30))
+```
+
+```{r}
 sim_inicial <- sim_inicial %>% mutate(dist = "inicial")
-sim_posterior <- tibble(theta = rbeta(10000, 22, 14)) %>% mutate(dist = "posterior")
+sim_posterior <- tibble(theta = rbeta(10000, 
+                                      params.inicial$a + 19, 
+                                      params.inicial$b + 30 - 19)) %>% 
+  mutate(dist = "posterior")
+
 sims <- bind_rows(sim_inicial, sim_posterior)
 ggplot(sims, aes(x = theta, fill = dist)) +
-  geom_histogram(aes(x = theta), bins = 30, alpha = 0.5, position = "identity")
+  geom_histogram(aes(x = theta), bins = 30, 
+                 alpha = 0.5, position = "identity") + 
+  geom_function(aes(group = 'verosimilitud'), fun = verosimilitud, 
+                args = list(scale = 1e4), lty = 2, show.legend = TRUE)
 ```
 La posterior nos dice cuáles son las *posibilidades* de dónde puede estar
 el parámetro $\theta$. Nótese que ahora excluye prácticamente valores más chicos
