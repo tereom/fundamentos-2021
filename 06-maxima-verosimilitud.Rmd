@@ -235,8 +235,9 @@ $$1, 0, 0, 3 ,0, 0, 0, 2, 1, 0, 0\,.$$
 La pregunta es: ¿qué porcentaje del tiempo la máquina está funcionando correctamente?
 
 Primero pensemos en una corrida. La probabilidad de observar una sucesión
-particular de $r$ defectos se puede modelar como una variable $\mathsf{Binomial}(0.03,11).$
-Cuya función de masa de probabilidad es *proporcional* a
+particular de $r$ defectos en cualquier orden se puede modelar como una variable
+$\mathsf{Binomial}(0.03,11).$ Cuya función de masa de probabilidad es
+*proporcional* a
 
 $$0.03^r(0.97)^{(11-r)}\,,$$
 cuando la máquina está funcionando correctamente.
