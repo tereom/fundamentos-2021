@@ -133,8 +133,8 @@ $$ c_{i,j} \leq c_{i',j'} \quad \text{si y sólo si} \quad u(c_{i,j}) \leq u(c_{
 *relevante*, se define la probabilidad de $E$ como
 $$\mathbb{P}(E) = \textsf{Area}(R)\,,$$
 donde $R$ es un conjunto de referencia con el cual comparamos las decisiones
-que son indiferentes a la realización del evento incierto. Esto lo
-denotamos por $d_R = d_E$.
+que son indiferentes (pues las consecuencias son equivalentes) a la realización 
+del evento incierto. Esto lo denotamos por $d_R = d_E$.
 
 De esta manera la función de probabilidad satisface:
 
