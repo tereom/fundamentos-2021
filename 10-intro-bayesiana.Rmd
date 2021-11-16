@@ -1445,7 +1445,7 @@ interés $\theta$. Ahora consideraremos casos puntuales:
 $$v(\hat \theta,\theta) = (\hat \theta- \theta)^2\,.$$
 
 En este caso la decisión óptima que minimiza la pérdida esperada es
-$$\hat \theta = \mathbb{E}(\theta)\,.$$
+$$\hat \theta = \mathbb{E}(\theta |X)\,.$$
 Es decir, la media de la distribución que contempla nuestro estado de
 conocimiento.
 
@@ -1453,7 +1453,7 @@ conocimiento.
 $$v(\hat \theta,\theta) = |\hat \theta- \theta|\,.$$
 
 En este caso la decisión óptima que minimiza la pérdida esperada es
-$$\hat \theta = \mathsf{mediana}(\theta)\,.$$
+$$\hat \theta = \mathsf{mediana}(\theta | X)\,.$$
 Es decir, la mediana de la distribución que contempla nuestro estado de
 conocimiento.
 
@@ -1463,20 +1463,20 @@ denota la vecindad con radio $\epsilon$ alrededor de $\hat \theta$.
 En este caso, la decisión óptima que minimiza la pérdida esperada
 cuando $\epsilon \rightarrow 0$ es
 
-$$\hat \theta = \mathsf{moda}(\theta)\,.$$
+$$\hat \theta = \mathsf{moda}(\theta|X)\,.$$
 Es decir, la moda media de la distribución que contempla nuestro estado de
 conocimiento.
 
 Para **estimación por intervalos** consideramos que $\mathcal{D} = \{
 I : I \subset \Theta\}$, donde $I$ es un intervalo de probabilidad
 $(1-\alpha)$ si
-$$ \int_{I}^{} \mathbb{P}(\theta)d\theta = 1 - \alpha\,.$$
+$$ \int_{I}^{} \mathbb{P}(\theta | X)d\theta = 1 - \alpha\,.$$
 
 **Nota** que para una $\alpha$ fija no existe un intervalo único de
 probabilidad.
 
 El espacio de eventos es el espacio parametral y la función de pérdida es
-$$v(I, \theta) = \|D\| - \mathbb{I}_I(\theta)\,.$$
+$$v(I, \theta) = \|D\| - 1_I(\theta)\,.$$
 De lo anterior, observamos que para un nivel dado $\alpha$ es preferible
 reportar el intervalo de probabilidad que sea de tamaño mínimo.
 
@@ -1506,9 +1506,10 @@ donde $v_{0,0}$, $v_{1,1}$ son la pérdida de tomar una decisión correcta
 cuando $H_0$ es cierta y $v_{0,1}$ es la pérdida de no rechazar $H_0$ cuando
 $H_0$ es falsa.
 
-Se denotamos por $p_0 = \mathbb{P}(H_0)$ la probabildiad asociada a la hipótesis $H_0$
-al momento de tomar una decisión. Entonces la pérdida esperada para cada decisión
-es
+Se denotamos por $p_0 = \mathbb{P}(H_0)$ la probabildiad asociada a la hipótesis
+$H_0$ al momento de tomar una decisión, la cual refleja nuestro estado de
+conocimiento (previo o posterior). Entonces la pérdida esperada para cada
+decisión es
 \begin{gather}
 \mathbb{E}[v(H_0)] = v_{0,0} p_0 + v_{0,1} (1 - p_0) = v_{0,1} - (v_{0,1}  - v_{0,0} ) p_0\,, \\
 \mathbb{E}[v(H_1)] = v_{1,0} p_0 + v_{1,1} (1 - p_0) = v_{1,1} - (v_{1,1}  - v_{1,0} ) p_0\,.
