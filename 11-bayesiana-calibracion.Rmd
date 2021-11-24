@@ -623,14 +623,15 @@ mide el costo de la discrepancia entre nuestro estimador
 $$\hat{\theta}_n = t(X_1,\ldots, X_n) \,,$$
 
 y el verdadero valor $\theta$ poblacional. Es posible considerar distintas
-funciones de pérdida, pero como en secciones anteriores, usaremos la **pérdida
-cuadrática**, definida por:
+funciones de pérdida, pero como en secciones anteriores (0-1, absoluta,
+norma-$p$, etc.), usaremos la **pérdida
+cuadrática**, la cual está definida por:
 
 $$L(\theta, \hat{\theta}_n) = (\theta - \hat{\theta}_n)^2\,,$$
 
-Esta función toma distintos valores dependiendo de la muestra y del parámetro
-$\theta$, y necesitamos resumirla para dar una evaluación de qué tan bueno
-es el estimador $\hat{\theta}_n.$
+Esta función toma distintos valores dependiendo de la muestra (reflejada en
+nuestro estimador) y del parámetro $\theta$, y necesitamos resumirla para dar
+una evaluación de qué tan bueno es el estimador $\hat{\theta}_n.$
 
 Ahora que hemos considerado tanto estadística bayesiana como frecuentista,
 podemos pensar en resumir esta función de distintas maneras.
@@ -671,13 +672,26 @@ que $\theta$ es un valor que no conocemos y que afecta la selección del
 procedimiento (estimador) adecuado de acuerdo a nuestro criterio (función de
 pérdida)?
 
-La respuesta es que bajo un enfoque frecuentista podemos tomar cualquiera de las 
-tres alternativas: 
+La respuesta es bajo un enfoque frecuentista podemos tomar cualquiera de las 
+tres alternativas:   
 - Admisibilidad. Una decision inadmisible es aquella que es dominada por otra en
-cualquier valor de $\theta$.
-- Restringir la clase de estimadores. 
-- Minimax. Nos fijamos en aquel procedimiento bajo $\max_\Theta R(\theta, t)$. 
+cualquier valor de $\theta$.  
+- Restringir la clase de estimadores. Por ejemplo, considerar sólo estimadores
+insesgados.  
+- Minimax. Nos fijamos en aquel procedimiento bajo $\max_\Theta R(\theta, t)$.  
 
+
+La dependencia en $\theta$ (el valor del parámetro que no conocemos) no nos
+permite tomar una decisión tan clara bajo $R(\theta, t)$. 
+
+**Ejemplo.** Considera una muestra $X\sim \mathsf{N}(\theta, 1)$. Asume que
+estamos utilizando error cuadrático como función de pérdida y considera los
+estimadores: 1) $\hat \theta = X$ y 2) $\hat \theta = 3$. Bajo estos estimadores 
+tenemos las siguientes funciones de riesgo:  
+1) $R(\theta, \hat \theta_1)= 1$.  
+2) $R(\theta, \hat \theta_2)= (3-\theta)^2$.   
+
+¡No podemos decir cuál es mejor estimador independientemente del valor de $\theta$!
 
 Ahora vamos a pensar de manera bayesiana: en este caso, los datos serán fijos
 una vez que los obervemos de manera que $\hat{\theta}_n$ está fijo, y el parámetro
@@ -756,36 +770,78 @@ para valores centrales de $\theta$  tiene menos variabilidad
 (por regularización) que el estimador de máxima verosimilitud, y sufre poco
 de sesgo.
 
-### Ejemplo: riesgo posterior {-}
-
-Supongamos que la inicial es $\theta \sim \mathsf{Beta}(5,3)$
+Ahora considera el caso de una Beta con parámetros $a = b = \sqrt{n/4}$, 
+que nos daría $\hat{p}_2 = \frac{k + \sqrt{n/4}}{n + \sqrt{n}}$.
 
 ```{r}
-estimar_riesgo_post <- function(n = 20, x, perdida, reps = 20000){
+t_3 <- function(n, x)  (x + sqrt(n/4)) / (n + sqrt(n))
+estimar_riesgo <- function(n = 20, theta, perdida, reps = 10000){
+  x <- rbinom(reps, n, theta)
   # calcular estimaciones
   theta_1 <- t_1(n, x)
   theta_2 <- t_2(n, x)
+  theta_3 <- t_3(n, x)
+  # calcular pérdida
+  media_perdida <- tibble(
+    n = n, theta = theta,
+    estimador = c("MLE", "Posterior", "Posterior 2"),
+    riesgo = c(mean(perdida(theta, theta_1)), 
+               mean(perdida(theta, theta_2)),
+               mean(perdida(theta, theta_3))
+               ))
+  media_perdida
+}
+```
+
+```{r, fig.height=2.5 }
+p_seq <- seq(0, 1, 0.001)
+riesgo_tbl <- map(p_seq, ~ estimar_riesgo(n = 20,
+                                          theta = .x,
+                                          perdida = perdida_cuad)) %>%
+  bind_rows()
+ggplot(riesgo_tbl, aes(x = theta, y = riesgo, colour = estimador)) +
+  geom_line()
+```
+
+Nota cómo este tercer estimador tiene un riesgo constante (independiente de
+$\theta$). Sin embargo, con un estimador con riesgo constante no podríamos
+identificar cuál es el mejor estimador. Es decir, no podemos decir qué estimador
+tiene un riesgo menor para cualquier valor de $\theta$.
+
+### Ejemplo: riesgo posterior {-}
+
+Ahora, supongamos que tenemos un conjunto de datos fijo. Y consideremos
+distintas realizaciones bajo la distribución posterior utilizando una inicial
+$\theta \sim \mathsf{Beta}(5,3)$:
+
+```{r}
+estimar_riesgo_post <- function(n = 20, x, perdida, reps = 50000){
+  # calcular estimaciones
+  theta_1 <- t_1(n, x)
+  theta_2 <- t_2(n, x)
+  theta_3 <- t_3(n, x)
   # simular de posterior
   theta_post <- rbeta(reps, x + 5, n - x + 3)
   # calcular pérdida
   media_perdida <- tibble(
     n = n, x = x,
-    estimador = c("MLE", "Posterior"),
+    estimador = c("MLE", "Posterior", "Posterior 2"),
     riesgo_post= c(mean(perdida(theta_post, theta_1)),
-                   mean(perdida(theta_post, theta_2))))
+                   mean(perdida(theta_post, theta_2)), 
+                   mean(perdida(theta_post, theta_3))))
   media_perdida
 }
 estimar_riesgo_post(n = 20, x = 8, perdida = perdida_cuad)
 ```
-Como dijimos, esta cantidad depende de los datos $x$ que no hemos observado. Así que
-calculamos para cada valor de $x$:
+Como dijimos, esta cantidad depende de un conjunto de datos $x$ fijo.
+Consideremos que los datos, además, no los observamos **previo** a decidir qué
+estimador utilizar. Así que calculamos para cada valor de $x$:
 
-Las funciones de pérdida promedio
-$\rho(x, t_1)$ y $\rho(x, t_2)$ (dependen de $x$)
-se ven aproximadamente como sigue:
+Las funciones de pérdida promedio $\rho(x, t_1)$ y $\rho(x, t_2)$ (dependen de
+$x$) se ven aproximadamente como sigue:
 
 ```{r, fig.height=2.5}
-x_seq <- seq(0, 20, 1)
+x_seq <- seq(5, 20, 1)
 riesgo_post_tbl <-
   map(x_seq, ~ estimar_riesgo_post(n = 20, x = .x, perdida = perdida_cuad)) %>%
   bind_rows()
@@ -794,14 +850,13 @@ ggplot(riesgo_post_tbl, aes(x = x, y = riesgo_post, colour = estimador)) +
   geom_point()
 ```
 
-Donde vemos que la pérdida del estimador bayesiano es mejor para valores extremos
-de número de éxitos observado $x$, pero tiene más riesgo posterior
-para valores chicos de $x$. En general es mejor el estimador $\theta_2$. El
-estimador de máxima verosimilitud tiene más riesgo en los extremos, lo que esperaríamos
-porque no tenemos la regularización que aporta la posterior. Igualmente,
-vemos más riesgo para valores chicos de $x$ que para valores grandes: esto
-es porque la inicial está concentrada en valores reslativamente grandes
-de $\theta$.
+Donde vemos que la pérdida del estimador bayesiano es mejor para valores
+extremos de número de éxitos observado $x$, pero tiene más riesgo posterior para
+valores chicos de $x$. En general es mejor el estimador $\theta_2$. El estimador
+de máxima verosimilitud tiene más riesgo en los extremos. Esto es de esperarse
+pues no tenemos la regularización que aporta la posterior. Igualmente, vemos más
+riesgo para valores chicos de $x$ que para valores grandes. Esto es porque la
+inicial está concentrada en valores reslativamente grandes de $\theta$.
 
 
 ## Riesgo de Bayes {-}
@@ -850,7 +905,6 @@ riesgo_tbl %>% left_join(theta_tbl) %>%
   group_by(estimador) %>%
   summarise(riesgo_bayes = sum(riesgo * n_x) / sum(n_x))
 ```
-
 
 Ahora consideremos cómo decidiríamos, desde el punto de vista Bayesiano, qué
 estimador usar:
