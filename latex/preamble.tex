@@ -11,6 +11,10 @@
 
 \usepackage{xcolor}
 
+\usepackage{fancyhdr}
+
+
+
 \renewcommand{\textfraction}{0.05}
 \renewcommand{\topfraction}{0.8}
 \renewcommand{\bottomfraction}{0.8}
@@ -153,5 +157,18 @@
     {}%
 }
 \makeatother
+
+% \fancyhead{}
+\fancyfoot{}
+\fancyfoot[C]{\includegraphics[height=3cm]{images/mcd-long.png}\vspace{-1cm}}
+\fancyfoot[RE,LO]{\vspace{-1.5cm}\thepage\vspace{-1cm}}
+\pagestyle{fancy}
+\fancypagestyle{plain}{\pagestyle{fancy}}
+
+
+\usepackage{titling}
+\pretitle{\begin{center}
+\includegraphics[height=5cm]{images/mcd-long.png}\LARGE\\}
+\posttitle{\end{center}}
 
 \frontmatter
