@@ -163,7 +163,11 @@
 \fancyfoot[C]{\includegraphics[height=3cm]{images/mcd-long.png}\vspace{-1cm}}
 \fancyfoot[RE,LO]{\vspace{-1.5cm}\thepage\vspace{-1cm}}
 \pagestyle{fancy}
-\fancypagestyle{plain}{\pagestyle{fancy}}
+\fancypagestyle{plain}{%
+  \fancyhead{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \pagestyle{fancy}%
+}
 
 
 \usepackage{titling}
