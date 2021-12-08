@@ -235,21 +235,23 @@ $$1, 0, 0, 3 ,0, 0, 0, 2, 1, 0, 0\,.$$
 La pregunta es: ¿qué porcentaje del tiempo la máquina está funcionando correctamente?
 
 Primero pensemos en una corrida. La probabilidad de observar una sucesión
-particular de $r$ defectos es
+particular de $r$ defectos en cualquier orden se puede modelar como una variable
+$\mathsf{Binomial}(0.03,11).$ Cuya función de masa de probabilidad es
+*proporcional* a
 
-$$0.03^r(0.97)^{(10-r)}\,,$$
+$$0.03^r(0.97)^{(11-r)}\,,$$
 cuando la máquina está funcionando correctamente.
 
-Si la máquina está fallando, la misma probabilidad es 
+Si la máquina está fallando, la misma probabilidad se deriva de $\mathsf{Binomial}(0.20,11)$
 
-$$0.2^r(0.8)^{(10-r)}\,.$$
+$$0.2^r(0.8)^{(11-r)}\,.$$
 
 Ahora supongamos que la máquina trabaja correctamente en una proporción $p$ de
 las corridas. Entonces la probabilidad de observar $r$ fallas se calcula
 promediando (probabilidad total) sobre las probabilidades de que la máquina esté
 funcionando bien o no:
 
-$$0.03^r(0.97)^{(10-r)}p + 0.2^r(0.8)^{(10-r)}(1-p)\,,$$
+$$0.03^r(0.97)^{(11-r)}p + 0.2^r(0.8)^{(11-r)}(1-p)\,,$$
 Y esta es nuestra función de verosimilitud para una observación.
 
 Suponemos que las $r_1,r_2, \ldots, r_{11}$ observaciones son independientes
@@ -316,7 +318,7 @@ una distribución exponencial con tasa $\lambda>0$ donde no conocemos $\lambda$.
 
 Para $\lambda>0$, tenemos que
 
-$${\mathcal L}(\lambda) = \prod_{i=1}^n \lambda e^{\lambda x_i}\,,$$
+$${\mathcal L}(\lambda) = \prod_{i=1}^n \lambda e^{-\lambda x_i}\,,$$
 de modo que
 
 $${\mathcal L}(\lambda) = \lambda^n e^{-\lambda \sum_{i=1}^nx_i} = \lambda^n e^{-n\lambda\bar{x}} = e^{n(\log\lambda - \lambda\bar{x})}\,.$$
